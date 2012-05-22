@@ -18,7 +18,7 @@ public class ClassOrInterfaceDeclarationParselet
 		//annotations and javadoc
 		String javadoc = null;
 		List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-		for (Object found : parser.any(WhiteSpaceParselet.class, BlockCommentParselet.class,
+		for (Object found : parser.any(WhiteSpaceParselet.class, CommentParselet.class,
 				AnnotationExpressionParselet.class)) {
 			if (found instanceof String && ((String) found).startsWith("/**")) {
 				javadoc = (String) found;

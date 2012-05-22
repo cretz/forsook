@@ -7,7 +7,7 @@ import org.forsook.parser.java.ast.ImportDeclaration;
 
 @ParseletDepends({
 	WhiteSpaceParselet.class,
-	BlockCommentParselet.class,
+	CommentParselet.class,
 	QualifiedNameParselet.class
 })
 public class ImportDeclarationParselet implements Parselet<ImportDeclaration> {
@@ -20,11 +20,11 @@ public class ImportDeclarationParselet implements Parselet<ImportDeclaration> {
 			return null;
 		}
 		parser.skip(6);
-		parser.any(WhiteSpaceParselet.class, BlockCommentParselet.class);
+		parser.any(WhiteSpaceParselet.class, CommentParselet.class);
 		//static present?
 		boolean _static = parser.peekStringPresent("static");
 		//must have something here
-		if (parser.any(WhiteSpaceParselet.class, BlockCommentParselet.class).isEmpty()) {
+		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
 			return null;
 		}
 		//get name

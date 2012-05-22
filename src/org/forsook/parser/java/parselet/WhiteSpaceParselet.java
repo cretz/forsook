@@ -1,16 +1,31 @@
 package org.forsook.parser.java.parselet;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 
-public class WhiteSpaceParselet implements Parselet<Void> {
+public class WhiteSpaceParselet implements Parselet<List<Character>> {
 
 	@Override
-	public Void parse(Parser parser) {
-		while (Character.isWhitespace(parser.peek())) {
-			parser.next();
-		}
-		return null;
+	public List<Character> parse(Parser parser) {
+	    List<Character> chars = new ArrayList<Character>();
+	    Character chr;
+	    do {
+	        chr = parser.peek();
+	        if (chr != null && Character.isWhitespace(chr)) {
+	            parser.next();
+	            chars.add(chr);
+	        } else {
+	            chr = null;
+	        }
+	    } while (chr != null);
+	    if (chars.isEmpty()) {
+	        return null;
+	    } else {
+	        return chars;
+	    }
 	}
 
 }

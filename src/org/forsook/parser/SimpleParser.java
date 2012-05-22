@@ -9,10 +9,9 @@ public class SimpleParser implements Parser {
 	private final String source;
 	private final Map<Class<? extends Parselet<?>>, Parselet<?>> parseletMap;
 	
-	private int cursor = 0;
+	private int cursor = -1;
 	
-	public SimpleParser(String source, 
-			Map<Class<? extends Parselet<?>>, Parselet<?>> parseletMap) {
+	public SimpleParser(String source, Map<Class<? extends Parselet<?>>, Parselet<?>> parseletMap) {
 		this.source = source;
 		this.parseletMap = parseletMap;
 	}
@@ -45,6 +44,7 @@ public class SimpleParser implements Parser {
 
 	@Override
 	public Character next() {
+	    cursor++;
 		if (cursor >= source.length()) {
 			return null;
 		} else {
@@ -59,7 +59,7 @@ public class SimpleParser implements Parser {
 
 	@Override
 	public boolean peekStringPresent(String string) {
-		return source.regionMatches(cursor, string, 0, string.length());
+		return source.regionMatches(cursor + 1, string, 0, string.length());
 	}
 
 	@Override

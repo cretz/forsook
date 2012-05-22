@@ -11,7 +11,7 @@ import org.forsook.parser.java.ast.PackageDeclaration;
 
 @ParseletDepends({ 
 	WhiteSpaceParselet.class, 
-	BlockCommentParselet.class, 
+	CommentParselet.class, 
 	AnnotationExpressionParselet.class,
 	QualifiedNameParselet.class })
 public class PackageDeclarationParselet implements Parselet<PackageDeclaration> {
@@ -23,7 +23,7 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 		List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
 		//loop over whitespace and annotations, only holding on to annotations
 		for (Object found : parser.any(WhiteSpaceParselet.class, 
-				BlockCommentParselet.class,  AnnotationExpressionParselet.class)) {
+				CommentParselet.class,  AnnotationExpressionParselet.class)) {
 			if (found instanceof AnnotationExpression) {
 				annotations.add((AnnotationExpression) found);
 			}
@@ -34,7 +34,7 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 		}
 		parser.skip(7);
 		//must have something here
-		if (parser.any(WhiteSpaceParselet.class, BlockCommentParselet.class).isEmpty()) {
+		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
 			return null;
 		}
 		//get name
@@ -44,7 +44,7 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 			return null;
 		}
 		//could have more mess
-		parser.any(WhiteSpaceParselet.class, BlockCommentParselet.class);
+		parser.any(WhiteSpaceParselet.class, CommentParselet.class);
 		//requires semicolon, then we're good
 		if (parser.peek() != ';') {
 			return null;
