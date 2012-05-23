@@ -1,11 +1,14 @@
 package org.forsook.parser.java.parselet;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.forsook.parser.java.ast.BlockComment;
 import org.forsook.parser.java.ast.Comment;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.LineComment;
+import org.forsook.parser.java.ast.PackageDeclaration;
 import org.junit.Test;
 
 public class SimpleParseletTest extends ParseletTestBase {
@@ -30,5 +33,37 @@ public class SimpleParseletTest extends ParseletTestBase {
         assertParse("//some here\nbut not here", CommentParselet.class, (Comment) new LineComment("some here"));
         assertParse("/*with\nnew\rlines*/", CommentParselet.class, (Comment) new BlockComment("with\nnew\rlines"));
         assertParse("/**with\nnew\rlines*/", CommentParselet.class, (Comment) new JavadocComment("with\nnew\rlines"));
+    }
+    
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testPackageDeclaration() {
+        assertParse("package com.foo.bar;", PackageDeclarationParselet.class, 
+                new PackageDeclaration(Collections.EMPTY_LIST, "com.foo.bar"));
+        //TODO: when annotations are finished
+    }
+    
+    private static void assertModifier(String name, int value) {
+        //normal
+        assertParse(name, ModifierParselet.class, value);
+        //wrong w/ bad char
+        assertParse("1" + name, ModifierParselet.class, null);
+        //wrong w/ one char taken away
+        assertParse(name.substring(0, name.length() - 1), ModifierParselet.class, null);
+    }
+    
+    @Test
+    public void testModifier() {
+        assertModifier("public", Modifier.PUBLIC);
+        assertModifier("static", Modifier.STATIC);
+        assertModifier("protected", Modifier.PROTECTED);
+        assertModifier("private", Modifier.PRIVATE);
+        assertModifier("final", Modifier.FINAL);
+        assertModifier("abstract", Modifier.ABSTRACT);
+        assertModifier("synchronized", Modifier.SYNCHRONIZED);
+        assertModifier("native", Modifier.NATIVE);
+        assertModifier("transient", Modifier.TRANSIENT);
+        assertModifier("volatile", Modifier.VOLATILE);
+        assertModifier("strictfp", Modifier.STRICT);
     }
 }

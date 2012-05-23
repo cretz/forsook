@@ -29,10 +29,9 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 			}
 		}
 		//needs "package" to be present
-		if (!parser.peekStringPresent("package")) {
+		if (!parser.peekPresentAndSkip("package")) {
 			return null;
 		}
-		parser.skip(7);
 		//must have something here
 		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
 			return null;
@@ -46,10 +45,9 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 		//could have more mess
 		parser.any(WhiteSpaceParselet.class, CommentParselet.class);
 		//requires semicolon, then we're good
-		if (parser.peek() != ';') {
+		if (!parser.peekPresentAndSkip(';')) {
 			return null;
 		}
-		parser.skip(1);
 		//return
 		return new PackageDeclaration(annotations, name);
 	}

@@ -16,26 +16,30 @@ public class ImportDeclarationParselet implements Parselet<ImportDeclaration> {
 	@SuppressWarnings("unchecked")
 	public ImportDeclaration parse(Parser parser) {
 		//needs "import" to be present
-		if (!parser.peekStringPresent("import")) {
+		if (!parser.peekPresentAndSkip("import")) {
 			return null;
 		}
-		parser.skip(6);
-		parser.any(WhiteSpaceParselet.class, CommentParselet.class);
-		//static present?
-		boolean _static = parser.peekStringPresent("static");
-		//must have something here
+		//whitespace required here
 		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
-			return null;
+		    return null;
+		}
+		//static present?
+		boolean _static = parser.peekPresentAndSkip("static");
+		//more whitespace?
+		if (_static) {
+		    //required
+		    if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
+		        return null;
+		    }
 		}
 		//get name
 		String name = parser.next(QualifiedNameParselet.class);
 		boolean asterisk = false;
 		if (name.endsWith(".")) {
-			asterisk = parser.peek() == '*';
-			if (!asterisk) {
-				return null;
-			}
-			parser.skip(1);
+		    if (!parser.peekPresentAndSkip('*')) {
+		        return null;
+		    }
+		    asterisk = true;
 		}
 		//return
 		return new ImportDeclaration(name, _static, asterisk);

@@ -12,8 +12,7 @@ public class CommentParselet implements Parselet<Comment> {
 
 	@Override
 	public Comment parse(Parser parser) {
-		if (parser.peekStringPresent("//")) {
-		    parser.skip(2);
+		if (parser.peekPresentAndSkip("//")) {
 		    //read until new line
 		    StringBuilder string = new StringBuilder();
 		    Character chr;
@@ -31,15 +30,11 @@ public class CommentParselet implements Parselet<Comment> {
 		        parser.skip(1);
 		        //skip the extra char if present
 		        if (chr == '\r') {
-		            chr = parser.peek();
-		            if (chr != null && chr == '\n') {
-		                parser.skip(1);
-		            }
+		            parser.peekPresentAndSkip('\n');
 		        }
 		    }
 		    return new LineComment(string.toString());
-		} else if (parser.peekStringPresent("/*")) {
-		    parser.skip(2);
+		} else if (parser.peekPresentAndSkip("/*")) {
 		    //read until end
 		    StringBuilder string = new StringBuilder();
 		    boolean prevWasAsterisk = false;

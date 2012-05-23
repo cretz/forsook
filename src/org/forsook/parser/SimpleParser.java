@@ -35,31 +35,58 @@ public class SimpleParser implements Parser {
 
 	@Override
 	public Character peek() {
-		if (cursor + 1 >= source.length()) {
-			return null;
-		} else {
-			return source.charAt(cursor + 1);
-		}
+		return isPeekEndOfInput() ? null : source.charAt(cursor + 1);
+	}
+	
+	@Override
+	public boolean isPeekEndOfInput() {
+	    return cursor + 1 >= source.length();
 	}
 
 	@Override
 	public Character next() {
 	    cursor++;
-		if (cursor >= source.length()) {
-			return null;
-		} else {
-			return source.charAt(cursor);
-		}
+        return isEndOfInput() ? null : source.charAt(cursor);
+	}
+	
+	@Override
+	public boolean isEndOfInput() {
+	    return cursor >= source.length();
 	}
 
 	@Override
 	public void skip(int charCount) {
 		cursor += charCount;
 	}
+    
+    @Override
+    public boolean peekPresent(char chr) {
+        return !isPeekEndOfInput() && source.charAt(cursor + 1) == chr;
+    }
 
 	@Override
-	public boolean peekStringPresent(String string) {
+	public boolean peekPresent(String string) {
 		return source.regionMatches(cursor + 1, string, 0, string.length());
+	}
+    
+    @Override
+    public boolean peekPresentAndSkip(char chr) {
+        if (peekPresent(chr)) {
+            skip(1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+	
+	@Override
+	public boolean peekPresentAndSkip(String string) {
+        if (peekPresent(string)) {
+            skip(string.length());
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	@Override
