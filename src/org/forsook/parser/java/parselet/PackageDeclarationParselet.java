@@ -3,7 +3,6 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.AnnotationExpression;
@@ -14,7 +13,7 @@ import org.forsook.parser.java.ast.PackageDeclaration;
 	CommentParselet.class, 
 	AnnotationExpressionParselet.class,
 	QualifiedNameParselet.class })
-public class PackageDeclarationParselet implements Parselet<PackageDeclaration> {
+public class PackageDeclarationParselet extends JavaParselet<PackageDeclaration> {
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -33,7 +32,7 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 			return null;
 		}
 		//must have something here
-		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
+		if (parseWhiteSpaceAndComments(parser).isEmpty()) {
 			return null;
 		}
 		//get name
@@ -43,7 +42,7 @@ public class PackageDeclarationParselet implements Parselet<PackageDeclaration> 
 			return null;
 		}
 		//could have more mess
-		parser.any(WhiteSpaceParselet.class, CommentParselet.class);
+		parseWhiteSpaceAndComments(parser);
 		//requires semicolon, then we're good
 		if (!parser.peekPresentAndSkip(';')) {
 			return null;

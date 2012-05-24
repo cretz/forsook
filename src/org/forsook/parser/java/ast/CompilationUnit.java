@@ -1,5 +1,6 @@
 package org.forsook.parser.java.ast;
 
-public class CompilationUnit {
+@SuppressWarnings("serial")
+public class CompilationUnit extends JavaModel {
 
 }

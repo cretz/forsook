@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 
-public class IdentifierParselet implements Parselet<String> {
+public class IdentifierParselet extends JavaParselet<String> {
     
     private static final Set<String> DISALLOWED_IDENTIFIERS = new HashSet<String>(
             Arrays.asList("abstract", "continue", "for", "new", "switch",

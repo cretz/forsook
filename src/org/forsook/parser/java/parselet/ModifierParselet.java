@@ -2,10 +2,9 @@ package org.forsook.parser.java.parselet;
 
 import java.lang.reflect.Modifier;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 
-public class ModifierParselet implements Parselet<Integer> {
+public class ModifierParselet extends JavaParselet<Integer> {
     
     @Override
     public Integer parse(Parser parser) {

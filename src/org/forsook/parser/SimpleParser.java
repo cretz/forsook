@@ -33,6 +33,17 @@ public class SimpleParser implements Parser {
 		return ret;
 	}
 
+    @Override
+	public Object first(Class<? extends Parselet<?>>... parselets) {
+	    for (Class<? extends Parselet<?>> parselet : parselets) {
+	        Object object = next(parselet);
+	        if (object != null) {
+	            return object;
+	        }
+	    }
+	    return null;
+	}
+
 	@Override
 	public Character peek() {
 		return isPeekEndOfInput() ? null : source.charAt(cursor + 1);

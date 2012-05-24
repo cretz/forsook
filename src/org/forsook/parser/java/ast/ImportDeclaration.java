@@ -1,6 +1,7 @@
 package org.forsook.parser.java.ast;
 
-public class ImportDeclaration {
+@SuppressWarnings("serial")
+public class ImportDeclaration extends JavaModel {
 
 	private String name;
 	private boolean _static;

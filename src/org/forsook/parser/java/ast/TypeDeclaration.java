@@ -2,6 +2,7 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
+@SuppressWarnings("serial")
 public abstract class TypeDeclaration extends BodyDeclaration {
 	
 	private String name;
@@ -12,7 +13,7 @@ public abstract class TypeDeclaration extends BodyDeclaration {
     	
     }
     
-	public TypeDeclaration(String javadoc, List<AnnotationExpression> annotations, String name, 
+	public TypeDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations, String name, 
 			int modifiers, List<BodyDeclaration> members) {
 		super(javadoc, annotations);
 		this.name = name;

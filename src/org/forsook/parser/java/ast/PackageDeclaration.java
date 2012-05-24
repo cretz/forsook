@@ -1,10 +1,9 @@
 package org.forsook.parser.java.ast;
 
-import java.io.Serializable;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PackageDeclaration implements Serializable {
+public class PackageDeclaration extends JavaModel {
 
 	private List<AnnotationExpression> annotations;
 	private String name;

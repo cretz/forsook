@@ -2,6 +2,7 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class ClassOrInterfaceDeclaration extends TypeDeclaration {
 
     private boolean _interface;
@@ -12,7 +13,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration {
     public ClassOrInterfaceDeclaration() {
     }
     
-	public ClassOrInterfaceDeclaration(String javadoc, List<AnnotationExpression> annotations,
+	public ClassOrInterfaceDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
 			String name, int modifiers, List<BodyDeclaration> members,
 			boolean _interface, List<TypeParameter> typeParameters,
 			List<ClassOrInterfaceType> extendsList, List<ClassOrInterfaceType> implementsList) {

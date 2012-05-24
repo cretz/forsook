@@ -15,6 +15,14 @@ public interface Parser {
 	List<?> any(Class<? extends Parselet<?>>... parselets);
 	
 	/**
+	 * Return the first found parselet, or null if not found
+	 * 
+	 * @param parselets
+	 * @return
+	 */
+	Object first(Class<? extends Parselet<?>>... parselets);
+	
+	/**
 	 * Peek for the next character without moving the cursor
 	 * 
 	 * @return The next character or null if end of input

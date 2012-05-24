@@ -1,6 +1,5 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.ImportDeclaration;
@@ -10,17 +9,16 @@ import org.forsook.parser.java.ast.ImportDeclaration;
 	CommentParselet.class,
 	QualifiedNameParselet.class
 })
-public class ImportDeclarationParselet implements Parselet<ImportDeclaration> {
+public class ImportDeclarationParselet extends JavaParselet<ImportDeclaration> {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public ImportDeclaration parse(Parser parser) {
 		//needs "import" to be present
 		if (!parser.peekPresentAndSkip("import")) {
 			return null;
 		}
 		//whitespace required here
-		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
+		if (parseWhiteSpaceAndComments(parser).isEmpty()) {
 		    return null;
 		}
 		//static present?
@@ -28,7 +26,7 @@ public class ImportDeclarationParselet implements Parselet<ImportDeclaration> {
 		//more whitespace?
 		if (_static) {
 		    //required
-		    if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
+		    if (parseWhiteSpaceAndComments(parser).isEmpty()) {
 		        return null;
 		    }
 		}

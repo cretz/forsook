@@ -1,9 +1,8 @@
 package org.forsook.parser.java.ast;
 
-import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public abstract class Comment implements Serializable {
+public abstract class Comment extends JavaModel {
 
     private String text;
     

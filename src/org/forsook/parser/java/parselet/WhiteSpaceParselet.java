@@ -3,10 +3,9 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 
-public class WhiteSpaceParselet implements Parselet<List<Character>> {
+public class WhiteSpaceParselet extends JavaParselet<List<Character>> {
 
 	@Override
 	public List<Character> parse(Parser parser) {

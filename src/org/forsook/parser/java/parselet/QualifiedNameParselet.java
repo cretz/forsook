@@ -1,9 +1,8 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 
-public class QualifiedNameParselet implements Parselet<String> {
+public class QualifiedNameParselet extends JavaParselet<String> {
 
 	@Override
 	public String parse(Parser parser) {

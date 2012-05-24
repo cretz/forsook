@@ -2,24 +2,25 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
-public abstract class BodyDeclaration {
+@SuppressWarnings("serial")
+public abstract class BodyDeclaration extends JavaModel {
 
-	private String javadoc;
+	private JavadocComment javadoc;
 	private List<AnnotationExpression> annotations;
 	
 	public BodyDeclaration() {
 	}
 
-	public BodyDeclaration(String javadoc, List<AnnotationExpression> annotations) {
+	public BodyDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations) {
 		this.javadoc = javadoc;
 		this.annotations = annotations;
 	}
 
-	public String getJavadoc() {
+	public JavadocComment getJavadoc() {
 		return javadoc;
 	}
 
-	public void setJavadoc(String javadoc) {
+	public void setJavadoc(JavadocComment javadoc) {
 		this.javadoc = javadoc;
 	}
 

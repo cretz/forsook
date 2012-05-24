@@ -2,6 +2,6 @@ package org.forsook.parser.java.ast;
 
 
 @SuppressWarnings("serial")
-public abstract class Expression extends JavaModel {
+public abstract class Type extends JavaModel {
 
 }

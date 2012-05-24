@@ -1,6 +1,5 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.BlockComment;
 import org.forsook.parser.java.ast.Comment;
@@ -8,7 +7,7 @@ import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.LineComment;
 
 
-public class CommentParselet implements Parselet<Comment> {
+public class CommentParselet extends JavaParselet<Comment> {
 
 	@Override
 	public Comment parse(Parser parser) {

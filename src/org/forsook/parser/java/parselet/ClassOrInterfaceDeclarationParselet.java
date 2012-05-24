@@ -6,12 +6,11 @@ import java.util.List;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.AnnotationExpression;
 import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
+import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.JavadocComment;
+import org.forsook.parser.java.ast.TypeParameter;
 
-public class ClassOrInterfaceDeclarationParselet 
-		extends TypeDeclarationParselet<ClassOrInterfaceDeclaration> {
-
-	
+public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet<ClassOrInterfaceDeclaration> {
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -36,7 +35,7 @@ public class ClassOrInterfaceDeclarationParselet
 		    return null;
 		}
 		//some spacing required
-		if (parser.any(WhiteSpaceParselet.class, CommentParselet.class).isEmpty()) {
+		if (parseWhiteSpaceAndComments(parser).isEmpty()) {
 		    return null;
 		}
 		//name
@@ -44,8 +43,43 @@ public class ClassOrInterfaceDeclarationParselet
 		if (name == null) {
 		    return null;
 		}
-		//TODO: type parameters
-		
+		parser.any(WhiteSpaceParselet.class, CommentParselet.class);
+		//type parameters
+		List<TypeParameter> parameters = parseTypeParameters(parser);
+        parser.any(WhiteSpaceParselet.class, CommentParselet.class);
+		//extends
+		List<ClassOrInterfaceType> extendsList = new ArrayList<ClassOrInterfaceType>();
+		if (parser.peekPresentAndSkip("extends")) {
+		    ClassOrInterfaceType type;
+	        do {
+	            parseWhiteSpaceAndComments(parser);
+	            type = parser.next(ClassOrInterfaceTypeParselet.class);
+	            if (type != null) {
+	                extendsList.add(type);
+	                parseWhiteSpaceAndComments(parser);
+	            }
+	        } while (type != null && parser.peekPresentAndSkip(','));
+	        if (extendsList.isEmpty()) {
+	            return null;
+	        }
+		}
+		//implements
+        List<ClassOrInterfaceType> implementsList = new ArrayList<ClassOrInterfaceType>();
+        if (parser.peekPresentAndSkip("implements")) {
+            ClassOrInterfaceType type;
+            do {
+                parseWhiteSpaceAndComments(parser);
+                type = parser.next(ClassOrInterfaceTypeParselet.class);
+                if (type != null) {
+                    implementsList.add(type);
+                    parseWhiteSpaceAndComments(parser);
+                }
+            } while (type != null && parser.peekPresentAndSkip(','));
+            if (implementsList.isEmpty()) {
+                return null;
+            }
+        }
+		//TODO: members
 		return null;
 	}
 

@@ -1,10 +1,9 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.Parselet;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.AnnotationExpression;
 
-public class AnnotationExpressionParselet implements Parselet<AnnotationExpression> {
+public class AnnotationExpressionParselet extends JavaParselet<AnnotationExpression> {
 
 	@Override
 	public AnnotationExpression parse(Parser parser) {
