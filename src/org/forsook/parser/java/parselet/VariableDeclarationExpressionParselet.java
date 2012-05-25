@@ -13,16 +13,8 @@ import org.forsook.parser.java.ast.VariableDeclarationExpression;
 import org.forsook.parser.java.ast.VariableDeclarator;
 import org.forsook.parser.java.ast.VariableDeclaratorId;
 
-@ParseletDepends({
-    WhiteSpaceParselet.class, 
-    CommentParselet.class,
-    AnnotationExpressionParselet.class, 
-    ModifierParselet.class,
-    ReferenceTypeParselet.class,
-    IdentifierParselet.class
-})
 public class VariableDeclarationExpressionParselet extends ExpressionParselet<VariableDeclarationExpression> {
-
+    
     @Override
     @SuppressWarnings("unchecked")
     public VariableDeclarationExpression parse(Parser parser) {
@@ -50,39 +42,16 @@ public class VariableDeclarationExpressionParselet extends ExpressionParselet<Va
         //declarators
         List<VariableDeclarator> vars = new ArrayList<VariableDeclarator>();
         do {
-            //name
-            String name = parser.next(IdentifierParselet.class);
-            if (name == null) {
+            VariableDeclarator var = parser.next(VariableDeclaratorParselet.class);
+            if (var != null) {
+                vars.add(var);
+            } else {
                 return null;
             }
             //spacing
             parseWhiteSpaceAndComments(parser);
-            //array count
-            int arrayCount = 0;
-            do {
-                parseWhiteSpaceAndComments(parser);
-                if (!parser.peekPresentAndSkip('[')) {
-                    break;
-                }
-                parseWhiteSpaceAndComments(parser);
-                if (!parser.peekPresentAndSkip(']')) {
-                    return null;
-                }
-                arrayCount++;
-            } while (true);
-            //initializer?
-            Expression init = null;
-            if (parser.peekPresentAndSkip('=')) {
-                //spacing
-                parseWhiteSpaceAndComments(parser);
-                //array initializer?
-                //TODO
-            }
-            vars.add(new VariableDeclarator(new VariableDeclaratorId(name, arrayCount), init));
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-        } while (!parser.peekPresentAndSkip(','));
-        if (vars.isEmpty()) {
+        } while (parser.peekPresentAndSkip(','));
+        if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
         return new VariableDeclarationExpression(javadoc, modifiers, annotations, type, vars);

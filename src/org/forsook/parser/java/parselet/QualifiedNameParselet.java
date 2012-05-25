@@ -17,7 +17,7 @@ public class QualifiedNameParselet extends JavaParselet<String> {
             //spacing
             parseWhiteSpaceAndComments(parser);
             //identifier
-            String identifier = parser.next(IdentifierParselet.class);
+            String identifier = nextWord(parser);
             if (identifier == null) {
                 break;
             } else {
