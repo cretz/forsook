@@ -64,4 +64,63 @@ public class VariableDeclarationExpression extends Expression {
         this.variables = variables;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((annotations == null) ? 0 : annotations.hashCode());
+        result = prime * result + ((javadoc == null) ? 0 : javadoc.hashCode());
+        result = prime * result + modifiers;
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result
+                + ((variables == null) ? 0 : variables.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        VariableDeclarationExpression other = (VariableDeclarationExpression) obj;
+        if (annotations == null) {
+            if (other.annotations != null) {
+                return false;
+            }
+        } else if (!annotations.equals(other.annotations)) {
+            return false;
+        }
+        if (javadoc == null) {
+            if (other.javadoc != null) {
+                return false;
+            }
+        } else if (!javadoc.equals(other.javadoc)) {
+            return false;
+        }
+        if (modifiers != other.modifiers) {
+            return false;
+        }
+        if (type == null) {
+            if (other.type != null) {
+                return false;
+            }
+        } else if (!type.equals(other.type)) {
+            return false;
+        }
+        if (variables == null) {
+            if (other.variables != null) {
+                return false;
+            }
+        } else if (!variables.equals(other.variables)) {
+            return false;
+        }
+        return true;
+    }
 }

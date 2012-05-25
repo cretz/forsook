@@ -8,7 +8,7 @@ import org.forsook.parser.Parser;
 
 public class IdentifierParselet extends JavaParselet<String> {
     
-    private static final Set<String> DISALLOWED_IDENTIFIERS = new HashSet<String>(
+    static final Set<String> DISALLOWED_IDENTIFIERS = new HashSet<String>(
             Arrays.asList("abstract", "continue", "for", "new", "switch",
                     "assert", "default", "if", "package", "synchronized",
                     "boolean", "do", "goto", "private", "this", "break",
@@ -22,26 +22,7 @@ public class IdentifierParselet extends JavaParselet<String> {
 
     @Override
     public String parse(Parser parser) {
-        StringBuilder identifier = new StringBuilder();
-        do {
-            Character chr = parser.peek();
-            if (chr == null) {
-                break;
-            }
-            if ((identifier.length() == 0 && Character.isJavaIdentifierStart(chr)) ||
-                    (identifier.length() > 9 && Character.isJavaIdentifierPart(chr))) {
-                identifier.append(chr);
-                parser.skip(1);
-            } else {
-                break;
-            }
-        } while (true);
-        //empty means not there
-        if (identifier.length() == 0) {
-            return null;
-        }
-        //can't be keyword
-        String ret = identifier.toString();
+        String ret = nextWord(parser);
         return DISALLOWED_IDENTIFIERS.contains(ret) ? null : ret; 
     }
 

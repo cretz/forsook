@@ -1,5 +1,6 @@
 package org.forsook.parser;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class ParserUtils {
         return dependencies;
     }
     
+    @SuppressWarnings("unchecked")
     private static void populateDependencies(Set<Class<? extends Parselet<?>>> set, 
             Class<? extends Parselet<?>> parseletClass) {
         if (!set.contains(parseletClass)) {
@@ -25,6 +27,10 @@ public class ParserUtils {
                     populateDependencies(set, parseletChild);
                 }
             }
+            //also do super
+            if (Parselet.class.isAssignableFrom(parseletClass.getSuperclass())) {
+                populateDependencies(set, (Class<? extends Parselet<?>>) parseletClass.getSuperclass());
+            }
         }
     }
     
@@ -34,7 +40,10 @@ public class ParserUtils {
                 new HashMap<Class<? extends Parselet<?>>, Parselet<?>>(parseletClassesWithDependencies.size());
         try {
             for (Class<? extends Parselet<?>> parseletClass : parseletClassesWithDependencies) {
-                map.put(parseletClass, parseletClass.newInstance());
+                //can't be abstract
+                if (!Modifier.isAbstract(parseletClass.getModifiers())) {
+                    map.put(parseletClass, parseletClass.newInstance());
+                }
             }
         } catch (InstantiationException e) {
            throw new RuntimeException(e);

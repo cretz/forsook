@@ -1,9 +1,11 @@
 package org.forsook.parser.java.parselet;
 
+import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.BlockStatement;
 import org.forsook.parser.java.ast.InitializerDeclaration;
 
+@ParseletDepends(BlockStatementParselet.class)
 public class InitializerDeclarationParselet extends BodyDeclarationParselet<InitializerDeclaration> {
 
     @Override

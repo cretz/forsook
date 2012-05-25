@@ -3,6 +3,7 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.AnnotationExpression;
 import org.forsook.parser.java.ast.Expression;
@@ -12,6 +13,14 @@ import org.forsook.parser.java.ast.VariableDeclarationExpression;
 import org.forsook.parser.java.ast.VariableDeclarator;
 import org.forsook.parser.java.ast.VariableDeclaratorId;
 
+@ParseletDepends({
+    WhiteSpaceParselet.class, 
+    CommentParselet.class,
+    AnnotationExpressionParselet.class, 
+    ModifierParselet.class,
+    ReferenceTypeParselet.class,
+    IdentifierParselet.class
+})
 public class VariableDeclarationExpressionParselet extends ExpressionParselet<VariableDeclarationExpression> {
 
     @Override

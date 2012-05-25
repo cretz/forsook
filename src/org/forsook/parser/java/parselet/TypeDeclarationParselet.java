@@ -3,12 +3,19 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.BodyDeclaration;
 import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.TypeDeclaration;
 import org.forsook.parser.java.ast.TypeParameter;
 
+@ParseletDepends({
+    IdentifierParselet.class,
+    ClassOrInterfaceTypeParselet.class,
+    InitializerDeclarationParselet.class,
+    ClassOrInterfaceDeclarationParselet.class
+})
 public abstract class TypeDeclarationParselet<T extends TypeDeclaration> extends BodyDeclarationParselet<T> {
 
     protected List<TypeParameter> parseTypeParameters(Parser parser) {

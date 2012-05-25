@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ParseletDepends {
-	Class<? extends Parselet<?>>[] value();
+    Class<? extends Parselet<?>>[] value();
 }

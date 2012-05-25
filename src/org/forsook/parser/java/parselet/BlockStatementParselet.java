@@ -3,6 +3,7 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.BlockStatement;
 import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
@@ -11,6 +12,10 @@ import org.forsook.parser.java.ast.Statement;
 import org.forsook.parser.java.ast.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.VariableDeclarationExpression;
 
+@ParseletDepends({
+    ClassOrInterfaceDeclarationParselet.class,
+    VariableDeclarationExpressionParselet.class
+})
 public class BlockStatementParselet extends StatementParselet<BlockStatement> {
 
     @Override

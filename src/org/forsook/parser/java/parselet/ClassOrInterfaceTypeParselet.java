@@ -3,10 +3,16 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.Type;
 
+@ParseletDepends({
+    IdentifierParselet.class,
+    WildcardTypeParselet.class,
+    ReferenceTypeParselet.class
+})
 public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceType> {
 
     @Override
@@ -27,7 +33,7 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
             }
             //add
             type = new ClassOrInterfaceType(type, name, typeArguments);
-        } while (!parser.peekPresentAndSkip('.'));
+        } while (parser.peekPresentAndSkip('.'));
         return type;
     }
 
@@ -50,7 +56,7 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
             ret.add(type);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (!parser.peekPresentAndSkip(','));
+        } while (parser.peekPresentAndSkip(','));
         return parser.peekPresentAndSkip('>') ? ret : null; 
     }
 

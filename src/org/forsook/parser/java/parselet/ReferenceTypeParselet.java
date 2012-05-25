@@ -1,9 +1,14 @@
 package org.forsook.parser.java.parselet;
 
+import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.ReferenceType;
 import org.forsook.parser.java.ast.Type;
 
+@ParseletDepends({
+    PrimitiveTypeParselet.class,
+    ClassOrInterfaceTypeParselet.class
+})
 public class ReferenceTypeParselet extends TypeParselet<ReferenceType> {
 
     @Override
