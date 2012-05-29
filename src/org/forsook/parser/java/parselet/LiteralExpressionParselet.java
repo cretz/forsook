@@ -28,11 +28,7 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
     }
 
     private LiteralExpression parseIntegerLiteral(Parser parser) {
-        String value = parseDecimalIntegerLiteral(parser);
-        if (value != null) {
-            return new LiteralExpression(value, LiteralExpressionType.DECIMAL_INTEGER);
-        }
-        value = parseHexIntegerLiteral(parser);
+        String value = parseHexIntegerLiteral(parser);
         if (value != null) {
             return new LiteralExpression(value, LiteralExpressionType.HEX_INTEGER);
         }
@@ -43,6 +39,11 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
         value = parseBinaryIntegerLiteral(parser);
         if (value != null) {
             return new LiteralExpression(value, LiteralExpressionType.BINARY_INTEGER);
+        }
+        //check this last
+        value = parseDecimalIntegerLiteral(parser);
+        if (value != null) {
+            return new LiteralExpression(value, LiteralExpressionType.DECIMAL_INTEGER);
         }
         return null;
     }
@@ -70,7 +71,8 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
         } while (true);
         if (ret.length() == 0) {
             return null;
-        } else if ((ret.charAt(0) == '0' && ret.length() > 1) || ret.charAt(0) == '_') {
+        } else if ((ret.charAt(0) == '0' && ret.length() > 1) || ret.charAt(0) == '_' ||
+                ret.charAt(ret.length() - 1) == '_') {
             return null;
         } else {
             checkEndingL(parser, ret);
@@ -102,9 +104,9 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
                 break;
             }
         } while (true);
-        if (ret.length() == 0) {
+        if (ret.length() <= 3) {
             return null;
-        } else if (ret.charAt(2) == '_') {
+        } else if (ret.charAt(2) == '_' || ret.charAt(ret.length() - 1) == '_') {
             return null;
         } else {
             checkEndingL(parser, ret);
@@ -128,7 +130,9 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
                 break;
             }
         } while (true);
-        if (ret.length() == 0) {
+        if (ret.length() <= 2) {
+            return null;
+        } else if (ret.charAt(1) == '_' || ret.charAt(ret.length() - 1) == '_') {
             return null;
         } else {
             checkEndingL(parser, ret);
@@ -158,9 +162,9 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
                 break;
             }
         } while (true);
-        if (ret.length() == 0) {
+        if (ret.length() <= 3) {
             return null;
-        } else if (ret.charAt(2) == '_') {
+        } else if (ret.charAt(2) == '_' || ret.charAt(ret.length() - 1) == '_') {
             return null;
         } else {
             checkEndingL(parser, ret);
@@ -180,11 +184,14 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
         return null;
     }
     
-    private void checkEndOfFloatingPoint(Parser parser, StringBuilder ret) {
+    private boolean checkEndOfFloatingPoint(Parser parser, StringBuilder ret) {
         Character chr = parser.peek();
         if (chr != null && (chr == 'f' || chr == 'F' || chr == 'd' || chr == 'D')) {
             ret.append(chr);
             parser.skip(1);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -219,7 +226,10 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
         if (ret.length() == 0) {
             return null;
         } else {
-            checkEndOfFloatingPoint(parser, ret);
+            boolean hasEnd = checkEndOfFloatingPoint(parser, ret);
+            if (!dotFound && !eFound && !hasEnd) {
+                return null;
+            }
             return ret.toString();
         }
     }
@@ -265,7 +275,7 @@ public class LiteralExpressionParselet extends ExpressionParselet<LiteralExpress
                 break;
             }
         } while (true);
-        if (ret.length() == 0) {
+        if (ret.length() == 0 || !binaryExponentFound) {
             return null;
         } else {
             checkEndOfFloatingPoint(parser, ret);
