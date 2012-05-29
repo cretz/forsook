@@ -35,9 +35,13 @@ public class VariableDeclaratorParselet extends JavaParselet<VariableDeclarator>
             //spacing
             parseWhiteSpaceAndComments(parser);
             //array initializer?
-            Expression expr = parser.next(ArrayInitializerExpressionParselet.class);
-            if (expr == null) {
-                
+            init = parser.next(ArrayInitializerExpressionParselet.class);
+            if (init == null) {
+                //normal expression?
+                init = ExpressionParselet.parseExpression(parser);
+                if (init == null) {
+                    return null;
+                }
             }
         }
         return new VariableDeclarator(new VariableDeclaratorId(name, arrayCount), init);

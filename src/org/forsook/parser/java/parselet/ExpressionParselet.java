@@ -5,7 +5,7 @@ import org.forsook.parser.java.ast.Expression;
 
 public abstract class ExpressionParselet<T extends Expression> extends JavaParselet<T> {
 
-    protected Expression parseExpression(Parser parser) {
+    public static Expression parseExpression(Parser parser) {
         //try conditional first
         Expression ret = parser.next(ConditionalExpressionParselet.class);
         if (ret == null) {

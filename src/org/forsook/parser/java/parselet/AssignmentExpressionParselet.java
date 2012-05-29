@@ -33,8 +33,12 @@ public class AssignmentExpressionParselet extends ExpressionParselet<AssignmentE
         if (operator == null) {
             return null;
         }
-        //TODO
-        return null;
+        //right hand is normal expression
+        Expression rightHand = parseExpression(parser);
+        if (rightHand == null) {
+            return null;
+        }
+        return new AssignmentExpression(leftHand, operator, rightHand);
     }
 
 }
