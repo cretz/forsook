@@ -1,6 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
 
+@JlsReference("14.4")
 @SuppressWarnings("serial")
 public class VariableDeclarator extends JavaModel {
     

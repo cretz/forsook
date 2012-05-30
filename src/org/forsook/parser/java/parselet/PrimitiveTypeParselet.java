@@ -1,11 +1,16 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.ParseletDepends;
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.PrimitiveType;
 import org.forsook.parser.java.ast.PrimitiveType.Primitive;
 
-@ParseletDepends(IdentifierParselet.class)
+@JlsReference("4.2")
+@ParseletDefinition(
+        name = "forsook.java.primitiveType",
+        emits = PrimitiveType.class
+)
 public class PrimitiveTypeParselet extends JavaParselet<PrimitiveType> {
 
     @Override

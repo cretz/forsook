@@ -3,8 +3,9 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.forsook.parser.ParseletDepends;
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.BlockStatement;
 import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.ExpressionStatement;
@@ -12,10 +13,12 @@ import org.forsook.parser.java.ast.Statement;
 import org.forsook.parser.java.ast.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.VariableDeclarationExpression;
 
-@ParseletDepends({
-    ClassOrInterfaceDeclarationParselet.class,
-    VariableDeclarationExpressionParselet.class
-})
+@JlsReference("14.2")
+@ParseletDefinition(
+        name = "forsook.java.blockStatement",
+        emits = BlockStatement.class,
+        needs = { ClassOrInterfaceDeclaration.class, VariableDeclarationExpression.class }
+)
 public class BlockStatementParselet extends StatementParselet<BlockStatement> {
 
     @Override
@@ -27,14 +30,14 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
         do {
             Statement stmt;
             //local class? (handles its own whitespace at beginning w/ javadoc and what not)
-            ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclarationParselet.class);
+            ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclaration.class);
             if (decl != null) {
                 stmt = new TypeDeclarationStatement(decl);
             } else {
                 //spacing
                 parseWhiteSpaceAndComments(parser);
                 //variable declaration?
-                VariableDeclarationExpression expr = parser.next(VariableDeclarationExpressionParselet.class);
+                VariableDeclarationExpression expr = parser.next(VariableDeclarationExpression.class);
                 if (expr != null) {
                     stmt = new ExpressionStatement(expr);
                 } else {

@@ -1,6 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
 
+@JlsReference({ "8.6", "8.7" })
 @SuppressWarnings("serial")
 public class InitializerDeclaration extends BodyDeclaration {
 

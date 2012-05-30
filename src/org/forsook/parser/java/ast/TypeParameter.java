@@ -5,22 +5,22 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class TypeParameter extends JavaModel {
 
-    private String name;
+    private Identifier name;
     private List<ClassOrInterfaceType> typesBound;
     
     public TypeParameter() {
     }
     
-    public TypeParameter(String name, List<ClassOrInterfaceType> typesBound) {
+    public TypeParameter(Identifier name, List<ClassOrInterfaceType> typesBound) {
         this.name = name;
         this.typesBound = typesBound;
     }
     
-    public String getName() {
+    public Identifier getName() {
         return name;
     }
     
-    public void setName(String name) {
+    public void setName(Identifier name) {
         this.name = name;
     }
     

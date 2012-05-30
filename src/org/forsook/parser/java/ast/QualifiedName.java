@@ -1,14 +1,17 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("6.5")
 @SuppressWarnings("serial")
-public class NameExpression extends Expression {
+public class QualifiedName extends Expression {
 
     private String name;
     
-    public NameExpression() {
+    public QualifiedName() {
     }
     
-    public NameExpression(String name) {
+    public QualifiedName(String name) {
         this.name = name;
     }
     
@@ -39,7 +42,7 @@ public class NameExpression extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        NameExpression other = (NameExpression) obj;
+        QualifiedName other = (QualifiedName) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

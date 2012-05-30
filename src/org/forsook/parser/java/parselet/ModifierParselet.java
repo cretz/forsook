@@ -1,13 +1,19 @@
 package org.forsook.parser.java.parselet;
 
-import java.lang.reflect.Modifier;
-
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.Modifier;
 
-public class ModifierParselet extends JavaParselet<Integer> {
+@JlsReference("6.6") //TODO: add the rest
+@ParseletDefinition(
+        name = "forsook.java.modifier",
+        emits = Modifier.class
+)
+public class ModifierParselet extends JavaParselet<Modifier> {
     
     @Override
-    public Integer parse(Parser parser) {
+    public Modifier parse(Parser parser) {
         //must be a character obviously
         if (parser.isPeekEndOfInput() || !Character.isLetter(parser.peek())) {
             //TODO: check whether this speeds things up or not
@@ -15,27 +21,27 @@ public class ModifierParselet extends JavaParselet<Integer> {
         }
         //get which one
         if (parser.peekPresentAndSkip("public")) {
-            return Modifier.PUBLIC;
+            return new Modifier(java.lang.reflect.Modifier.PUBLIC);
         } else if (parser.peekPresentAndSkip("static")) {
-            return Modifier.STATIC;
+            return new Modifier(java.lang.reflect.Modifier.STATIC);
         } else if (parser.peekPresentAndSkip("protected")) {
-            return Modifier.PROTECTED;
+            return new Modifier(java.lang.reflect.Modifier.PROTECTED);
         } else if (parser.peekPresentAndSkip("private")) {
-            return Modifier.PRIVATE;
+            return new Modifier(java.lang.reflect.Modifier.PRIVATE);
         } else if (parser.peekPresentAndSkip("final")) {
-            return Modifier.FINAL;
+            return new Modifier(java.lang.reflect.Modifier.FINAL);
         } else if (parser.peekPresentAndSkip("abstract")) {
-            return Modifier.ABSTRACT;
+            return new Modifier(java.lang.reflect.Modifier.ABSTRACT);
         } else if (parser.peekPresentAndSkip("synchronized")) {
-            return Modifier.SYNCHRONIZED;
+            return new Modifier(java.lang.reflect.Modifier.SYNCHRONIZED);
         } else if (parser.peekPresentAndSkip("native")) {
-            return Modifier.NATIVE;
+            return new Modifier(java.lang.reflect.Modifier.NATIVE);
         } else if (parser.peekPresentAndSkip("transient")) {
-            return Modifier.TRANSIENT;
+            return new Modifier(java.lang.reflect.Modifier.TRANSIENT);
         } else if (parser.peekPresentAndSkip("volatile")) {
-            return Modifier.VOLATILE;
+            return new Modifier(java.lang.reflect.Modifier.VOLATILE);
         } else if (parser.peekPresentAndSkip("strictfp")) {
-            return Modifier.STRICT;
+            return new Modifier(java.lang.reflect.Modifier.STRICT);
         } else {
             return null;
         }

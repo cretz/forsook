@@ -2,12 +2,15 @@ package org.forsook.parser.java.parselet;
 
 import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.QualifiedName;
 
+@JlsReference("6.5") //TODO check this
 @ParseletDepends(IdentifierParselet.class)
-public class QualifiedNameParselet extends JavaParselet<String> {
+public class QualifiedNameParselet extends JavaParselet<QualifiedName> {
 
     @Override
-    public String parse(Parser parser) {
+    public QualifiedName parse(Parser parser) {
         //simply put, either an identifier char or a dot
         StringBuilder builder = new StringBuilder();
         do {
@@ -29,7 +32,7 @@ public class QualifiedNameParselet extends JavaParselet<String> {
         if (builder.length() == 0) {
             return null;
         } else {
-            return builder.toString();
+            return new QualifiedName(builder.toString());
         }
     }
 

@@ -2,25 +2,29 @@ package org.forsook.parser;
 
 import java.util.List;
 
-
+/**
+ * Parser interface
+ *
+ * @author Chad Retz
+ */
 public interface Parser {
     
     /**
-     * Return an ordered list of the found parselets, all optional
-     * and all can appear in any order
+     * Return an ordered list of the found types, all optional
+     * and all can appear in any order.
      * 
-     * @param parselets
-     * @return
+     * @param types 
+     * @return The list of items, or an empty list if none found
      */
-    List<?> any(Class<? extends Parselet<?>>... parselets);
+    List<?> any(Class<?>... types);
     
     /**
-     * Return the first found parselet, or null if not found
+     * Return the first found type, or null if not found
      * 
-     * @param parselets
+     * @param types
      * @return
      */
-    Object first(Class<? extends Parselet<?>>... parselets);
+    Object first(Class<?>... types);
     
     /**
      * Peek for the next character without moving the cursor
@@ -92,10 +96,25 @@ public interface Parser {
     boolean peekPresentAndSkip(String string);
     
     /**
-     * Try to get the next value for the given parselet class
+     * Try to get the next value for the given type
      * 
      * @param parselet
      * @return The next value or null if not found
      */
-    <U, T extends Parselet<U>> U next(Class<T> parselet);
+    <T> T next(Class<T> type);
+    
+    /**
+     * Get the current cursor position
+     * 
+     * @return
+     */
+    int getCursor();
+    
+    /**
+     * Set the cursor position. Note, this is very dangerous during
+     * recursive parsing. Please use wisely.
+     * 
+     * @param cursor
+     */
+    void setCursor(int cursor);
 }

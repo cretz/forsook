@@ -1,5 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("4.2")
 @SuppressWarnings("serial")
 public class PrimitiveType extends Type {
 

@@ -172,27 +172,4 @@ public class SimpleParseletTest extends ParseletTestBase {
                         new WildcardType(new ReferenceType(new ClassOrInterfaceType(null, "List", 
                                 Arrays.asList(new WildcardType(null, null))), 0), null))), 1));
     }
-    
-    @Test
-    public void testLiteralExpression() {
-        //decimal integer literal
-        assertParse("0", LiteralExpressionParselet.class, 
-                new LiteralExpression("0", LiteralExpressionType.DECIMAL_INTEGER));
-//        assertParse("02", LiteralExpressionParselet.class, null);
-//        assertParse("a", LiteralExpressionParselet.class, null);
-//        assertParse("_5", LiteralExpressionParselet.class, null);
-//        assertParse("5_", LiteralExpressionParselet.class, null);
-//        assertParse("5_0", LiteralExpressionParselet.class,
-//                new LiteralExpression("5_0", LiteralExpressionType.DECIMAL_INTEGER));
-//        assertParse("5_0_1_6l", LiteralExpressionParselet.class,
-//                new LiteralExpression("5_0_1_6l", LiteralExpressionType.DECIMAL_INTEGER));
-//        assertParse("5_0_1_6L", LiteralExpressionParselet.class,
-//                new LiteralExpression("5_0_1_6L", LiteralExpressionType.DECIMAL_INTEGER));
-//        //hex integer literal
-//        assertParse("0x0", LiteralExpressionParselet.class, 
-//                new LiteralExpression("0x0", LiteralExpressionType.HEX_INTEGER));
-//        assertParse("0x0__12_2", LiteralExpressionParselet.class, 
-//                new LiteralExpression("0x0__12_2", LiteralExpressionType.HEX_INTEGER));
-        
-    }
 }

@@ -1,5 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("15.26")
 @SuppressWarnings("serial")
 public class AssignmentExpression extends Expression {
 

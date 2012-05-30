@@ -3,27 +3,33 @@ package org.forsook.parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 
+/**
+ * Simple parser supporting a string-based source file and a map of parselets
+ *
+ * @author Chad Retz
+ */
 public class SimpleParser implements Parser {
 
     private final String source;
-    private final Map<Class<? extends Parselet<?>>, Parselet<?>> parseletMap;
+    private final Map<Class<?>, NavigableSet<Parselet<?>>> parseletMap;
     
     private int cursor = -1;
     
-    public SimpleParser(String source, Map<Class<? extends Parselet<?>>, Parselet<?>> parseletMap) {
+    public SimpleParser(String source, Map<Class<?>, NavigableSet<Parselet<?>>> parseletMap) {
         this.source = source;
         this.parseletMap = parseletMap;
     }
     
     @Override
-    public List<?> any(Class<? extends Parselet<?>>... parselets) {
+    public List<?> any(Class<?>... types) {
         List<Object> ret = new ArrayList<Object>();
         boolean found;
         do {
             found = false;
-            for (Class<? extends Parselet<?>> parseletClass : parselets) {
-                Object object = next(parseletClass);
+            for (Class<?> type : types) {
+                Object object = next(type);
                 if (object != null) {
                     found = true;
                     ret.add(object);
@@ -34,9 +40,9 @@ public class SimpleParser implements Parser {
     }
 
     @Override
-    public Object first(Class<? extends Parselet<?>>... parselets) {
-        for (Class<? extends Parselet<?>> parselet : parselets) {
-            Object object = next(parselet);
+    public Object first(Class<?>... types) {
+        for (Class<?> type : types) {
+            Object object = next(type);
             if (object != null) {
                 return object;
             }
@@ -102,17 +108,29 @@ public class SimpleParser implements Parser {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <U, T extends Parselet<U>> U next(Class<T> parselet) {
-        T parseletImpl = (T) parseletMap.get(parselet);
-        if (parseletImpl == null) {
+    public <T> T next(Class<T> type) {
+        NavigableSet<Parselet<?>> parseletSet = parseletMap.get(type);
+        if (parseletSet == null) {
             return null;
         }
-        int oldCursor = cursor;
-        U object = parseletImpl.parse(this);
-        if (object != null) {
-            return object;
+        for (Parselet<?> parselet : parseletSet) {
+            int oldCursor = cursor;
+            T object = (T) parselet.parse(this);
+            if (object != null) {
+                return object;
+            }
+            cursor = oldCursor;
         }
-        cursor = oldCursor;
         return null;
+    }
+    
+    @Override
+    public int getCursor() {
+        return cursor;
+    }
+    
+    @Override
+    public void setCursor(int cursor) {
+        this.cursor = cursor;
     }
 }

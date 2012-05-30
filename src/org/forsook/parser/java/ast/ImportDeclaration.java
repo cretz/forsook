@@ -1,26 +1,29 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("7.5")
 @SuppressWarnings("serial")
 public class ImportDeclaration extends JavaModel {
 
-    private String name;
+    private QualifiedName name;
     private boolean _static;
     private boolean asterisk;
 
     public ImportDeclaration() {
     }
 
-    public ImportDeclaration(String name, boolean _static, boolean asterisk) {
+    public ImportDeclaration(QualifiedName name, boolean _static, boolean asterisk) {
         this.name = name;
         this._static = _static;
         this.asterisk = asterisk;
     }
 
-    public String getName() {
+    public QualifiedName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(QualifiedName name) {
         this.name = name;
     }
 

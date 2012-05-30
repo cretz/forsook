@@ -1,10 +1,18 @@
 package org.forsook.parser.java.parselet;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ReferenceType;
 import org.forsook.parser.java.ast.WildcardType;
 
+@JlsReference("4.5.1")
+@ParseletDefinition(
+        name = "forsook.java.wildcardType",
+        emits = WildcardType.class,
+        needs = ReferenceType.class
+)
 @ParseletDepends(ReferenceTypeParselet.class)
 public class WildcardTypeParselet extends TypeParselet<WildcardType> {
 
@@ -19,7 +27,7 @@ public class WildcardTypeParselet extends TypeParselet<WildcardType> {
         boolean extendsType = parser.peekPresentAndSkip("extends");
         if (extendsType || parser.peekPresentAndSkip("super")) {
             parseWhiteSpaceAndComments(parser);
-            ReferenceType type = parser.next(ReferenceTypeParselet.class);
+            ReferenceType type = parser.next(ReferenceType.class);
             if (type == null) {
                 return null;
             } else {

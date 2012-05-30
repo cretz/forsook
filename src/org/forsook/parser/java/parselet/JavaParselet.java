@@ -3,19 +3,18 @@ package org.forsook.parser.java.parselet;
 import java.util.List;
 
 import org.forsook.parser.Parselet;
-import org.forsook.parser.ParseletDepends;
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.ast.Comment;
+import org.forsook.parser.java.ast.WhiteSpace;
 
-@ParseletDepends({
-    WhiteSpaceParselet.class,
-    CommentParselet.class
-})
+@ParseletDefinition(
+        needs = { WhiteSpace.class, Comment.class }
+)
 public abstract class JavaParselet<T> implements Parselet<T> {
 
-
-    @SuppressWarnings("unchecked")
     protected List<?> parseWhiteSpaceAndComments(Parser parser) {
-        return parser.any(WhiteSpaceParselet.class, CommentParselet.class);
+        return parser.any(WhiteSpace.class, Comment.class);
     }
     
     /**

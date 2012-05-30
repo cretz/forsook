@@ -2,17 +2,20 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("7.4")
 @SuppressWarnings("serial")
 public class PackageDeclaration extends JavaModel {
 
     private List<AnnotationExpression> annotations;
-    private String name;
+    private QualifiedName name;
     
     public PackageDeclaration() {
         
     }
     
-    public PackageDeclaration(List<AnnotationExpression> annotations, String name) {
+    public PackageDeclaration(List<AnnotationExpression> annotations, QualifiedName name) {
         this.annotations = annotations;
         this.name = name;
     }
@@ -25,11 +28,11 @@ public class PackageDeclaration extends JavaModel {
         this.annotations = annotations;
     }
     
-    public String getName() {
+    public QualifiedName getName() {
         return name;
     }
     
-    public void setName(String name) {
+    public void setName(QualifiedName name) {
         this.name = name;
     }
 

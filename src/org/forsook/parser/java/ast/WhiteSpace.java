@@ -2,42 +2,42 @@ package org.forsook.parser.java.ast;
 
 import org.forsook.parser.java.JlsReference;
 
-@JlsReference("4.3")
+@JlsReference("3.6")
 @SuppressWarnings("serial")
-public class ReferenceType extends Type {
+public class WhiteSpace extends JavaModel {
 
-    private Type type;
-    private int arrayCount;
+    private WhiteSpaceType type;
+    private int amount;
     
-    public ReferenceType() {   
+    public WhiteSpace() {
     }
     
-    public ReferenceType(Type type, int arrayCount) {
+    public WhiteSpace(WhiteSpaceType type, int amount) {
         this.type = type;
-        this.arrayCount = arrayCount;
+        this.amount = amount;
     }
-
-    public Type getType() {
+    
+    public WhiteSpaceType getType() {
         return type;
     }
-
-    public void setType(Type type) {
+    
+    public void setType(WhiteSpaceType type) {
         this.type = type;
     }
-
-    public int getArrayCount() {
-        return arrayCount;
+    
+    public int getAmount() {
+        return amount;
     }
-
-    public void setArrayCount(int arrayCount) {
-        this.arrayCount = arrayCount;
+    
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + arrayCount;
+        result = prime * result + amount;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
@@ -53,17 +53,22 @@ public class ReferenceType extends Type {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ReferenceType other = (ReferenceType) obj;
-        if (arrayCount != other.arrayCount) {
+        WhiteSpace other = (WhiteSpace) obj;
+        if (amount != other.amount) {
             return false;
         }
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
+        if (type != other.type) {
             return false;
         }
         return true;
-    }    
+    }
+
+    public static enum WhiteSpaceType {
+        SPACE,
+        TAB,
+        FORM_FEED,
+        NEWLINE,
+        RETURN,
+        NEWLINE_RETURN
+    }
 }

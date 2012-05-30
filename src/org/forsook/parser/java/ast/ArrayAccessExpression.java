@@ -1,6 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
 
+@JlsReference("15.13")
 @SuppressWarnings("serial")
 public class ArrayAccessExpression extends Expression {
 

@@ -3,16 +3,22 @@ package org.forsook.parser.java.parselet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ClassOrInterfaceType;
+import org.forsook.parser.java.ast.Identifier;
+import org.forsook.parser.java.ast.ReferenceType;
 import org.forsook.parser.java.ast.Type;
+import org.forsook.parser.java.ast.WildcardType;
 
-@ParseletDepends({
-    IdentifierParselet.class,
-    WildcardTypeParselet.class,
-    ReferenceTypeParselet.class
-})
+@JlsReference("4.3")
+@ParseletDefinition(
+        name = "forsook.java.classOrInterfaceType",
+        emits = ClassOrInterfaceType.class,
+        needs = { Identifier.class, WildcardType.class, ReferenceType.class }
+)
 public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceType> {
 
     @Override
@@ -20,7 +26,7 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
         ClassOrInterfaceType type = null;
         do {
             //name
-            String name = parser.next(IdentifierParselet.class);
+            Identifier name = parser.next(Identifier.class);
             if (name == null) {
                 return null;
             }
@@ -46,9 +52,9 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
             //spacing
             parseWhiteSpaceAndComments(parser);
             //get type
-            Type type = parser.next(WildcardTypeParselet.class);
+            Type type = parser.next(WildcardType.class);
             if (type == null) {
-                type = parser.next(ReferenceTypeParselet.class);
+                type = parser.next(ReferenceType.class);
                 if (type == null) {
                     return null;
                 }

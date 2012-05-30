@@ -4,22 +4,22 @@ package org.forsook.parser.java.ast;
 @SuppressWarnings("serial")
 public class VariableDeclaratorId extends JavaModel {
 
-    private String name;
+    private Identifier name;
     private int arrayCount;
     
     public VariableDeclaratorId() {
     }
     
-    public VariableDeclaratorId(String name, int arrayCount) {
+    public VariableDeclaratorId(Identifier name, int arrayCount) {
         this.name = name;
         this.arrayCount = arrayCount;
     }
     
-    public String getName() {
+    public Identifier getName() {
         return name;
     }
     
-    public void setName(String name) {
+    public void setName(Identifier name) {
         this.name = name;
     }
     

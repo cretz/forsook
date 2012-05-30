@@ -1,5 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("9.7")
 @SuppressWarnings("serial")
 public abstract class AnnotationExpression extends Expression {
 

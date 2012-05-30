@@ -1,10 +1,17 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.ParseletDepends;
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ImportDeclaration;
+import org.forsook.parser.java.ast.QualifiedName;
 
-@ParseletDepends(QualifiedNameParselet.class)
+@JlsReference("7.5")
+@ParseletDefinition(
+        name = "forsook.java.importDeclaration",
+        emits = ImportDeclaration.class,
+        needs = QualifiedName.class
+)
 public class ImportDeclarationParselet extends JavaParselet<ImportDeclaration> {
 
     @Override
@@ -27,9 +34,12 @@ public class ImportDeclarationParselet extends JavaParselet<ImportDeclaration> {
             }
         }
         //get name
-        String name = parser.next(QualifiedNameParselet.class);
+        QualifiedName name = parser.next(QualifiedName.class);
+        if (name == null) {
+            return null;
+        }
         boolean asterisk = false;
-        if (name.endsWith(".")) {
+        if (name.getName().endsWith(".")) {
             parseWhiteSpaceAndComments(parser);
             if (!parser.peekPresentAndSkip('*')) {
                 return null;

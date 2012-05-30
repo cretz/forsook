@@ -1,11 +1,18 @@
 package org.forsook.parser.java.parselet;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.BlockComment;
 import org.forsook.parser.java.ast.Comment;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.LineComment;
 
+@JlsReference("3.7")
+@ParseletDefinition(
+        name = "forsook.java.comment",
+        emits = Comment.class
+)
 public class CommentParselet extends JavaParselet<Comment> {
 
     @Override

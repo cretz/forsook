@@ -2,17 +2,20 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("4.3")
 @SuppressWarnings("serial")
 public class ClassOrInterfaceType extends Type {
 
     private ClassOrInterfaceType previous;
-    private String name;
+    private Identifier name;
     private List<? extends Type> typeArguments;
     
     public ClassOrInterfaceType() {
     }
 
-    public ClassOrInterfaceType(ClassOrInterfaceType previous, String name,
+    public ClassOrInterfaceType(ClassOrInterfaceType previous, Identifier name,
             List<? extends Type> typeArguments) {
         this.previous = previous;
         this.name = name;
@@ -27,11 +30,11 @@ public class ClassOrInterfaceType extends Type {
         this.previous = previous;
     }
 
-    public String getName() {
+    public Identifier getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Identifier name) {
         this.name = name;
     }
 

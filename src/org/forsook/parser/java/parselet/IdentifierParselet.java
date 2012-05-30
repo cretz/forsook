@@ -4,9 +4,17 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.Identifier;
 
-public class IdentifierParselet extends JavaParselet<String> {
+@JlsReference("3.8")
+@ParseletDefinition(
+        name = "forsook.java.identifier",
+        emits = Identifier.class
+)
+public class IdentifierParselet extends JavaParselet<Identifier> {
     
     static final Set<String> DISALLOWED_IDENTIFIERS = new HashSet<String>(
             Arrays.asList("abstract", "continue", "for", "new", "switch",
@@ -21,9 +29,12 @@ public class IdentifierParselet extends JavaParselet<String> {
                     "true", "false", "null"));
 
     @Override
-    public String parse(Parser parser) {
+    public Identifier parse(Parser parser) {
         String ret = nextWord(parser);
-        return DISALLOWED_IDENTIFIERS.contains(ret) ? null : ret; 
+        if (ret == null || DISALLOWED_IDENTIFIERS.contains(ret)) {
+            return null;
+        }
+        return new Identifier(ret); 
     }
 
 }

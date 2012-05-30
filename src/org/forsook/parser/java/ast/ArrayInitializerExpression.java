@@ -2,6 +2,9 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("10.6")
 @SuppressWarnings("serial")
 public class ArrayInitializerExpression extends Expression {
 
