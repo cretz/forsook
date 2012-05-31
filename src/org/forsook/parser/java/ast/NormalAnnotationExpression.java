@@ -2,6 +2,9 @@ package org.forsook.parser.java.ast;
 
 import java.util.List;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("9.7.1")
 @SuppressWarnings("serial")
 public class NormalAnnotationExpression extends AnnotationExpression {
     
@@ -11,7 +14,7 @@ public class NormalAnnotationExpression extends AnnotationExpression {
         
     }
     
-    public NormalAnnotationExpression(String name, List<ElementValuePair> pairs) {
+    public NormalAnnotationExpression(QualifiedName name, List<ElementValuePair> pairs) {
         super(name);
         this.pairs = pairs;
     }
@@ -56,22 +59,22 @@ public class NormalAnnotationExpression extends AnnotationExpression {
 
     public static class ElementValuePair extends JavaModel {
         
-        private String name;
+        private Identifier name;
         private Expression value;
         
         public ElementValuePair() {
         }
          
-        public ElementValuePair(String name, Expression value) {
+        public ElementValuePair(Identifier name, Expression value) {
             this.name = name;
             this.value = value;
         }
         
-        public String getName() {
+        public Identifier getName() {
             return name;
         }
         
-        public void setName(String name) {
+        public void setName(Identifier name) {
             this.name = name;
         }
         

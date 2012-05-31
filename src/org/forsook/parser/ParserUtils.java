@@ -2,14 +2,14 @@ package org.forsook.parser;
 
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Properties;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class ParserUtils {
@@ -71,8 +71,8 @@ public class ParserUtils {
             }
         }
         //get emits and needs
-        List<Class<?>> emits = new ArrayList<Class<?>>();
-        List<Class<?>> needs = new ArrayList<Class<?>>();
+        Set<Class<?>> emits = new HashSet<Class<?>>();
+        Set<Class<?>> needs = new HashSet<Class<?>>();
         Class<?> superClass = parselet.getClass();
         do {
             ParseletDefinition superDefinition = superClass.getAnnotation(ParseletDefinition.class);
@@ -82,7 +82,7 @@ public class ParserUtils {
         } while (superClass.isAnnotationPresent(ParseletDefinition.class));
         //build instance
         ParseletInstance instance = new ParseletInstance(definition.name(), emits, needs, 
-                Arrays.asList(definition.replaces()), precedence, parselet);
+                new HashSet<Class<? extends Parselet<?>>>(Arrays.asList(definition.replaces())), precedence, parselet);
         if (!instance.getReplaces().isEmpty()) {
             //go replacing...
             for (Class<? extends Parselet<?>> replace : instance.getReplaces()) {

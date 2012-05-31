@@ -17,8 +17,6 @@ import org.forsook.parser.java.ast.Expression;
 )
 public class ArrayInitializerExpressionParselet extends ExpressionParselet<ArrayInitializerExpression> {
     
-    int[] i = { , };
-    
     @Override
     public ArrayInitializerExpression parse(Parser parser) {
         if (!parser.peekPresentAndSkip('{')) {

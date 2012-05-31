@@ -1,19 +1,19 @@
 package org.forsook.parser;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 public class ParseletInstance implements Comparable<ParseletInstance> {
 
     private final String name;
-    private final List<Class<?>> emits;
-    private final List<Class<?>> needs;
-    private final List<Class<? extends Parselet<?>>> replaces;
+    private final Set<Class<?>> emits;
+    private final Set<Class<?>> needs;
+    private final Set<Class<? extends Parselet<?>>> replaces;
     private final BigDecimal precedence;
     private final Parselet<?> parselet;
     
-    ParseletInstance(String name, List<Class<?>> emits, List<Class<?>> needs,
-            List<Class<? extends Parselet<?>>> replaces, BigDecimal precedence,
+    ParseletInstance(String name, Set<Class<?>> emits, Set<Class<?>> needs,
+            Set<Class<? extends Parselet<?>>> replaces, BigDecimal precedence,
             Parselet<?> parselet) {
         this.name = name;
         this.emits = emits;
@@ -27,15 +27,15 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
         return name;
     }
 
-    List<Class<?>> getEmits() {
+    Set<Class<?>> getEmits() {
         return emits;
     }
     
-    List<Class<?>> getNeeds() {
+    Set<Class<?>> getNeeds() {
         return needs;
     }
     
-    List<Class<? extends Parselet<?>>> getReplaces() {
+    Set<Class<? extends Parselet<?>>> getReplaces() {
         return replaces;
     }
 

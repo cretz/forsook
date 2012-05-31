@@ -1,5 +1,8 @@
 package org.forsook.parser.java.ast;
 
+import org.forsook.parser.java.JlsReference;
+
+@JlsReference("9.7.3")
 @SuppressWarnings("serial")
 public class SingleElementAnnotationExpression extends AnnotationExpression {
 
@@ -8,7 +11,7 @@ public class SingleElementAnnotationExpression extends AnnotationExpression {
     public SingleElementAnnotationExpression() {
     }
     
-    public SingleElementAnnotationExpression(String name, Expression value) {
+    public SingleElementAnnotationExpression(QualifiedName name, Expression value) {
         super(name);
         this.value = value;
     }

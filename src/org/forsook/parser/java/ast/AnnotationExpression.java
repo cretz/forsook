@@ -6,20 +6,20 @@ import org.forsook.parser.java.JlsReference;
 @SuppressWarnings("serial")
 public abstract class AnnotationExpression extends Expression {
 
-    private String name;
+    private QualifiedName name;
     
     public AnnotationExpression() {
     }
     
-    public AnnotationExpression(String name) {
+    public AnnotationExpression(QualifiedName name) {
         this.name = name;
     }
     
-    public String getName() {
+    public QualifiedName getName() {
         return name;
     }
     
-    public void setName(String name) {
+    public void setName(QualifiedName name) {
         this.name = name;
     }
 

@@ -26,6 +26,7 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
         if (!parser.peekPresentAndSkip('{')) {
             return null;
         }
+        //statements
         List<Statement> statements = new ArrayList<Statement>();
         do {
             Statement stmt;
@@ -41,10 +42,16 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
                 if (expr != null) {
                     stmt = new ExpressionStatement(expr);
                 } else {
-                    //TODO
+                    //regular statement
+                    stmt = parser.next(Statement.class);
+                    if (stmt == null) {
+                        return null;
+                    }
                 }
             }
-        } while (true);
+            statements.add(stmt);
+        } while (!parser.peekPresentAndSkip('}'));
+        return new BlockStatement(statements);
     }
 
 }

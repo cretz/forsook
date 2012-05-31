@@ -1,5 +1,5 @@
 # Please keep in alphabetical order
-org.forsook.parser.java.parselet.AnnotationExpressionParselet
+org.forsook.parser.java.parselet.AnnotationParselet
 org.forsook.parser.java.parselet.ArrayAccessExpressionParselet
 org.forsook.parser.java.parselet.ArrayInitializerExpressionParselet
 org.forsook.parser.java.parselet.AssignmentExpressionParselet
