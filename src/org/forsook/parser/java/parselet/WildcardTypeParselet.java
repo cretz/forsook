@@ -1,7 +1,6 @@
 package org.forsook.parser.java.parselet;
 
 import org.forsook.parser.ParseletDefinition;
-import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ReferenceType;
@@ -13,7 +12,6 @@ import org.forsook.parser.java.ast.WildcardType;
         emits = WildcardType.class,
         needs = ReferenceType.class
 )
-@ParseletDepends(ReferenceTypeParselet.class)
 public class WildcardTypeParselet extends TypeParselet<WildcardType> {
 
     @Override

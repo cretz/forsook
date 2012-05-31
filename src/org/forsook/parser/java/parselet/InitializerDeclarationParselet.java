@@ -1,7 +1,6 @@
 package org.forsook.parser.java.parselet;
 
 import org.forsook.parser.ParseletDefinition;
-import org.forsook.parser.ParseletDepends;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.BlockStatement;
@@ -13,7 +12,6 @@ import org.forsook.parser.java.ast.InitializerDeclaration;
         emits = InitializerDeclaration.class,
         needs = BlockStatement.class
 )
-@ParseletDepends(BlockStatementParselet.class)
 public class InitializerDeclarationParselet extends BodyDeclarationParselet<InitializerDeclaration> {
 
     @Override

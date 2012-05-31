@@ -13,11 +13,11 @@ import java.util.NavigableSet;
 public class SimpleParser implements Parser {
 
     private final String source;
-    private final Map<Class<?>, NavigableSet<Parselet<?>>> parseletMap;
+    private final Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap;
     
     private int cursor = -1;
     
-    public SimpleParser(String source, Map<Class<?>, NavigableSet<Parselet<?>>> parseletMap) {
+    public SimpleParser(String source, Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap) {
         this.source = source;
         this.parseletMap = parseletMap;
     }
@@ -109,13 +109,13 @@ public class SimpleParser implements Parser {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T next(Class<T> type) {
-        NavigableSet<Parselet<?>> parseletSet = parseletMap.get(type);
+        NavigableSet<ParseletInstance> parseletSet = parseletMap.get(type);
         if (parseletSet == null) {
-            return null;
+            throw new RuntimeException("No parselets that emit type " + type);
         }
-        for (Parselet<?> parselet : parseletSet) {
+        for (ParseletInstance parselet : parseletSet) {
             int oldCursor = cursor;
-            T object = (T) parselet.parse(this);
+            T object = (T) parselet.getParselet().parse(this);
             if (object != null) {
                 return object;
             }

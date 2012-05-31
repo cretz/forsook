@@ -7,15 +7,17 @@ import java.util.Collections;
 import org.forsook.parser.java.ast.BlockComment;
 import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.Comment;
+import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.ImportDeclaration;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.LineComment;
-import org.forsook.parser.java.ast.LiteralExpression;
 import org.forsook.parser.java.ast.PackageDeclaration;
 import org.forsook.parser.java.ast.PrimitiveType;
-import org.forsook.parser.java.ast.LiteralExpression.LiteralExpressionType;
 import org.forsook.parser.java.ast.PrimitiveType.Primitive;
+import org.forsook.parser.java.ast.QualifiedName;
 import org.forsook.parser.java.ast.ReferenceType;
+import org.forsook.parser.java.ast.WhiteSpace;
+import org.forsook.parser.java.ast.WhiteSpace.WhiteSpaceType;
 import org.forsook.parser.java.ast.WildcardType;
 import org.junit.Test;
 
@@ -23,49 +25,52 @@ public class SimpleParseletTest extends ParseletTestBase {
 
     @Test
     public void testWhiteSpace() {
-        assertParse("\t", WhiteSpaceParselet.class, Arrays.asList('\t'));
-        assertParse("    \r \t \nother string", 
-                WhiteSpaceParselet.class, Arrays.asList(' ', ' ', ' ', ' ', '\r', ' ', '\t', ' ', '\n'));
-        assertParse("no whitespace at the beginning", WhiteSpaceParselet.class, null);
+        assertParse("\t\t\t\f", new WhiteSpace(WhiteSpaceType.TAB, 3));
+        assertParse("    \f", new WhiteSpace(WhiteSpaceType.SPACE, 4));
+        assertParse("\f\t", new WhiteSpace(WhiteSpaceType.FORM_FEED, 1));
+        assertParse("\n\n\n\f", new WhiteSpace(WhiteSpaceType.NEWLINE, 3));
+        assertParse("\r\r\f", new WhiteSpace(WhiteSpaceType.RETURN, 2));
+        assertParse("\r\n\r\n\f", new WhiteSpace(WhiteSpaceType.NEWLINE_RETURN, 2));
+        assertNull("no whitespace at the beginning", WhiteSpace.class);
     }
     
     @Test
     public void testComment() {
-        assertParse("//something here", CommentParselet.class, (Comment) new LineComment("something here"));
-        assertParse("/*more *complex**/", CommentParselet.class, (Comment) new BlockComment("more *complex*"));
-        assertParse("/**javadoc time!*/", CommentParselet.class, (Comment) new JavadocComment("javadoc time!"));
-        assertParse("this isn't a comment", CommentParselet.class, null);
-        assertParse("//", CommentParselet.class, (Comment) new LineComment(""));
-        assertParse("/**/", CommentParselet.class, (Comment) new BlockComment(""));
-        assertParse("/***/", CommentParselet.class, (Comment) new JavadocComment(""));
-        assertParse("//some here\nbut not here", CommentParselet.class, (Comment) new LineComment("some here"));
-        assertParse("/*with\nnew\rlines*/", CommentParselet.class, (Comment) new BlockComment("with\nnew\rlines"));
-        assertParse("/**with\nnew\rlines*/", CommentParselet.class, (Comment) new JavadocComment("with\nnew\rlines"));
+        assertParse("//something here", Comment.class, new LineComment("something here"));
+        assertParse("/*more *complex**/", Comment.class, new BlockComment("more *complex*"));
+        assertParse("/**javadoc time!*/", Comment.class, new JavadocComment("javadoc time!"));
+        assertNull("this isn't a comment", Comment.class);
+        assertParse("//", Comment.class, new LineComment(""));
+        assertParse("/**/", Comment.class, new BlockComment(""));
+        assertParse("/***/", Comment.class, new JavadocComment(""));
+        assertParse("//some here\nbut not here", Comment.class, new LineComment("some here"));
+        assertParse("/*with\nnew\rlines*/", Comment.class, new BlockComment("with\nnew\rlines"));
+        assertParse("/**with\nnew\rlines*/", Comment.class, new JavadocComment("with\nnew\rlines"));
     }
     
     @Test
     public void testQualifiedName() {
-        assertParse("a.//something\nb", QualifiedNameParselet.class, "a.b");
-        assertParse("meh", QualifiedNameParselet.class, "meh");
-        assertParse("a.b.c.1", QualifiedNameParselet.class, "a.b.c.");
-        assertParse("1.2.3", QualifiedNameParselet.class, null);
+        assertParse("a.//something\nb", new QualifiedName("a.b"));
+        assertParse("meh", new QualifiedName("meh"));
+        assertParse("a.b.c.1", new QualifiedName("a.b.c."));
+        assertNull("1.2.3", QualifiedName.class);
     }
     
     @Test
     @SuppressWarnings("unchecked")
     public void testPackageDeclaration() {
-        assertParse("package com.foo.bar;", PackageDeclarationParselet.class, 
-                new PackageDeclaration(Collections.EMPTY_LIST, "com.foo.bar"));
+        assertParse("package com.foo.bar;", 
+                new PackageDeclaration(Collections.EMPTY_LIST, new QualifiedName("com.foo.bar")));
         //TODO: when annotations are finished
     }
     
-    private static void assertModifier(String name, int value) {
+    private void assertModifier(String name, int value) {
         //normal
-        assertParse(name, ModifierParselet.class, value);
+        assertParse(name, new org.forsook.parser.java.ast.Modifier(value));
         //wrong w/ bad char
-        assertParse("1" + name, ModifierParselet.class, null);
+        assertNull("1" + name, org.forsook.parser.java.ast.Modifier.class);
         //wrong w/ one char taken away
-        assertParse(name.substring(0, name.length() - 1), ModifierParselet.class, null);
+        assertNull(name.substring(0, name.length() - 1), org.forsook.parser.java.ast.Modifier.class);
     }
     
     @Test
@@ -87,89 +92,88 @@ public class SimpleParseletTest extends ParseletTestBase {
     public void testIdentifier() {
         //make sure all disallowed ones are disallowed
         for (String string : IdentifierParselet.DISALLOWED_IDENTIFIERS) {
-            assertParse(string, IdentifierParselet.class, null);
+            assertNull(string, Identifier.class);
         }
-        assertParse("_testTest", IdentifierParselet.class, "_testTest");
-        assertParse("_test.Test", IdentifierParselet.class, "_test");
-        assertParse("._test.Test", IdentifierParselet.class, null);
-        assertParse("133t", IdentifierParselet.class, null);
-        assertParse("l33t", IdentifierParselet.class, "l33t");
-        assertParse("test-test", IdentifierParselet.class, "test");
-        assertParse("$test", IdentifierParselet.class, "$test");
-        assertParse("t$es_$t", IdentifierParselet.class, "t$es_$t");
-        assertParse("üö", IdentifierParselet.class, "üö");
+        assertParse("_testTest", new Identifier("_testTest"));
+        assertParse("_test.Test", new Identifier("_test"));
+        assertNull("._test.Test", Identifier.class);
+        assertNull("133t", Identifier.class);
+        assertParse("l33t", new Identifier("l33t"));
+        assertParse("test-test", new Identifier("test"));
+        assertParse("$test", new Identifier("$test"));
+        assertParse("t$es_$t", new Identifier("t$es_$t"));
+        assertParse("üö", new Identifier("üö"));
     }
     
     @Test
     @SuppressWarnings("unchecked")
     public void testClassOrInterfaceType() {
-        assertParse("a.b.c", ClassOrInterfaceTypeParselet.class, 
+        assertParse("a.b.c",  
                 new ClassOrInterfaceType(new ClassOrInterfaceType(new ClassOrInterfaceType(
-                        null, "a", Collections.EMPTY_LIST), "b", Collections.EMPTY_LIST), 
-                        "c", Collections.EMPTY_LIST));
-        assertParse("java.util.Map<K, V>", ClassOrInterfaceTypeParselet.class, 
+                        null, new Identifier("a"), Collections.EMPTY_LIST), 
+                        new Identifier("b"), Collections.EMPTY_LIST), new Identifier("c"), Collections.EMPTY_LIST));
+        assertParse("java.util.Map<K, V>",  
                 new ClassOrInterfaceType(new ClassOrInterfaceType(new ClassOrInterfaceType(
-                        null, "java", Collections.EMPTY_LIST), "util", Collections.EMPTY_LIST), "Map", 
-                        Arrays.asList(new ReferenceType(new ClassOrInterfaceType(null, "K", Collections.EMPTY_LIST), 0),
-                            new ReferenceType(new ClassOrInterfaceType(null, "V", Collections.EMPTY_LIST), 0))));
-        assertParse("Pair<A, Pair<A, /*comment*/ B>>", ClassOrInterfaceTypeParselet.class, 
-                new ClassOrInterfaceType(null, "Pair", Arrays.asList(
-                        new ReferenceType(new ClassOrInterfaceType(null, "A", Collections.EMPTY_LIST), 0),
-                        new ReferenceType(new ClassOrInterfaceType(null, "Pair", 
-                                Arrays.asList(
-                                        new ReferenceType(new ClassOrInterfaceType(null, "A", Collections.EMPTY_LIST), 0),
-                                        new ReferenceType(new ClassOrInterfaceType(null, "B", Collections.EMPTY_LIST), 0)
+                        null, new Identifier("java"), Collections.EMPTY_LIST), new Identifier("util"), Collections.EMPTY_LIST), 
+                        new Identifier("Map"), Arrays.asList(new ReferenceType(new ClassOrInterfaceType(
+                                null, new Identifier("K"), Collections.EMPTY_LIST), 0), new ReferenceType(
+                                        new ClassOrInterfaceType(null, new Identifier("V"), Collections.EMPTY_LIST), 0))));
+        assertParse("Pair<A, Pair<A, /*comment*/ B>>", 
+                new ClassOrInterfaceType(null, new Identifier("Pair"), Arrays.asList(
+                        new ReferenceType(new ClassOrInterfaceType(null, new Identifier("A"), Collections.EMPTY_LIST), 0),
+                        new ReferenceType(new ClassOrInterfaceType(null, new Identifier("Pair"), Arrays.asList(
+                                new ReferenceType(new ClassOrInterfaceType(null, new Identifier("A"), Collections.EMPTY_LIST), 0),
+                                new ReferenceType(new ClassOrInterfaceType(null, new Identifier("B"), Collections.EMPTY_LIST), 0)
                                         )), 0))));
-        assertParse("Pair<?, ?>", ClassOrInterfaceTypeParselet.class,
-                new ClassOrInterfaceType(null, "Pair", Arrays.asList(
+        assertParse("Pair<?, ?>",
+                new ClassOrInterfaceType(null, new Identifier("Pair"), Arrays.asList(
                         new WildcardType(null, null), new WildcardType(null, null))));
-        assertParse("List<? extends List<?>>", ClassOrInterfaceTypeParselet.class,
-                new ClassOrInterfaceType(null, "List", Arrays.asList(
-                        new WildcardType(new ReferenceType(new ClassOrInterfaceType(null, "List", 
+        assertParse("List<? extends List<?>>",
+                new ClassOrInterfaceType(null, new Identifier("List"), Arrays.asList(
+                        new WildcardType(new ReferenceType(new ClassOrInterfaceType(null, new Identifier("List"), 
                                 Arrays.asList(new WildcardType(null, null))), 0), null))));
-        assertParse("List<? super List<?>>", ClassOrInterfaceTypeParselet.class,
-                new ClassOrInterfaceType(null, "List", Arrays.asList(
-                        new WildcardType(null, new ReferenceType(new ClassOrInterfaceType(null, "List", 
+        assertParse("List<? super List<?>>", 
+                new ClassOrInterfaceType(null, new Identifier("List"), Arrays.asList(
+                        new WildcardType(null, new ReferenceType(new ClassOrInterfaceType(null, new Identifier("List"), 
                                 Arrays.asList(new WildcardType(null, null))), 0)))));
-        assertParse("List<? extends ?>", ClassOrInterfaceTypeParselet.class, null);
+        assertNull("List<? extends ?>", ClassOrInterfaceType.class);
     }
     
     @Test
     public void testImportDeclaration() {
-        assertParse("import a.b.c;", ImportDeclarationParselet.class, 
-                new ImportDeclaration("a.b.c", false, false));
-        assertParse("import a./*comment*/b.c//blahblah\n;", ImportDeclarationParselet.class, 
-                new ImportDeclaration("a.b.c", false, false));
-        assertParse("import static a.b.c;", ImportDeclarationParselet.class, 
-                new ImportDeclaration("a.b.c", true, false));
-        assertParse("import static a.b.c.;", ImportDeclarationParselet.class, null);
-        assertParse("import a.b//hey\n.c./*blahblah*/\n\n\r\n*;", ImportDeclarationParselet.class, 
-                new ImportDeclaration("a.b.c.", false, true));
+        assertParse("import a.b.c;", 
+                new ImportDeclaration(new QualifiedName("a.b.c"), false, false));
+        assertParse("import a./*comment*/b.c//blahblah\n;",  
+                new ImportDeclaration(new QualifiedName("a.b.c"), false, false));
+        assertParse("import static a.b.c;",  
+                new ImportDeclaration(new QualifiedName("a.b.c"), true, false));
+        assertNull("import static a.b.c.;", ImportDeclaration.class);
+        assertParse("import a.b//hey\n.c./*blahblah*/\n\n\r\n*;",  
+                new ImportDeclaration(new QualifiedName("a.b.c."), false, true));
     }
     
     @Test
     public void testPrimitiveType() {
         for (Primitive primitive : Primitive.values()) {
-            assertParse(primitive.name().toLowerCase(), PrimitiveTypeParselet.class, 
-                    new PrimitiveType(primitive));
-            assertParse(primitive.name().toLowerCase() + "1", PrimitiveTypeParselet.class, null);
-            assertParse(primitive.name(), PrimitiveTypeParselet.class, null);
-            assertParse("_" + primitive.name(), PrimitiveTypeParselet.class, null);
+            assertParse(primitive.name().toLowerCase(), new PrimitiveType(primitive));
+            assertNull(primitive.name().toLowerCase() + "1", PrimitiveType.class);
+            assertNull(primitive.name(), PrimitiveType.class);
+            assertNull("_" + primitive.name(), PrimitiveType.class);
         }
     }
     
     @Test
     @SuppressWarnings("unchecked")
     public void testReferenceType() {
-        assertParse("A", ReferenceTypeParselet.class, new ReferenceType(
-                new ClassOrInterfaceType(null, "A", Collections.EMPTY_LIST), 0));
-        assertParse("A[/*something here*/]//meh\n[]", ReferenceTypeParselet.class, new ReferenceType(
-                new ClassOrInterfaceType(null, "A", Collections.EMPTY_LIST), 2));
-        assertParse("double[/*something here*/]//meh\n[]", ReferenceTypeParselet.class, new ReferenceType(
+        assertParse("A", new ReferenceType(
+                new ClassOrInterfaceType(null, new Identifier("A"), Collections.EMPTY_LIST), 0));
+        assertParse("A[/*something here*/]//meh\n[]", new ReferenceType(
+                new ClassOrInterfaceType(null, new Identifier("A"), Collections.EMPTY_LIST), 2));
+        assertParse("double[/*something here*/]//meh\n[]", new ReferenceType(
                 new PrimitiveType(Primitive.DOUBLE), 2));
-        assertParse("List<? extends List<?>>[]", ReferenceTypeParselet.class, new ReferenceType(
-                new ClassOrInterfaceType(null, "List", Arrays.asList(
-                        new WildcardType(new ReferenceType(new ClassOrInterfaceType(null, "List", 
-                                Arrays.asList(new WildcardType(null, null))), 0), null))), 1));
+        assertParse("List<? extends List<?>>[]", new ReferenceType(
+                new ClassOrInterfaceType(null, new Identifier("List"), Arrays.asList(
+                        new WildcardType(new ReferenceType(new ClassOrInterfaceType(null, 
+                                new Identifier("List"), Arrays.asList(new WildcardType(null, null))), 0), null))), 1));
     }
 }

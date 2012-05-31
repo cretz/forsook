@@ -1,12 +1,15 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.ParseletDepends;
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.QualifiedName;
 
 @JlsReference("6.5") //TODO check this
-@ParseletDepends(IdentifierParselet.class)
+@ParseletDefinition(
+        name = "forsook.java.qualifiedName",
+        emits = QualifiedName.class
+)
 public class QualifiedNameParselet extends JavaParselet<QualifiedName> {
 
     @Override

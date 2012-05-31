@@ -1,8 +1,13 @@
 package org.forsook.parser.java.parselet;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.ConditionalExpression;
 
+@ParseletDefinition(
+        name = "forsook.java.conditionalExpression",
+        emits = ConditionalExpression.class
+)
 public class ConditionalExpressionParselet extends ExpressionParselet<ConditionalExpression> {
 
     @Override

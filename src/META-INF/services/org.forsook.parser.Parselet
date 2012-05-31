@@ -1,0 +1,27 @@
+# Please keep in alphabetical order
+org.forsook.parser.java.parselet.AnnotationExpressionParselet
+org.forsook.parser.java.parselet.ArrayAccessExpressionParselet
+org.forsook.parser.java.parselet.ArrayInitializerExpressionParselet
+org.forsook.parser.java.parselet.AssignmentExpressionParselet
+org.forsook.parser.java.parselet.BlockStatementParselet
+org.forsook.parser.java.parselet.BooleanAndNullLiteralExpressionParselet
+org.forsook.parser.java.parselet.CharacterAndStringLiteralExpressionParselet
+org.forsook.parser.java.parselet.ClassOrInterfaceDeclarationParselet
+org.forsook.parser.java.parselet.ClassOrInterfaceTypeParselet
+org.forsook.parser.java.parselet.CommentParselet
+org.forsook.parser.java.parselet.ConditionalExpressionParselet
+org.forsook.parser.java.parselet.ExpressionParselet
+org.forsook.parser.java.parselet.FloatingPointLiteralExpressionParselet
+org.forsook.parser.java.parselet.IdentifierParselet
+org.forsook.parser.java.parselet.ImportDeclarationParselet
+org.forsook.parser.java.parselet.InitializerDeclarationParselet
+org.forsook.parser.java.parselet.IntegerLiteralExpressionParselet
+org.forsook.parser.java.parselet.ModifierParselet
+org.forsook.parser.java.parselet.PackageDeclarationParselet
+org.forsook.parser.java.parselet.PrimitiveTypeParselet
+org.forsook.parser.java.parselet.QualifiedNameParselet
+org.forsook.parser.java.parselet.ReferenceTypeParselet
+org.forsook.parser.java.parselet.VariableDeclarationExpressionParselet
+org.forsook.parser.java.parselet.VariableDeclaratorParselet
+org.forsook.parser.java.parselet.WhiteSpaceParselet
+org.forsook.parser.java.parselet.WildcardTypeParselet

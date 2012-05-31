@@ -1,22 +1,43 @@
 package org.forsook.parser.java.parselet;
 
+import java.util.Properties;
+import java.util.ServiceLoader;
+
 import junit.framework.Assert;
 
 import org.forsook.parser.Parselet;
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.ParserUtils;
 import org.forsook.parser.SimpleParser;
 
 public abstract class ParseletTestBase {
+    
+    private static final Properties allLocalParseletsEnabled = new Properties();
+    
+    static {
+        for (Parselet<?> parselet : ServiceLoader.load(Parselet.class)) {
+            ParseletDefinition definition = parselet.getClass().getAnnotation(ParseletDefinition.class);
+            if (definition != null && !definition.name().isEmpty()) {
+                allLocalParseletsEnabled.setProperty(definition.name() + ".enabled", "true");
+            }
+        }
+    }
 
-    protected static Parser buildParser(String source, Class<? extends Parselet<?>>... parseletClasses) {
-        return new SimpleParser(source, ParserUtils.buildParseletMap(ParserUtils.getDependencies(parseletClasses)));
+    protected Parser buildParser(String source) {
+        return new SimpleParser(source, ParserUtils.buildParseletMap(allLocalParseletsEnabled));
     }
     
-    @SuppressWarnings("unchecked")
-    protected static <U, T extends Parselet<U>> void assertParse(String source, 
-            Class<T> parseletClass, U expected) {
-        U actual = buildParser(source, parseletClass).next(parseletClass);
-        Assert.assertEquals("Results unequal for parselet: " + parseletClass, expected, actual);
+    protected void assertParse(String source, Object expected) {
+        assertParse(source, expected.getClass(), expected);
+    }
+    
+    protected void assertNull(String source, Class<?> classToEmit) {
+        assertParse(source, classToEmit, null);
+    }
+    
+    protected void assertParse(String source, Class<?> classToEmit, Object expected) {
+        Object actual = buildParser(source).next(classToEmit);
+        Assert.assertEquals("Results unequal for class: " + classToEmit, expected, actual);
     }
 }
