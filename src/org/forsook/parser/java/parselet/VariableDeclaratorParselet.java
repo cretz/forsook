@@ -13,32 +13,23 @@ import org.forsook.parser.java.ast.VariableDeclaratorId;
 @ParseletDefinition(
         name = "forsook.java.variableDeclarator",
         emits = VariableDeclarator.class,
-        needs = { Identifier.class, ArrayInitializerExpression.class, Expression.class }
+        needs = { 
+            Identifier.class, 
+            ArrayInitializerExpression.class, 
+            Expression.class,
+            VariableDeclaratorId.class
+        }
 )
 public class VariableDeclaratorParselet extends JavaParselet<VariableDeclarator> {
 
     @Override
     public VariableDeclarator parse(Parser parser) {
-        //name
-        Identifier name = parser.next(Identifier.class);
-        if (name == null) {
+        VariableDeclaratorId id = parser.next(VariableDeclaratorId.class);
+        if (id == null) {
             return null;
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
-        //array count
-        int arrayCount = 0;
-        do {
-            parseWhiteSpaceAndComments(parser);
-            if (!parser.peekPresentAndSkip('[')) {
-                break;
-            }
-            parseWhiteSpaceAndComments(parser);
-            if (!parser.peekPresentAndSkip(']')) {
-                return null;
-            }
-            arrayCount++;
-        } while (true);
         //initializer?
         Expression init = null;
         if (parser.peekPresentAndSkip('=')) {
@@ -54,7 +45,7 @@ public class VariableDeclaratorParselet extends JavaParselet<VariableDeclarator>
                 }
             }
         }
-        return new VariableDeclarator(new VariableDeclaratorId(name, arrayCount), init);
+        return new VariableDeclarator(id, init);
     }
 
 }

@@ -1,7 +1,5 @@
 package org.forsook.parser.java.ast;
 
-import java.util.List;
-
 import org.forsook.parser.java.JlsReference;
 
 @JlsReference("4.3")
@@ -10,13 +8,13 @@ public class ClassOrInterfaceType extends Type {
 
     private ClassOrInterfaceType previous;
     private Identifier name;
-    private List<? extends Type> typeArguments;
+    private TypeArguments typeArguments;
     
     public ClassOrInterfaceType() {
     }
 
     public ClassOrInterfaceType(ClassOrInterfaceType previous, Identifier name,
-            List<? extends Type> typeArguments) {
+            TypeArguments typeArguments) {
         this.previous = previous;
         this.name = name;
         this.typeArguments = typeArguments;
@@ -38,11 +36,11 @@ public class ClassOrInterfaceType extends Type {
         this.name = name;
     }
 
-    public List<? extends Type> getTypeArguments() {
+    public TypeArguments getTypeArguments() {
         return typeArguments;
     }
-
-    public void setTypeArguments(List<? extends Type> typeArguments) {
+    
+    public void setTypeArguments(TypeArguments typeArguments) {
         this.typeArguments = typeArguments;
     }
 

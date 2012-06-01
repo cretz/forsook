@@ -1,22 +1,24 @@
 package org.forsook.parser.java.parselet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.ReferenceType;
-import org.forsook.parser.java.ast.Type;
+import org.forsook.parser.java.ast.TypeArguments;
 import org.forsook.parser.java.ast.WildcardType;
 
 @JlsReference("4.3")
 @ParseletDefinition(
         name = "forsook.java.classOrInterfaceType",
         emits = ClassOrInterfaceType.class,
-        needs = { Identifier.class, WildcardType.class, ReferenceType.class }
+        needs = { 
+            Identifier.class, 
+            WildcardType.class, 
+            ReferenceType.class,
+            TypeArguments.class
+        }
 )
 public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceType> {
 
@@ -27,42 +29,25 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
             //name
             Identifier name = parser.next(Identifier.class);
             if (name == null) {
-                return null;
+                //don't skip the dot, just get out (could be varargs)
+                if (type == null) {
+                    return null;
+                } else {
+                    break;
+                }
+            } else {
+                parser.skip(1);
             }
             //spacing
             parseWhiteSpaceAndComments(parser);
             //type args
-            List<Type> typeArguments = parseTypeArguments(parser);
-            if (typeArguments == null) {
-                return null;
-            }
+            TypeArguments typeArguments = parser.next(TypeArguments.class);
             //add
             type = new ClassOrInterfaceType(type, name, typeArguments);
-        } while (parser.peekPresentAndSkip('.'));
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+        } while (parser.peekPresent('.'));
         return type;
-    }
-
-    private List<Type> parseTypeArguments(Parser parser) {
-        if (!parser.peekPresentAndSkip('<')) {
-            return new ArrayList<Type>(0);
-        }
-        List<Type> ret = new ArrayList<Type>();
-        do {
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-            //get type
-            Type type = parser.next(WildcardType.class);
-            if (type == null) {
-                type = parser.next(ReferenceType.class);
-                if (type == null) {
-                    return null;
-                }
-            }
-            ret.add(type);
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-        } while (parser.peekPresentAndSkip(','));
-        return parser.peekPresentAndSkip('>') ? ret : null; 
     }
 
 }
