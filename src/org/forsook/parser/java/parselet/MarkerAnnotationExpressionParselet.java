@@ -4,7 +4,7 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.MarkerAnnotationExpression;
-import org.forsook.parser.java.ast.QualifiedName;
+import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("9.7.2")
 @ParseletDefinition(

@@ -14,8 +14,8 @@ import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.FieldDeclaration;
 import org.forsook.parser.java.ast.InitializerDeclaration;
 import org.forsook.parser.java.ast.MethodDeclaration;
-import org.forsook.parser.java.ast.TypeArguments;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
+import org.forsook.parser.java.ast.type.TypeArguments;
 
 @JlsReference("15.9")
 @ParseletDefinition(

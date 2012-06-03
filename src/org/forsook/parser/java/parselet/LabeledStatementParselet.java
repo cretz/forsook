@@ -3,9 +3,9 @@ package org.forsook.parser.java.parselet;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.LabeledStatement;
 import org.forsook.parser.java.ast.Statement;
+import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("14.7")
 @ParseletDefinition(

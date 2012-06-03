@@ -1,8 +1,7 @@
 package org.forsook.parser.java.ast.type;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Identifier;
-import org.forsook.parser.java.ast.TypeArguments;
+import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("4.3")
 @SuppressWarnings("serial")

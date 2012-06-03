@@ -1,9 +1,9 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.type;
 
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.type.Type;
+import org.forsook.parser.java.ast.JavaModel;
 
 @JlsReference("4.5.1")
 @SuppressWarnings("serial")

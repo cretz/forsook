@@ -6,7 +6,7 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ArrayAccessExpression;
 import org.forsook.parser.java.ast.ArrayCreationExpression;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.QualifiedName;
+import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.13")
 @ParseletDefinition(

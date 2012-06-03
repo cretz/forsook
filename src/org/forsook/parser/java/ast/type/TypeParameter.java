@@ -3,8 +3,8 @@ package org.forsook.parser.java.ast.type;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.JavaModel;
+import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("4.4")
 @SuppressWarnings("serial")

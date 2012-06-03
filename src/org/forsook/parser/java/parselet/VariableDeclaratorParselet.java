@@ -5,9 +5,9 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ArrayInitializerExpression;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.VariableDeclarator;
 import org.forsook.parser.java.ast.VariableDeclaratorId;
+import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("14.4")
 @ParseletDefinition(

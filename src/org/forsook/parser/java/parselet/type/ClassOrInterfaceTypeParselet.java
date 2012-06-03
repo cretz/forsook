@@ -3,11 +3,9 @@ package org.forsook.parser.java.parselet.type;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Identifier;
-import org.forsook.parser.java.ast.TypeArguments;
+import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
-import org.forsook.parser.java.ast.type.ReferenceType;
-import org.forsook.parser.java.ast.type.WildcardType;
+import org.forsook.parser.java.ast.type.TypeArguments;
 
 @JlsReference("4.3")
 @ParseletDefinition(

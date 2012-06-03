@@ -9,10 +9,10 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.AnnotationExpression;
 import org.forsook.parser.java.ast.BlockStatement;
 import org.forsook.parser.java.ast.ConstructorDeclaration;
-import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.Parameter;
+import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.TypeParameter;
 

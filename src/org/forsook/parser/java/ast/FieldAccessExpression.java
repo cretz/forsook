@@ -1,6 +1,8 @@
 package org.forsook.parser.java.ast;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.11")
 @SuppressWarnings("serial")

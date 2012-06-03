@@ -7,9 +7,9 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.BodyDeclaration;
 import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
-import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.InitializerDeclaration;
 import org.forsook.parser.java.ast.TypeDeclaration;
+import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 
 @ParseletDefinition(

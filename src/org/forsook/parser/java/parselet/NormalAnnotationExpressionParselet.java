@@ -7,10 +7,10 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.NormalAnnotationExpression;
 import org.forsook.parser.java.ast.NormalAnnotationExpression.ElementValuePair;
-import org.forsook.parser.java.ast.QualifiedName;
+import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("9.7.1")
 @ParseletDefinition(
