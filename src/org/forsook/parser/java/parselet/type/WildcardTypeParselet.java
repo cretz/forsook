@@ -1,10 +1,10 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.type;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.ReferenceType;
-import org.forsook.parser.java.ast.WildcardType;
+import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.type.WildcardType;
 
 @JlsReference("4.5.1")
 @ParseletDefinition(

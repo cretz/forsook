@@ -5,20 +5,20 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.forsook.parser.java.ast.BlockComment;
-import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.Comment;
 import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.ImportDeclaration;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.LineComment;
 import org.forsook.parser.java.ast.PackageDeclaration;
-import org.forsook.parser.java.ast.PrimitiveType;
-import org.forsook.parser.java.ast.PrimitiveType.Primitive;
 import org.forsook.parser.java.ast.QualifiedName;
-import org.forsook.parser.java.ast.ReferenceType;
 import org.forsook.parser.java.ast.WhiteSpace;
 import org.forsook.parser.java.ast.WhiteSpace.WhiteSpaceType;
-import org.forsook.parser.java.ast.WildcardType;
+import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
+import org.forsook.parser.java.ast.type.PrimitiveType;
+import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.type.WildcardType;
+import org.forsook.parser.java.ast.type.PrimitiveType.Primitive;
 import org.junit.Test;
 
 public class SimpleParseletTest extends ParseletTestBase {

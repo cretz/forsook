@@ -1,6 +1,7 @@
 package org.forsook.parser.java.ast;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.type.ReferenceType;
 
 @JlsReference("15.16")
 @SuppressWarnings("serial")

@@ -1,7 +1,12 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.type;
 
 import java.util.List;
 
+import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.Identifier;
+import org.forsook.parser.java.ast.JavaModel;
+
+@JlsReference("4.4")
 @SuppressWarnings("serial")
 public class TypeParameter extends JavaModel {
 

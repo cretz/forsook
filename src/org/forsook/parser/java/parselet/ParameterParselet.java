@@ -8,8 +8,8 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.AnnotationExpression;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.Parameter;
-import org.forsook.parser.java.ast.ReferenceType;
 import org.forsook.parser.java.ast.VariableDeclaratorId;
+import org.forsook.parser.java.ast.type.ReferenceType;
 
 @JlsReference("8.4.1")
 @ParseletDefinition(

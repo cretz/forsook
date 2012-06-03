@@ -9,11 +9,13 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.BodyDeclaration;
 import org.forsook.parser.java.ast.ClassInstanceCreationExpression;
 import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
-import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.ConstructorDeclaration;
 import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.FieldDeclaration;
 import org.forsook.parser.java.ast.InitializerDeclaration;
+import org.forsook.parser.java.ast.MethodDeclaration;
 import org.forsook.parser.java.ast.TypeArguments;
+import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 
 @JlsReference("15.9")
 @ParseletDefinition(
@@ -24,6 +26,7 @@ public class ClassInstanceCreationExpressionParselet
         extends ExpressionParselet<ClassInstanceCreationExpression> {
 
     @Override
+    @SuppressWarnings("unchecked")
     public ClassInstanceCreationExpression parse(Parser parser) {
         //starts with primary expression?
         Expression scope = parsePrimaryExpression(parser, true);

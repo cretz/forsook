@@ -4,30 +4,32 @@ import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
+import org.forsook.parser.java.ast.type.Type;
 import org.forsook.parser.java.ast.type.TypeParameter;
 
-@JlsReference("8.8")
+@JlsReference("8.4")
 @SuppressWarnings("serial")
-public class ConstructorDeclaration extends BodyDeclaration {
+public class MethodDeclaration extends BodyDeclaration {
 
     private Modifier modifier;
     private List<TypeParameter> typeParameters;
+    private Type result;
     private Identifier name;
     private List<Parameter> parameters;
     private List<ClassOrInterfaceType> throwsList;
     private BlockStatement block;
-    
-    public ConstructorDeclaration() {
+
+    public MethodDeclaration() {
     }
 
-    public ConstructorDeclaration(JavadocComment javadoc, 
+    public MethodDeclaration(JavadocComment javadoc,
             List<AnnotationExpression> annotations, Modifier modifier,
-            List<TypeParameter> typeParameters, Identifier name,
+            List<TypeParameter> typeParameters, Type result, Identifier name,
             List<Parameter> parameters, List<ClassOrInterfaceType> throwsList,
             BlockStatement block) {
-        super(javadoc, annotations);
         this.modifier = modifier;
         this.typeParameters = typeParameters;
+        this.result = result;
         this.name = name;
         this.parameters = parameters;
         this.throwsList = throwsList;
@@ -50,6 +52,14 @@ public class ConstructorDeclaration extends BodyDeclaration {
         this.typeParameters = typeParameters;
     }
 
+    public Type getResult() {
+        return result;
+    }
+
+    public void setResult(Type result) {
+        this.result = result;
+    }
+
     public Identifier getName() {
         return name;
     }
@@ -69,7 +79,7 @@ public class ConstructorDeclaration extends BodyDeclaration {
     public List<ClassOrInterfaceType> getThrowsList() {
         return throwsList;
     }
-    
+
     public void setThrowsList(List<ClassOrInterfaceType> throwsList) {
         this.throwsList = throwsList;
     }
@@ -93,6 +103,8 @@ public class ConstructorDeclaration extends BodyDeclaration {
         result = prime * result
                 + ((parameters == null) ? 0 : parameters.hashCode());
         result = prime * result
+                + ((this.result == null) ? 0 : this.result.hashCode());
+        result = prime * result
                 + ((throwsList == null) ? 0 : throwsList.hashCode());
         result = prime * result
                 + ((typeParameters == null) ? 0 : typeParameters.hashCode());
@@ -110,7 +122,7 @@ public class ConstructorDeclaration extends BodyDeclaration {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ConstructorDeclaration other = (ConstructorDeclaration) obj;
+        MethodDeclaration other = (MethodDeclaration) obj;
         if (block == null) {
             if (other.block != null) {
                 return false;
@@ -137,6 +149,13 @@ public class ConstructorDeclaration extends BodyDeclaration {
                 return false;
             }
         } else if (!parameters.equals(other.parameters)) {
+            return false;
+        }
+        if (result == null) {
+            if (other.result != null) {
+                return false;
+            }
+        } else if (!result.equals(other.result)) {
             return false;
         }
         if (throwsList == null) {

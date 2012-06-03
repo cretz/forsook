@@ -1,10 +1,12 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.type;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.Identifier;
+import org.forsook.parser.java.ast.TypeArguments;
 
 @JlsReference("4.3")
 @SuppressWarnings("serial")
-public class ClassOrInterfaceType extends Type {
+public class ClassOrInterfaceType extends ReferenceType {
 
     private ClassOrInterfaceType previous;
     private Identifier name;

@@ -8,13 +8,13 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.AnnotationExpression;
 import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
-import org.forsook.parser.java.ast.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.Comment;
 import org.forsook.parser.java.ast.Identifier;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
-import org.forsook.parser.java.ast.TypeParameter;
 import org.forsook.parser.java.ast.WhiteSpace;
+import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
+import org.forsook.parser.java.ast.type.TypeParameter;
 
 @JlsReference({ "8.1", "9.1" })
 @ParseletDefinition(
@@ -34,19 +34,10 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
     @Override
     public ClassOrInterfaceDeclaration parse(Parser parser) {
         //annotations, javadoc, and modifiers
-        JavadocComment javadoc = null;
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        int modifiers = 0;
-        for (Object found : parser.any(WhiteSpace.class, Comment.class, 
-                AnnotationExpression.class, Modifier.class)) {
-            if (found instanceof JavadocComment) {
-                javadoc = (JavadocComment) found;
-            } else if (found instanceof AnnotationExpression) {
-                annotations.add((AnnotationExpression) found);
-            } else if (found instanceof Modifier) {
-                modifiers &= ((Modifier) found).getModifier();
-            }
-        }
+        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
+        //modifiers
+        Modifier modifiers = parseModifiers(parser);
         //interface/class
         boolean iface = parser.peekPresentAndSkip("interface");
         if (!iface && !parser.peekPresentAndSkip("class")) {

@@ -15,7 +15,8 @@ import org.forsook.parser.java.ast.Expression;
         emits = ArrayInitializerExpression.class,
         needs = { ArrayInitializerExpression.class, Expression.class }
 )
-public class ArrayInitializerExpressionParselet extends ExpressionParselet<ArrayInitializerExpression> {
+public class ArrayInitializerExpressionParselet 
+        extends ExpressionParselet<ArrayInitializerExpression> {
     
     @Override
     public ArrayInitializerExpression parse(Parser parser) {

@@ -4,9 +4,9 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.ClassExpression;
-import org.forsook.parser.java.ast.ReferenceType;
-import org.forsook.parser.java.ast.Type;
-import org.forsook.parser.java.ast.VoidType;
+import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.type.Type;
+import org.forsook.parser.java.ast.type.VoidType;
 
 @JlsReference("15.8.2")
 @ParseletDefinition(

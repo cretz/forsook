@@ -3,6 +3,7 @@ package org.forsook.parser.java.ast;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 
 @JlsReference("15.9")
 @SuppressWarnings("serial")

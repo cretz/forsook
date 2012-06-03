@@ -1,29 +1,28 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.type;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.type.Type;
 
-@JlsReference("15.8.2")
+@JlsReference("4.2")
 @SuppressWarnings("serial")
-public class ClassExpression extends Expression {
+public class PrimitiveType extends Type {
 
-    private Type type;
+    private Primitive type;
     
-    public ClassExpression() {
+    public PrimitiveType() {
     }
     
-    public ClassExpression(Type type) {
+    public PrimitiveType(Primitive type) {
         this.type = type;
     }
     
-    public Type getType() {
+    public Primitive getType() {
         return type;
     }
     
-    public void setType(Type type) {
+    public void setType(Primitive type) {
         this.type = type;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -43,14 +42,21 @@ public class ClassExpression extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ClassExpression other = (ClassExpression) obj;
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
+        PrimitiveType other = (PrimitiveType) obj;
+        if (type != other.type) {
             return false;
         }
         return true;
+    }
+
+    public static enum Primitive {
+        BOOLEAN,
+        BYTE,
+        CHAR,
+        DOUBLE,
+        FLOAT,
+        INT,
+        LONG,
+        SHORT
     }
 }

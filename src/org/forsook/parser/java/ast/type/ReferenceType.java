@@ -1,33 +1,43 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.type;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.type.Type;
 
-@JlsReference("15.8.2")
+@JlsReference("4.3")
 @SuppressWarnings("serial")
-public class ClassExpression extends Expression {
+public class ReferenceType extends Type {
 
     private Type type;
+    private int arrayCount;
     
-    public ClassExpression() {
+    public ReferenceType() {   
     }
     
-    public ClassExpression(Type type) {
+    public ReferenceType(Type type, int arrayCount) {
         this.type = type;
+        this.arrayCount = arrayCount;
     }
-    
+
     public Type getType() {
         return type;
     }
-    
+
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public int getArrayCount() {
+        return arrayCount;
+    }
+
+    public void setArrayCount(int arrayCount) {
+        this.arrayCount = arrayCount;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + arrayCount;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
@@ -43,7 +53,10 @@ public class ClassExpression extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ClassExpression other = (ClassExpression) obj;
+        ReferenceType other = (ReferenceType) obj;
+        if (arrayCount != other.arrayCount) {
+            return false;
+        }
         if (type == null) {
             if (other.type != null) {
                 return false;
@@ -52,5 +65,5 @@ public class ClassExpression extends Expression {
             return false;
         }
         return true;
-    }
+    }    
 }

@@ -10,11 +10,11 @@ import org.forsook.parser.java.ast.AnnotationExpression;
 import org.forsook.parser.java.ast.Comment;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
-import org.forsook.parser.java.ast.ReferenceType;
-import org.forsook.parser.java.ast.Type;
 import org.forsook.parser.java.ast.VariableDeclarationExpression;
 import org.forsook.parser.java.ast.VariableDeclarator;
 import org.forsook.parser.java.ast.WhiteSpace;
+import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("14.4")
 @ParseletDefinition(

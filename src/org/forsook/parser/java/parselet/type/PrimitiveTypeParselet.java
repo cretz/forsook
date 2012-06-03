@@ -1,10 +1,11 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.type;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.PrimitiveType;
-import org.forsook.parser.java.ast.PrimitiveType.Primitive;
+import org.forsook.parser.java.ast.type.PrimitiveType;
+import org.forsook.parser.java.ast.type.PrimitiveType.Primitive;
+import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("4.2")
 @ParseletDefinition(

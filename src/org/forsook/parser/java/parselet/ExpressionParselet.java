@@ -7,6 +7,7 @@ import org.forsook.parser.java.ast.ArrayAccessExpression;
 import org.forsook.parser.java.ast.ArrayCreationExpression;
 import org.forsook.parser.java.ast.AssignmentExpression;
 import org.forsook.parser.java.ast.ClassExpression;
+import org.forsook.parser.java.ast.ClassInstanceCreationExpression;
 import org.forsook.parser.java.ast.ConditionalExpression;
 import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.LiteralExpression;
@@ -17,7 +18,13 @@ import org.forsook.parser.java.ast.ThisExpression;
 @ParseletDefinition(
         name = "forsook.java.expression",
         emits = Expression.class,
-        needs = { ConditionalExpression.class, AssignmentExpression.class }
+        needs = {
+            ConditionalExpression.class, AssignmentExpression.class,
+            LiteralExpression.class, ClassExpression.class, ThisExpression.class,
+            ParenthesizedExpression.class, ClassInstanceCreationExpression.class,
+            FieldAccessExpression.class, MethodInvocationExpression.class,
+            ArrayAccessExpression.class, ArrayCreationExpression.class 
+        }
 )
 public class ExpressionParselet<T extends Expression> extends JavaParselet<T> {
 
@@ -37,7 +44,7 @@ public class ExpressionParselet<T extends Expression> extends JavaParselet<T> {
     }
     
     protected Expression parsePrimaryExpression(Parser parser, boolean newArray) {
-        Expression expr = parser.first(LiteralExpression.class,
+        Expression expr = (Expression) parser.first(LiteralExpression.class,
                 ClassExpression.class, ThisExpression.class, ParenthesizedExpression.class,
                 ClassInstanceCreationExpression.class, FieldAccessExpression.class,
                 MethodInvocationExpression.class, ArrayAccessExpression.class);

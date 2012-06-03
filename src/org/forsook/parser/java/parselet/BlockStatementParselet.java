@@ -17,7 +17,11 @@ import org.forsook.parser.java.ast.VariableDeclarationExpression;
 @ParseletDefinition(
         name = "forsook.java.blockStatement",
         emits = BlockStatement.class,
-        needs = { ClassOrInterfaceDeclaration.class, VariableDeclarationExpression.class }
+        needs = { 
+            ClassOrInterfaceDeclaration.class, 
+            VariableDeclarationExpression.class,
+            Statement.class
+        }
 )
 public class BlockStatementParselet extends StatementParselet<BlockStatement> {
 

@@ -13,7 +13,11 @@ import org.forsook.parser.java.ast.AssignmentExpression.AssignmentOperator;
 @ParseletDefinition(
         name = "forsook.java.assignmentExpression",
         emits = AssignmentExpression.class,
-        needs = { ArrayAccessExpression.class, QualifiedName.class }
+        needs = { 
+            ArrayAccessExpression.class, 
+            QualifiedName.class,
+            Expression.class
+        }
 )
 public class AssignmentExpressionParselet extends ExpressionParselet<AssignmentExpression> {
 

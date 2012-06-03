@@ -11,9 +11,9 @@ import org.forsook.parser.java.ast.Comment;
 import org.forsook.parser.java.ast.FieldDeclaration;
 import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
-import org.forsook.parser.java.ast.ReferenceType;
 import org.forsook.parser.java.ast.VariableDeclarator;
 import org.forsook.parser.java.ast.WhiteSpace;
+import org.forsook.parser.java.ast.type.ReferenceType;
 
 @JlsReference("8.3")
 @ParseletDefinition(
@@ -26,22 +26,9 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
     public FieldDeclaration parse(Parser parser) {
         //annotations and javadoc
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = null;
-        for (Object found : parser.any(WhiteSpace.class, 
-                Comment.class, AnnotationExpression.class)) {
-            if (found instanceof AnnotationExpression) {
-                annotations.add((AnnotationExpression) found);
-            } else if (found instanceof JavadocComment) {
-                javadoc = (JavadocComment) found;
-            }
-        }
+        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
         //modifiers
-        int modifiers = 0;
-        for (Object found : parser.any(WhiteSpace.class, Comment.class, Modifier.class)) {
-            if (found instanceof Modifier) {
-                modifiers &= ((Modifier) found).getModifier();
-            }
-        }
+        Modifier modifiers = parseModifiers(parser);
         //type
         ReferenceType type = parser.next(ReferenceType.class);
         if (type == null) {
@@ -64,8 +51,7 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
-        return new FieldDeclaration(javadoc, annotations, 
-                new Modifier(modifiers), type, variables);
+        return new FieldDeclaration(javadoc, annotations, modifiers, type, variables);
     }
 
 }

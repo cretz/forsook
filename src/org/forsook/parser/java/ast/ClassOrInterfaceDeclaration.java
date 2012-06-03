@@ -3,6 +3,8 @@ package org.forsook.parser.java.ast;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
+import org.forsook.parser.java.ast.type.TypeParameter;
 
 @JlsReference({ "8.1", "9.1" })
 @SuppressWarnings("serial")

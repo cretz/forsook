@@ -23,20 +23,23 @@ import org.forsook.parser.java.ast.SingleElementAnnotationExpression;
             SingleElementAnnotationExpression.class,
             NormalAnnotationExpression.class,
             MarkerAnnotationExpression.class,
-            Expression.class
+            ConditionalExpression.class
         }
 )
-public class AnnotationExpressionParselet<T extends AnnotationExpression> extends ExpressionParselet<T> {
+public class AnnotationExpressionParselet<T extends AnnotationExpression> 
+        extends ExpressionParselet<T> {
 
     @Override
     @SuppressWarnings("unchecked")
     public T parse(Parser parser) {
-        return (T) parser.first(SingleElementAnnotationExpression.class, NormalAnnotationExpression.class, MarkerAnnotationExpression.class);
+        return (T) parser.first(SingleElementAnnotationExpression.class, 
+                NormalAnnotationExpression.class, MarkerAnnotationExpression.class);
     }
 
     protected Expression parseElementValue(Parser parser) {
         //conditional or annotation?
-        Expression value = (Expression) parser.first(AnnotationExpression.class, ConditionalExpression.class);
+        Expression value = (Expression) parser.first(AnnotationExpression.class, 
+                ConditionalExpression.class);
         if (value != null) {
             return value;
         }

@@ -18,27 +18,6 @@ public abstract class JavaParselet<T> implements Parselet<T> {
     }
     
     /**
-     * Parse the array dimensions of a type (e.g. [][][])
-     * 
-     * @param parser
-     * @return
-     */
-    protected Integer parseArrayBracketCount(Parser parser) {
-        int arrayCount = 0;
-        do {
-            parseWhiteSpaceAndComments(parser);
-            if (!parser.peekPresentAndSkip('[')) {
-                return arrayCount;
-            }
-            parseWhiteSpaceAndComments(parser);
-            if (!parser.peekPresentAndSkip(']')) {
-                return null;
-            }
-            arrayCount++;
-        } while (true);
-    }
-    
-    /**
      * The next word in the parser that is a java identifier (doesn't check keywords).
      * 
      * @param parser
