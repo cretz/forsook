@@ -7,11 +7,11 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.BlockStatement;
-import org.forsook.parser.java.ast.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.ExpressionStatement;
 import org.forsook.parser.java.ast.Statement;
-import org.forsook.parser.java.ast.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.VariableDeclarationExpression;
+import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
+import org.forsook.parser.java.ast.decl.TypeDeclarationStatement;
 
 @JlsReference("14.2")
 @ParseletDefinition(

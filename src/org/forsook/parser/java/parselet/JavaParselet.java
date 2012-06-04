@@ -13,7 +13,7 @@ import org.forsook.parser.java.ast.WhiteSpace;
 )
 public abstract class JavaParselet<T> implements Parselet<T> {
 
-    protected List<?> parseWhiteSpaceAndComments(Parser parser) {
+    public List<?> parseWhiteSpaceAndComments(Parser parser) {
         return parser.any(WhiteSpace.class, Comment.class);
     }
     

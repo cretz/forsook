@@ -1,18 +1,19 @@
-package org.forsook.parser.java.ast.packag;
+package org.forsook.parser.java.ast.decl;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
-@JlsReference("7.5.2")
+@JlsReference("9.7")
 @SuppressWarnings("serial")
-public class TypeOnDemandImportDeclaration extends ImportDeclaration {
+public abstract class AnnotationExpression extends Expression {
 
     private QualifiedName name;
     
-    public TypeOnDemandImportDeclaration() {
+    public AnnotationExpression() {
     }
     
-    public TypeOnDemandImportDeclaration(QualifiedName name) {
+    public AnnotationExpression(QualifiedName name) {
         this.name = name;
     }
     
@@ -43,7 +44,7 @@ public class TypeOnDemandImportDeclaration extends ImportDeclaration {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        TypeOnDemandImportDeclaration other = (TypeOnDemandImportDeclaration) obj;
+        AnnotationExpression other = (AnnotationExpression) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

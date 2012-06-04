@@ -1,9 +1,17 @@
 package org.forsook.parser.java.parselet.packag;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.name.QualifiedName;
 import org.forsook.parser.java.ast.packag.SingleTypeImportDeclaration;
 
+@JlsReference("7.5.1")
+@ParseletDefinition(
+        name = "forsook.java.singleTypeImportDeclaration",
+        emits = SingleTypeImportDeclaration.class,
+        needs = QualifiedName.class
+)
 public class SingleTypeImportDeclarationParselet 
         extends ImportDeclarationParselet<SingleTypeImportDeclaration> {
 

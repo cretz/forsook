@@ -1,4 +1,4 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.packag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,19 +6,16 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.AnnotationExpression;
-import org.forsook.parser.java.ast.Comment;
-import org.forsook.parser.java.ast.PackageDeclaration;
-import org.forsook.parser.java.ast.QualifiedName;
-import org.forsook.parser.java.ast.WhiteSpace;
+import org.forsook.parser.java.ast.decl.AnnotationExpression;
+import org.forsook.parser.java.ast.name.QualifiedName;
+import org.forsook.parser.java.ast.packag.PackageDeclaration;
+import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("7.4")
 @ParseletDefinition(
         name = "forsook.java.packageDeclaration",
         emits = PackageDeclaration.class,
         needs = {
-            WhiteSpace.class,
-            Comment.class,
             AnnotationExpression.class,
             QualifiedName.class
         }
@@ -27,14 +24,17 @@ public class PackageDeclarationParselet extends JavaParselet<PackageDeclaration>
 
     @Override
     public PackageDeclaration parse(Parser parser) {
-        //hold annotations
+        //annotations
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        //loop over whitespace and annotations, only holding on to annotations
-        for (Object found : parser.any(WhiteSpace.class, Comment.class,  AnnotationExpression.class)) {
-            if (found instanceof AnnotationExpression) {
-                annotations.add((AnnotationExpression) found);
+        do {
+            AnnotationExpression annotation = parser.next(AnnotationExpression.class);
+            if (annotation == null) {
+                break;
             }
-        }
+            annotations.add(annotation);
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+        } while (true);
         //needs "package" to be present
         if (!parser.peekPresentAndSkip("package")) {
             return null;
@@ -45,8 +45,7 @@ public class PackageDeclarationParselet extends JavaParselet<PackageDeclaration>
         }
         //get name
         QualifiedName name = parser.next(QualifiedName.class);
-        //can't end w/ a dot
-        if (name != null && name.getName().endsWith(".")) {
+        if (name == null) {
             return null;
         }
         //could have more mess

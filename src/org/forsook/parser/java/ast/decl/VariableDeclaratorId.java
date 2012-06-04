@@ -1,33 +1,45 @@
-package org.forsook.parser.java.ast.packag;
+package org.forsook.parser.java.ast.decl;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.name.QualifiedName;
+import org.forsook.parser.java.ast.JavaModel;
+import org.forsook.parser.java.ast.lexical.Identifier;
 
-@JlsReference("7.5.2")
+@JlsReference("8.3")
 @SuppressWarnings("serial")
-public class TypeOnDemandImportDeclaration extends ImportDeclaration {
+public class VariableDeclaratorId extends JavaModel {
 
-    private QualifiedName name;
+    private Identifier name;
+    private int arrayCount;
     
-    public TypeOnDemandImportDeclaration() {
+    public VariableDeclaratorId() {
     }
     
-    public TypeOnDemandImportDeclaration(QualifiedName name) {
+    public VariableDeclaratorId(Identifier name, int arrayCount) {
         this.name = name;
+        this.arrayCount = arrayCount;
     }
     
-    public QualifiedName getName() {
+    public Identifier getName() {
         return name;
     }
     
-    public void setName(QualifiedName name) {
+    public void setName(Identifier name) {
         this.name = name;
+    }
+    
+    public int getArrayCount() {
+        return arrayCount;
+    }
+    
+    public void setArrayCount(int arrayCount) {
+        this.arrayCount = arrayCount;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + arrayCount;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -43,7 +55,10 @@ public class TypeOnDemandImportDeclaration extends ImportDeclaration {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        TypeOnDemandImportDeclaration other = (TypeOnDemandImportDeclaration) obj;
+        VariableDeclaratorId other = (VariableDeclaratorId) obj;
+        if (arrayCount != other.arrayCount) {
+            return false;
+        }
         if (name == null) {
             if (other.name != null) {
                 return false;

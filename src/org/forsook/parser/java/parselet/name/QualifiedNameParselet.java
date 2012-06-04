@@ -1,41 +1,43 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.name;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.QualifiedName;
+import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.name.QualifiedName;
+import org.forsook.parser.java.parselet.JavaParselet;
 
-@JlsReference("6.5") //TODO check this
+@JlsReference("6.5")
 @ParseletDefinition(
         name = "forsook.java.qualifiedName",
-        emits = QualifiedName.class
+        emits = QualifiedName.class,
+        needs = Identifier.class
 )
 public class QualifiedNameParselet extends JavaParselet<QualifiedName> {
 
     @Override
     public QualifiedName parse(Parser parser) {
-        //simply put, either an identifier char or a dot
-        StringBuilder builder = new StringBuilder();
+        List<Identifier> identifiers = new ArrayList<Identifier>();
         do {
-            if (builder.length() > 0) {
-                builder.append('.');
-            }
             //spacing
             parseWhiteSpaceAndComments(parser);
             //identifier
-            String identifier = nextWord(parser);
+            Identifier identifier = parser.next(Identifier.class);
             if (identifier == null) {
                 break;
             } else {
-                builder.append(identifier);
+                identifiers.add(identifier);
             }
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (parser.peekPresentAndSkip('.'));
-        if (builder.length() == 0) {
+        if (identifiers.isEmpty()) {
             return null;
         } else {
-            return new QualifiedName(builder.toString());
+            return new QualifiedName(identifiers);
         }
     }
 

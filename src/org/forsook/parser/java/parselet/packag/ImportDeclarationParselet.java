@@ -1,53 +1,35 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.packag;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.ImportDeclaration;
-import org.forsook.parser.java.ast.QualifiedName;
+import org.forsook.parser.java.ast.packag.ImportDeclaration;
+import org.forsook.parser.java.ast.packag.SingleStaticImportDeclaration;
+import org.forsook.parser.java.ast.packag.SingleTypeImportDeclaration;
+import org.forsook.parser.java.ast.packag.StaticOnDemandImportDeclaration;
+import org.forsook.parser.java.ast.packag.TypeOnDemandImportDeclaration;
+import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("7.5")
 @ParseletDefinition(
         name = "forsook.java.importDeclaration",
         emits = ImportDeclaration.class,
-        needs = QualifiedName.class
+        needs = {
+            SingleTypeImportDeclaration.class,
+            TypeOnDemandImportDeclaration.class,
+            SingleStaticImportDeclaration.class,
+            StaticOnDemandImportDeclaration.class
+        }
 )
-public class ImportDeclarationParselet extends JavaParselet<ImportDeclaration> {
+public class ImportDeclarationParselet<T extends ImportDeclaration> extends JavaParselet<T> {
 
     @Override
-    public ImportDeclaration parse(Parser parser) {
-        //needs "import" to be present
-        if (!parser.peekPresentAndSkip("import")) {
-            return null;
-        }
-        //whitespace required here
-        if (parseWhiteSpaceAndComments(parser).isEmpty()) {
-            return null;
-        }
-        //static present?
-        boolean _static = parser.peekPresentAndSkip("static");
-        //more whitespace?
-        if (_static) {
-            //required
-            if (parseWhiteSpaceAndComments(parser).isEmpty()) {
-                return null;
-            }
-        }
-        //get name
-        QualifiedName name = parser.next(QualifiedName.class);
-        if (name == null) {
-            return null;
-        }
-        boolean asterisk = false;
-        if (name.getName().endsWith(".")) {
-            parseWhiteSpaceAndComments(parser);
-            if (!parser.peekPresentAndSkip('*')) {
-                return null;
-            }
-            asterisk = true;
-        }
-        //return
-        return new ImportDeclaration(name, _static, asterisk);
+    @SuppressWarnings("unchecked")
+    public T parse(Parser parser) {
+        return (T) parser.first(SingleTypeImportDeclaration.class,
+                TypeOnDemandImportDeclaration.class,
+                SingleStaticImportDeclaration.class,
+                StaticOnDemandImportDeclaration.class);
     }
 
 }

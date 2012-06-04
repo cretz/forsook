@@ -1,10 +1,17 @@
 package org.forsook.parser.java.parselet.packag;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.name.QualifiedName;
-import org.forsook.parser.java.ast.packag.SingleTypeImportDeclaration;
 import org.forsook.parser.java.ast.packag.TypeOnDemandImportDeclaration;
 
+@JlsReference("7.5.2")
+@ParseletDefinition(
+        name = "forsook.java.typeOnDemandImportDeclaration",
+        emits = TypeOnDemandImportDeclaration.class,
+        needs = QualifiedName.class
+)
 public class TypeOnDemandImportDeclarationParselet 
         extends ImportDeclarationParselet<TypeOnDemandImportDeclaration> {
 

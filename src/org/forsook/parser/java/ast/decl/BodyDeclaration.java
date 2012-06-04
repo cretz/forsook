@@ -1,42 +1,38 @@
-package org.forsook.parser.java.ast.packag;
+package org.forsook.parser.java.ast.decl;
 
 import java.util.List;
 
-import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.JavaModel;
-import org.forsook.parser.java.ast.decl.AnnotationExpression;
-import org.forsook.parser.java.ast.name.QualifiedName;
+import org.forsook.parser.java.ast.JavadocComment;
 
-@JlsReference("7.4")
 @SuppressWarnings("serial")
-public class PackageDeclaration extends JavaModel {
+public abstract class BodyDeclaration extends JavaModel {
 
+    private JavadocComment javadoc;
     private List<AnnotationExpression> annotations;
-    private QualifiedName name;
     
-    public PackageDeclaration() {
-        
+    public BodyDeclaration() {
     }
-    
-    public PackageDeclaration(List<AnnotationExpression> annotations, QualifiedName name) {
+
+    public BodyDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations) {
+        this.javadoc = javadoc;
         this.annotations = annotations;
-        this.name = name;
     }
-    
+
+    public JavadocComment getJavadoc() {
+        return javadoc;
+    }
+
+    public void setJavadoc(JavadocComment javadoc) {
+        this.javadoc = javadoc;
+    }
+
     public List<AnnotationExpression> getAnnotations() {
         return annotations;
     }
-    
+
     public void setAnnotations(List<AnnotationExpression> annotations) {
         this.annotations = annotations;
-    }
-    
-    public QualifiedName getName() {
-        return name;
-    }
-    
-    public void setName(QualifiedName name) {
-        this.name = name;
     }
 
     @Override
@@ -45,7 +41,7 @@ public class PackageDeclaration extends JavaModel {
         int result = 1;
         result = prime * result
                 + ((annotations == null) ? 0 : annotations.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((javadoc == null) ? 0 : javadoc.hashCode());
         return result;
     }
 
@@ -60,7 +56,7 @@ public class PackageDeclaration extends JavaModel {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        PackageDeclaration other = (PackageDeclaration) obj;
+        BodyDeclaration other = (BodyDeclaration) obj;
         if (annotations == null) {
             if (other.annotations != null) {
                 return false;
@@ -68,11 +64,11 @@ public class PackageDeclaration extends JavaModel {
         } else if (!annotations.equals(other.annotations)) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
+        if (javadoc == null) {
+            if (other.javadoc != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (!javadoc.equals(other.javadoc)) {
             return false;
         }
         return true;

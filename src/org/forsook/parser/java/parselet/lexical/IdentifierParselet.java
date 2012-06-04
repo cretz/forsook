@@ -1,4 +1,4 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.lexical;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,7 +7,8 @@ import java.util.Set;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Identifier;
+import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("3.8")
 @ParseletDefinition(
