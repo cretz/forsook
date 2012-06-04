@@ -11,7 +11,7 @@ import org.forsook.parser.java.ast.type.TypeParameter;
 
 @JlsReference({ "8.1", "9.1" })
 @SuppressWarnings("serial")
-public class ClassOrInterfaceDeclaration extends TypeDeclaration {
+public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceBody> {
 
     private boolean _interface;
     private List<TypeParameter> typeParameters;
@@ -22,10 +22,10 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration {
     }
     
     public ClassOrInterfaceDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, List<BodyDeclaration> members,
+            Identifier name, Modifier modifiers, ClassOrInterfaceBody body,
             boolean _interface, List<TypeParameter> typeParameters,
             List<ClassOrInterfaceType> extendsList, List<ClassOrInterfaceType> implementsList) {
-        super(javadoc, annotations, name, modifiers, members);
+        super(javadoc, annotations, name, modifiers, body);
         this._interface = _interface;
         this.typeParameters = typeParameters;
         this.extendsList = extendsList;

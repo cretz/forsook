@@ -5,7 +5,7 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.lexical.LiteralExpression;
 import org.forsook.parser.java.ast.lexical.LiteralExpression.LiteralExpressionType;
-import org.forsook.parser.java.parselet.ExpressionParselet;
+import org.forsook.parser.java.parselet.expression.ExpressionParselet;
 
 @JlsReference({ "3.10.3", "3.10.7" })
 @ParseletDefinition(

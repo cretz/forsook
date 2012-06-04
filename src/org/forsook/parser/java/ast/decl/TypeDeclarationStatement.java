@@ -5,20 +5,20 @@ import org.forsook.parser.java.ast.statement.Statement;
 @SuppressWarnings("serial")
 public class TypeDeclarationStatement extends Statement {
 
-    private TypeDeclaration typeDeclaration;
+    private TypeDeclaration<?> typeDeclaration;
     
     public TypeDeclarationStatement() {
     }
     
-    public TypeDeclarationStatement(TypeDeclaration typeDeclaration) {
+    public TypeDeclarationStatement(TypeDeclaration<?> typeDeclaration) {
         this.typeDeclaration = typeDeclaration;
     }
     
-    public TypeDeclaration getTypeDeclaration() {
+    public TypeDeclaration<?> getTypeDeclaration() {
         return typeDeclaration;
     }
     
-    public void setTypeDeclaration(TypeDeclaration typeDeclaration) {
+    public void setTypeDeclaration(TypeDeclaration<?> typeDeclaration) {
         this.typeDeclaration = typeDeclaration;
     }
 

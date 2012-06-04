@@ -1,7 +1,7 @@
 package org.forsook.parser.java.ast.decl;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("9.7")

@@ -1,11 +1,11 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("15.8.2")
 @SuppressWarnings("serial")
-public class ClassExpression extends Expression {
+public class ClassExpression extends Expression implements PrimaryNoNewArrayExpression {
 
     private Type type;
     

@@ -10,7 +10,7 @@ import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 
 @JlsReference("8.9")
 @SuppressWarnings("serial")
-public class EnumDeclaration extends TypeDeclaration {
+public class EnumDeclaration extends TypeDeclaration<EnumBody> {
 
     private List<ClassOrInterfaceType> implementsList;
     
@@ -18,9 +18,9 @@ public class EnumDeclaration extends TypeDeclaration {
     }
     
     public EnumDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, List<BodyDeclaration> members,
+            Identifier name, Modifier modifiers, EnumBody body,
             List<ClassOrInterfaceType> implementsList) {
-        super(javadoc, annotations, name, modifiers, members);
+        super(javadoc, annotations, name, modifiers, body);
         this.implementsList = implementsList;
     }
 

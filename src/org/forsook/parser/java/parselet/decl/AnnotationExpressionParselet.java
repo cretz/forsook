@@ -7,7 +7,7 @@ import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.MarkerAnnotationExpression;
 import org.forsook.parser.java.ast.decl.NormalAnnotationExpression;
 import org.forsook.parser.java.ast.decl.SingleElementAnnotationExpression;
-import org.forsook.parser.java.parselet.ExpressionParselet;
+import org.forsook.parser.java.parselet.expression.ExpressionParselet;
 
 @JlsReference("9.7")
 @ParseletDefinition(

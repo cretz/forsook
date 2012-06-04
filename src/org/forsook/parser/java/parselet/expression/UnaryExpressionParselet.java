@@ -1,12 +1,12 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.expression;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.CastExpression;
-import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.UnaryExpression;
-import org.forsook.parser.java.ast.UnaryExpression.UnaryOperator;
+import org.forsook.parser.java.ast.expression.CastExpression;
+import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.UnaryExpression;
+import org.forsook.parser.java.ast.expression.UnaryExpression.UnaryOperator;
 
 @JlsReference("15.15")
 @ParseletDefinition(

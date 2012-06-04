@@ -1,4 +1,4 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.type.ReferenceType;

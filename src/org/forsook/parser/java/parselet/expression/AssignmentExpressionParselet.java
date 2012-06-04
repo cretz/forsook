@@ -1,12 +1,12 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.expression;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.ArrayAccessExpression;
-import org.forsook.parser.java.ast.AssignmentExpression;
-import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.AssignmentExpression.AssignmentOperator;
+import org.forsook.parser.java.ast.expression.ArrayAccessExpression;
+import org.forsook.parser.java.ast.expression.AssignmentExpression;
+import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.AssignmentExpression.AssignmentOperator;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.26")

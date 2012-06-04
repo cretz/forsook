@@ -6,7 +6,7 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.statement.BasicForStatement;
 import org.forsook.parser.java.ast.statement.ExpressionStatement;
 import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;

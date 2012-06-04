@@ -11,7 +11,7 @@ import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.VariableDeclarator;
 import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 import org.forsook.parser.java.ast.type.Type;
-import org.forsook.parser.java.parselet.ExpressionParselet;
+import org.forsook.parser.java.parselet.expression.ExpressionParselet;
 
 @JlsReference("14.4")
 @ParseletDefinition(

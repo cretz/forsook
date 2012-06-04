@@ -1,10 +1,9 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.expression;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.ClassExpression;
-import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.expression.ClassExpression;
 import org.forsook.parser.java.ast.type.Type;
 import org.forsook.parser.java.ast.type.VoidType;
 
@@ -12,14 +11,14 @@ import org.forsook.parser.java.ast.type.VoidType;
 @ParseletDefinition(
         name = "forsook.java.classExpression",
         emits = ClassExpression.class,
-        needs = { ReferenceType.class, VoidType.class }
+        needs = { Type.class, VoidType.class }
 )
 public class ClassExpressionParselet extends ExpressionParselet<ClassExpression> {
 
     @Override
     public ClassExpression parse(Parser parser) {
         //type
-        Type type = (Type) parser.first(ReferenceType.class, VoidType.class);
+        Type type = (Type) parser.first(Type.class, VoidType.class);
         if (type == null) {
             return null;
         }

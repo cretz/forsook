@@ -8,8 +8,7 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
-import org.forsook.parser.java.ast.decl.BodyDeclaration;
-import org.forsook.parser.java.ast.decl.EnumConstantDeclaration;
+import org.forsook.parser.java.ast.decl.EnumBody;
 import org.forsook.parser.java.ast.decl.EnumDeclaration;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
@@ -18,7 +17,8 @@ import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 @JlsReference("8.9")
 @ParseletDefinition(
         name = "forsook.java.enumDeclaration",
-        emits = EnumDeclaration.class
+        emits = EnumDeclaration.class,
+        needs = { Identifier.class, EnumBody.class }
 )
 public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclaration> {
     
@@ -30,7 +30,7 @@ public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclara
         //modifiers
         Modifier modifiers = parseModifiers(parser);
         //enum
-        if (!!parser.peekPresentAndSkip("enum")) {
+        if (!parser.peekPresentAndSkip("enum")) {
             return null;
         }
         //some spacing required
@@ -46,32 +46,12 @@ public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclara
         //extends
         List<ClassOrInterfaceType> implementsList = 
                 parseExtendsOrImplementsList("implements", parser);
-        //brace
-        if (!parser.peekPresentAndSkip('{')) {
+        //body
+        EnumBody body = parser.next(EnumBody.class);
+        if (body == null) {
             return null;
         }
-        //members
-        //constants first
-        List<BodyDeclaration> members = new ArrayList<BodyDeclaration>();
-        do {
-            parseWhiteSpaceAndComments(parser);
-            EnumConstantDeclaration constant = parser.next(EnumConstantDeclaration.class);
-            if (constant == null) {
-                break;
-            }
-            members.add(constant);
-            parseWhiteSpaceAndComments(parser);
-        } while (parser.peekPresentAndSkip(','));
-        //semicolon?
-        if (parser.peekPresentAndSkip(';')) {
-            //we probably have a body here then
-            members.addAll(parseTypeMembers(parser));
-        }
-        //brace
-        if (!parser.peekPresentAndSkip('}')) {
-            return null;
-        }
-        return new EnumDeclaration(javadoc, annotations, name, modifiers, members, implementsList);
+        return new EnumDeclaration(javadoc, annotations, name, modifiers, body, implementsList);
     }
 
 }

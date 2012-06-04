@@ -1,6 +1,6 @@
 package org.forsook.parser.java.ast.statement;
 
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 
 @SuppressWarnings("serial")
 public class ExpressionStatement extends Statement {

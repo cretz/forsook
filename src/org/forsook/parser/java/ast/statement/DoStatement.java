@@ -1,7 +1,7 @@
 package org.forsook.parser.java.ast.statement;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 
 @JlsReference("14.13")
 @SuppressWarnings("serial")

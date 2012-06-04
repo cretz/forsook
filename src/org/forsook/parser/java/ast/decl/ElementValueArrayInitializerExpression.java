@@ -2,7 +2,7 @@ package org.forsook.parser.java.ast.decl;
 
 import java.util.List;
 
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 
 @SuppressWarnings("serial")
 public class ElementValueArrayInitializerExpression extends Expression {

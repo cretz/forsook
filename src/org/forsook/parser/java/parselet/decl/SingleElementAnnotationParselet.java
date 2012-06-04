@@ -3,9 +3,9 @@ package org.forsook.parser.java.parselet.decl;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.decl.ElementValue;
 import org.forsook.parser.java.ast.decl.SingleElementAnnotationExpression;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("9.7.3")

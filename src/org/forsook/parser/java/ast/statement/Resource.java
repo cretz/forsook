@@ -1,10 +1,10 @@
 package org.forsook.parser.java.ast.statement;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.JavaModel;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.VariableDeclaratorId;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("14.20.3")

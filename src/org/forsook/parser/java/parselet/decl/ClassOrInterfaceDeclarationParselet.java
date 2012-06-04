@@ -8,12 +8,10 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
-import org.forsook.parser.java.ast.decl.BodyDeclaration;
+import org.forsook.parser.java.ast.decl.ClassOrInterfaceBody;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
-import org.forsook.parser.java.ast.lexical.Comment;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
-import org.forsook.parser.java.ast.lexical.WhiteSpace;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.TypeParameter;
 
@@ -21,14 +19,7 @@ import org.forsook.parser.java.ast.type.TypeParameter;
 @ParseletDefinition(
         name = "forsook.java.classOrInterfaceDeclaration",
         emits = ClassOrInterfaceDeclaration.class,
-        needs = {
-            WhiteSpace.class,
-            Comment.class,
-            AnnotationExpression.class,
-            Modifier.class,
-            Identifier.class,
-            ClassOrInterfaceType.class
-        }
+        needs = { Identifier.class, ClassOrInterfaceBody.class }
 )
 public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet<ClassOrInterfaceDeclaration> {
     
@@ -63,18 +54,13 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
         //implements
         List<ClassOrInterfaceType> implementsList = 
                 parseExtendsOrImplementsList("implements", parser);
-        //brace
-        if (!parser.peekPresentAndSkip('{')) {
-            return null;
-        }
-        //members
-        List<BodyDeclaration> members = parseTypeMembers(parser);
-        //brace
-        if (!parser.peekPresentAndSkip('}')) {
+        //body
+        ClassOrInterfaceBody body = parser.next(ClassOrInterfaceBody.class);
+        if (body == null) {
             return null;
         }
         return new ClassOrInterfaceDeclaration(javadoc, annotations, name, modifiers, 
-                members, iface, parameters, extendsList, implementsList);
+                body, iface, parameters, extendsList, implementsList);
     }
 
 }

@@ -1,11 +1,12 @@
 package org.forsook.parser.java.ast.lexical;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.PrimaryNoNewArrayExpression;
 
 @JlsReference("3.10")
 @SuppressWarnings("serial")
-public class LiteralExpression extends Expression {
+public class LiteralExpression extends Expression implements PrimaryNoNewArrayExpression {
 
     private String value;
     private LiteralExpressionType type;

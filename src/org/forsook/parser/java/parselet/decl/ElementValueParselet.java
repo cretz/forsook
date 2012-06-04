@@ -6,11 +6,11 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.ConditionalExpression;
-import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.ElementValue;
 import org.forsook.parser.java.ast.decl.ElementValueArrayInitializerExpression;
+import org.forsook.parser.java.ast.expression.ConditionalExpression;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("9.7.1")

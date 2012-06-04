@@ -8,9 +8,8 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
+import org.forsook.parser.java.ast.decl.AnnotationTypeBody;
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
-import org.forsook.parser.java.ast.decl.AnnotationTypeElementDeclaration;
-import org.forsook.parser.java.ast.decl.BodyDeclaration;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
 
@@ -18,13 +17,12 @@ import org.forsook.parser.java.ast.lexical.JavadocComment;
 @ParseletDefinition(
         name = "forsook.java.annotationTypeDeclaration",
         emits = AnnotationTypeDeclaration.class,
-        needs = { Identifier.class, AnnotationTypeElementDeclaration.class }
+        needs = { Identifier.class, AnnotationTypeBody.class }
 )
 public class AnnotationTypeDeclarationParselet 
         extends TypeDeclarationParselet<AnnotationTypeDeclaration> {
     
     @Override
-    @SuppressWarnings("unchecked")
     public AnnotationTypeDeclaration parse(Parser parser) {
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
@@ -45,30 +43,12 @@ public class AnnotationTypeDeclarationParselet
             return null;
         }
         parseWhiteSpaceAndComments(parser);
-        //brace
-        if (!parser.peekPresentAndSkip('{')) {
+        //body
+        AnnotationTypeBody body = parser.next(AnnotationTypeBody.class);
+        if (body == null) {
             return null;
         }
-        //members
-        List<BodyDeclaration> members = new ArrayList<BodyDeclaration>();
-        do {
-            //type elements
-            List<BodyDeclaration> memberList = (List<BodyDeclaration>)
-                    parser.any(AnnotationTypeElementDeclaration.class);
-            if (memberList.isEmpty()) {
-                //regular members
-                memberList = parseTypeMembers(parser);
-                if (memberList.isEmpty()) {
-                    break;
-                }
-            }
-            members.addAll(memberList);
-        } while (true);
-        //brace
-        if (!parser.peekPresentAndSkip('}')) {
-            return null;
-        }
-        return new AnnotationTypeDeclaration(javadoc, annotations, name, modifiers, members);
+        return new AnnotationTypeDeclaration(javadoc, annotations, name, modifiers, body);
     }
 
 }

@@ -1,8 +1,8 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.expression;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
-import org.forsook.parser.java.ast.ConditionalExpression;
+import org.forsook.parser.java.ast.expression.ConditionalExpression;
 
 @ParseletDefinition(
         name = "forsook.java.conditionalExpression",

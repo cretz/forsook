@@ -1,10 +1,10 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
 
 @JlsReference("15.8.5")
 @SuppressWarnings("serial")
-public class ParenthesizedExpression extends Expression {
+public class ParenthesizedExpression extends Expression implements PrimaryNoNewArrayExpression {
 
     private Expression expression;
     

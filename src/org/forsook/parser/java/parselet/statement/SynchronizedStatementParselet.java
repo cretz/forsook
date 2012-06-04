@@ -3,7 +3,7 @@ package org.forsook.parser.java.parselet.statement;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.statement.BlockStatement;
 import org.forsook.parser.java.ast.statement.SynchronizedStatement;
 

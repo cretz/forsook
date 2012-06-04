@@ -7,22 +7,21 @@ import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
 
 @SuppressWarnings("serial")
-public abstract class TypeDeclaration extends BodyDeclaration {
+public abstract class TypeDeclaration<T extends TypeBody> extends BodyDeclaration {
     
     private Identifier name;
     private Modifier modifiers;
-    private List<BodyDeclaration> members;
+    private T body;
     
     public TypeDeclaration() {
-        
     }
     
     public TypeDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, List<BodyDeclaration> members) {
+            Identifier name, Modifier modifiers, T members) {
         super(javadoc, annotations);
         this.name = name;
         this.modifiers = modifiers;
-        this.members = members;
+        this.body = members;
     }
 
     public Identifier getName() {
@@ -41,19 +40,19 @@ public abstract class TypeDeclaration extends BodyDeclaration {
         this.modifiers = modifiers;
     }
 
-    public List<BodyDeclaration> getMembers() {
-        return members;
+    public T getBody() {
+        return body;
     }
-
-    public void setMembers(List<BodyDeclaration> members) {
-        this.members = members;
+    
+    public void setBody(T body) {
+        this.body = body;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((members == null) ? 0 : members.hashCode());
+        result = prime * result + ((body == null) ? 0 : body.hashCode());
         result = prime * result
                 + ((modifiers == null) ? 0 : modifiers.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -61,6 +60,7 @@ public abstract class TypeDeclaration extends BodyDeclaration {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -72,11 +72,11 @@ public abstract class TypeDeclaration extends BodyDeclaration {
             return false;
         }
         TypeDeclaration other = (TypeDeclaration) obj;
-        if (members == null) {
-            if (other.members != null) {
+        if (body == null) {
+            if (other.body != null) {
                 return false;
             }
-        } else if (!members.equals(other.members)) {
+        } else if (!body.equals(other.body)) {
             return false;
         }
         if (modifiers == null) {

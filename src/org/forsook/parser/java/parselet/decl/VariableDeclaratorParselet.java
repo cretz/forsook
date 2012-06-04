@@ -3,10 +3,10 @@ package org.forsook.parser.java.parselet.decl;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.array.ArrayInitializerExpression;
 import org.forsook.parser.java.ast.decl.VariableDeclarator;
 import org.forsook.parser.java.ast.decl.VariableDeclaratorId;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("8.3")

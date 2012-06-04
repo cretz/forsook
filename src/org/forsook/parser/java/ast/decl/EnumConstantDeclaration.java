@@ -3,7 +3,7 @@ package org.forsook.parser.java.ast.decl;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("8.9.1")

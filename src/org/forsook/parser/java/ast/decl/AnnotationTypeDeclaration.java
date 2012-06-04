@@ -9,13 +9,13 @@ import org.forsook.parser.java.ast.lexical.JavadocComment;
 
 @JlsReference("9.6")
 @SuppressWarnings("serial")
-public class AnnotationTypeDeclaration extends TypeDeclaration {
+public class AnnotationTypeDeclaration extends TypeDeclaration<AnnotationTypeBody> {
 
     public AnnotationTypeDeclaration() {
     }
     
     public AnnotationTypeDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, List<BodyDeclaration> members) {
+            Identifier name, Modifier modifiers, AnnotationTypeBody members) {
         super(javadoc, annotations, name, modifiers, members);
     }
 }
