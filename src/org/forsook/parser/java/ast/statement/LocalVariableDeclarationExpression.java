@@ -1,49 +1,40 @@
-package org.forsook.parser.java.ast;
+package org.forsook.parser.java.ast.statement;
 
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.VariableDeclarator;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("14.4")
 @SuppressWarnings("serial")
-public class VariableDeclarationExpression extends Expression {
+public class LocalVariableDeclarationExpression extends Expression {
 
-    private JavadocComment javadoc;
-    private int modifiers;
+    private boolean _final;
     private List<AnnotationExpression> annotations;
     private Type type;
     private List<VariableDeclarator> variables;
     
-    public VariableDeclarationExpression() {
+    public LocalVariableDeclarationExpression() {
     }
 
-    public VariableDeclarationExpression(JavadocComment javadoc, int modifiers,
+    public LocalVariableDeclarationExpression(boolean _final,
             List<AnnotationExpression> annotations, Type type,
             List<VariableDeclarator> variables) {
-        this.javadoc = javadoc;
-        this.modifiers = modifiers;
+        this._final = _final;
         this.annotations = annotations;
         this.type = type;
         this.variables = variables;
     }
     
-    public JavadocComment getJavadoc() {
-        return javadoc;
+    public boolean isFinal() {
+        return _final;
     }
     
-    public void setJavadoc(JavadocComment javadoc) {
-        this.javadoc = javadoc;
-    }
-
-    public int getModifiers() {
-        return modifiers;
-    }
-
-    public void setModifiers(int modifiers) {
-        this.modifiers = modifiers;
+    public void setFinal(boolean _final) {
+        this._final = _final;
     }
 
     public List<AnnotationExpression> getAnnotations() {
@@ -74,10 +65,9 @@ public class VariableDeclarationExpression extends Expression {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (_final ? 1231 : 1237);
         result = prime * result
                 + ((annotations == null) ? 0 : annotations.hashCode());
-        result = prime * result + ((javadoc == null) ? 0 : javadoc.hashCode());
-        result = prime * result + modifiers;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result
                 + ((variables == null) ? 0 : variables.hashCode());
@@ -95,22 +85,15 @@ public class VariableDeclarationExpression extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        VariableDeclarationExpression other = (VariableDeclarationExpression) obj;
+        LocalVariableDeclarationExpression other = (LocalVariableDeclarationExpression) obj;
+        if (_final != other._final) {
+            return false;
+        }
         if (annotations == null) {
             if (other.annotations != null) {
                 return false;
             }
         } else if (!annotations.equals(other.annotations)) {
-            return false;
-        }
-        if (javadoc == null) {
-            if (other.javadoc != null) {
-                return false;
-            }
-        } else if (!javadoc.equals(other.javadoc)) {
-            return false;
-        }
-        if (modifiers != other.modifiers) {
             return false;
         }
         if (type == null) {

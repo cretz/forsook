@@ -1,12 +1,13 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.lexical;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.BlockComment;
-import org.forsook.parser.java.ast.Comment;
-import org.forsook.parser.java.ast.JavadocComment;
-import org.forsook.parser.java.ast.LineComment;
+import org.forsook.parser.java.ast.lexical.BlockComment;
+import org.forsook.parser.java.ast.lexical.Comment;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
+import org.forsook.parser.java.ast.lexical.LineComment;
+import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("3.7")
 @ParseletDefinition(

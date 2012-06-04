@@ -1,11 +1,11 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.Statement;
-import org.forsook.parser.java.ast.WhileStatement;
+import org.forsook.parser.java.ast.statement.Statement;
+import org.forsook.parser.java.ast.statement.WhileStatement;
 
 @JlsReference("14.12")
 @ParseletDefinition(
@@ -36,16 +36,21 @@ public class WhileStatementParselet extends StatementParselet<WhileStatement> {
         //spacing
         parseWhiteSpaceAndComments(parser);
         //parentheses
-        if (!parser.peekPresentAndSkip('(')) {
+        if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //body
-        Statement body = parser.next(Statement.class);
+        Statement body = parseStatement(parser);
         if (body == null) {
             return null;
         }
         return new WhileStatement(condition, body);
+    }
+    
+    protected Statement parseStatement(Parser parser) {
+        //abstracted for the no-short-if
+        return parser.next(Statement.class);
     }
 }

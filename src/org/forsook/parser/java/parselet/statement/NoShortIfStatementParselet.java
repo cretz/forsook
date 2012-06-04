@@ -4,7 +4,6 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.statement.BasicForNoShortIfStatement;
-import org.forsook.parser.java.ast.statement.EnhancedForNoShortIfStatement;
 import org.forsook.parser.java.ast.statement.IfNoShortIfStatement;
 import org.forsook.parser.java.ast.statement.LabeledNoShortIfStatement;
 import org.forsook.parser.java.ast.statement.NoShortIfStatement;
@@ -21,8 +20,7 @@ import org.forsook.parser.java.parselet.JavaParselet;
             LabeledNoShortIfStatement.class,
             IfNoShortIfStatement.class,
             WhileNoShortIfStatement.class,
-            BasicForNoShortIfStatement.class,
-            EnhancedForNoShortIfStatement.class
+            BasicForNoShortIfStatement.class
         }
 )
 public class NoShortIfStatementParselet extends JavaParselet<NoShortIfStatement> {
@@ -34,8 +32,7 @@ public class NoShortIfStatementParselet extends JavaParselet<NoShortIfStatement>
                 LabeledNoShortIfStatement.class,
                 IfNoShortIfStatement.class,
                 WhileNoShortIfStatement.class,
-                BasicForNoShortIfStatement.class,
-                EnhancedForNoShortIfStatement.class
+                BasicForNoShortIfStatement.class
             );
     }
 

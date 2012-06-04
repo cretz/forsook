@@ -1,4 +1,4 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.BlockStatement;
-import org.forsook.parser.java.ast.ExpressionStatement;
-import org.forsook.parser.java.ast.Statement;
-import org.forsook.parser.java.ast.VariableDeclarationExpression;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.decl.TypeDeclarationStatement;
+import org.forsook.parser.java.ast.statement.BlockStatement;
+import org.forsook.parser.java.ast.statement.ExpressionStatement;
+import org.forsook.parser.java.ast.statement.Statement;
+import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 
 @JlsReference("14.2")
 @ParseletDefinition(
@@ -19,7 +19,7 @@ import org.forsook.parser.java.ast.decl.TypeDeclarationStatement;
         emits = BlockStatement.class,
         needs = { 
             ClassOrInterfaceDeclaration.class, 
-            VariableDeclarationExpression.class,
+            LocalVariableDeclarationExpression.class,
             Statement.class
         }
 )
@@ -32,17 +32,17 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
         }
         //statements
         List<Statement> statements = new ArrayList<Statement>();
+        //local class gets no javadoc IMO
+        parseWhiteSpaceAndComments(parser);
         do {
             Statement stmt;
-            //local class? (handles its own whitespace at beginning w/ javadoc and what not)
+            //local class?
             ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclaration.class);
-            if (decl != null) {
+            if (decl != null && !decl.isInterface()) {
                 stmt = new TypeDeclarationStatement(decl);
             } else {
-                //spacing
-                parseWhiteSpaceAndComments(parser);
                 //variable declaration?
-                VariableDeclarationExpression expr = parser.next(VariableDeclarationExpression.class);
+                LocalVariableDeclarationExpression expr = parser.next(LocalVariableDeclarationExpression.class);
                 if (expr != null) {
                     stmt = new ExpressionStatement(expr);
                 } else {
@@ -54,6 +54,8 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
                 }
             }
             statements.add(stmt);
+            //spacing
+            parseWhiteSpaceAndComments(parser);
         } while (!parser.peekPresentAndSkip('}'));
         return new BlockStatement(statements);
     }

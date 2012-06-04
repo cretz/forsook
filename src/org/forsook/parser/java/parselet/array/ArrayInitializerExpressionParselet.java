@@ -1,4 +1,4 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.array;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,9 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.ArrayInitializerExpression;
 import org.forsook.parser.java.ast.Expression;
+import org.forsook.parser.java.ast.array.ArrayInitializerExpression;
+import org.forsook.parser.java.parselet.ExpressionParselet;
 
 @JlsReference("10.6")
 @ParseletDefinition(

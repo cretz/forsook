@@ -1,11 +1,11 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.BasicForStatement;
-import org.forsook.parser.java.ast.EnhancedForStatement;
-import org.forsook.parser.java.ast.ForStatement;
+import org.forsook.parser.java.ast.statement.BasicForStatement;
+import org.forsook.parser.java.ast.statement.EnhancedForStatement;
+import org.forsook.parser.java.ast.statement.ForStatement;
 
 @JlsReference("14.14")
 @ParseletDefinition(

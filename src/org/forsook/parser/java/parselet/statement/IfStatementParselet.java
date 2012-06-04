@@ -1,17 +1,22 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.IfStatement;
-import org.forsook.parser.java.ast.Statement;
+import org.forsook.parser.java.ast.statement.IfStatement;
+import org.forsook.parser.java.ast.statement.NoShortIfStatement;
+import org.forsook.parser.java.ast.statement.Statement;
 
 @JlsReference("14.9")
 @ParseletDefinition(
         name = "forsook.java.ifStatement",
         emits = IfStatement.class,
-        needs = { Expression.class, Statement.class }
+        needs = { 
+            Expression.class, 
+            Statement.class,
+            NoShortIfStatement.class
+        }
 )
 public class IfStatementParselet extends StatementParselet<IfStatement> {
 
@@ -36,7 +41,7 @@ public class IfStatementParselet extends StatementParselet<IfStatement> {
         //spacing
         parseWhiteSpaceAndComments(parser);
         //parentheses
-        if (!parser.peekPresentAndSkip('(')) {
+        if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
         //spacing
@@ -44,19 +49,12 @@ public class IfStatementParselet extends StatementParselet<IfStatement> {
         //then statement
         Statement thenStatement = parser.next(Statement.class);
         if (thenStatement == null) {
-            return null;
-        }
-        //spacing
-        parseWhiteSpaceAndComments(parser);
-        //else?
-        Statement elseStatement = null;
-        if (isStatementNoShortIf(thenStatement) && 
-                parser.peekPresentAndSkip("else")) {
-            elseStatement = parser.next(Statement.class);
-            if (elseStatement == null) {
+            //try no short if
+            thenStatement = (Statement) parser.next(NoShortIfStatement.class);
+            if (thenStatement == null) {
                 return null;
             }
         }
-        return new IfStatement(condition, thenStatement, elseStatement);
+        return new IfStatement(condition, thenStatement, null);
     }
 }

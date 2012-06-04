@@ -1,9 +1,9 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.EmptyStatement;
+import org.forsook.parser.java.ast.statement.EmptyStatement;
 
 @JlsReference("14.6")
 @ParseletDefinition(

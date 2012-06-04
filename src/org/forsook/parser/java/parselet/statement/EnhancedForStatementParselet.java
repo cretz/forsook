@@ -1,19 +1,19 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.EnhancedForStatement;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.Statement;
-import org.forsook.parser.java.ast.VariableDeclarationExpression;
+import org.forsook.parser.java.ast.statement.EnhancedForStatement;
+import org.forsook.parser.java.ast.statement.Statement;
+import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 
 @JlsReference("14.14.2")
 @ParseletDefinition(
         name = "forsook.java.enhancedForStatement",
         emits = EnhancedForStatement.class,
         needs = {
-            VariableDeclarationExpression.class,
+            LocalVariableDeclarationExpression.class,
             Expression.class,
             Statement.class
         }
@@ -34,7 +34,8 @@ public class EnhancedForStatementParselet extends ForStatementParselet<EnhancedF
         //spacing
         parseWhiteSpaceAndComments(parser);
         //var
-        VariableDeclarationExpression var = parser.next(VariableDeclarationExpression.class);
+        LocalVariableDeclarationExpression var = 
+                parser.next(LocalVariableDeclarationExpression.class);
         //spacing
         parseWhiteSpaceAndComments(parser);
         //colon

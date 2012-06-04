@@ -1,11 +1,11 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.statement;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.LabeledStatement;
-import org.forsook.parser.java.ast.Statement;
 import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.statement.LabeledStatement;
+import org.forsook.parser.java.ast.statement.Statement;
 
 @JlsReference("14.7")
 @ParseletDefinition(
@@ -30,10 +30,15 @@ public class LabeledStatementParselet extends StatementParselet<LabeledStatement
         //spacing
         parseWhiteSpaceAndComments(parser);
         //statement
-        Statement statement = parser.next(Statement.class);
+        Statement statement = parseStatement(parser);
         if (statement == null) {
             return null;
         }
         return new LabeledStatement(identifier, statement);
+    }
+    
+    protected Statement parseStatement(Parser parser) {
+        //abstracted for the no-short-if
+        return parser.next(Statement.class);
     }
 }

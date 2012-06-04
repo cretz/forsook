@@ -1,10 +1,11 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.lexical;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.WhiteSpace;
-import org.forsook.parser.java.ast.WhiteSpace.WhiteSpaceType;
+import org.forsook.parser.java.ast.lexical.WhiteSpace;
+import org.forsook.parser.java.ast.lexical.WhiteSpace.WhiteSpaceType;
+import org.forsook.parser.java.parselet.JavaParselet;
 
 @JlsReference("3.6")
 @ParseletDefinition(
