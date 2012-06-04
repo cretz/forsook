@@ -53,7 +53,7 @@ public class NormalAnnotationExpressionParselet extends AnnotationExpressionPars
             //spacing
             parseWhiteSpaceAndComments(parser);
             //value
-            Expression value = parseElementValue(parser);
+            Expression value = parseElementValue(this, parser);
             if (value == null) {
                 return null;
             }
