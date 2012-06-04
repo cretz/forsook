@@ -1,6 +1,6 @@
 package org.forsook.parser.java.ast.decl;
 
-import org.forsook.parser.java.ast.Statement;
+import org.forsook.parser.java.ast.statement.Statement;
 
 @SuppressWarnings("serial")
 public class TypeDeclarationStatement extends Statement {

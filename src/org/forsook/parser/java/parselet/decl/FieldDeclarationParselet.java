@@ -6,11 +6,11 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.FieldDeclaration;
 import org.forsook.parser.java.ast.decl.VariableDeclarator;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("8.3")

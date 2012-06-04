@@ -1,28 +1,27 @@
 package org.forsook.parser.java.ast.decl;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("9.7.3")
 @SuppressWarnings("serial")
 public class SingleElementAnnotationExpression extends AnnotationExpression {
 
-    private Expression value;
+    private ElementValue value;
     
     public SingleElementAnnotationExpression() {
     }
     
-    public SingleElementAnnotationExpression(QualifiedName name, Expression value) {
+    public SingleElementAnnotationExpression(QualifiedName name, ElementValue value) {
         super(name);
         this.value = value;
     }
     
-    public Expression getValue() {
+    public ElementValue getValue() {
         return value;
     }
     
-    public void setValue(Expression value) {
+    public void setValue(ElementValue value) {
         this.value = value;
     }
 

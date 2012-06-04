@@ -3,9 +3,9 @@ package org.forsook.parser.java.ast.decl;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.TypeParameter;
 

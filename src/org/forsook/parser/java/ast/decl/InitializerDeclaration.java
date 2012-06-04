@@ -1,7 +1,7 @@
 package org.forsook.parser.java.ast.decl;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.BlockStatement;
+import org.forsook.parser.java.ast.statement.BlockStatement;
 
 @JlsReference({ "8.6", "8.7" })
 @SuppressWarnings("serial")

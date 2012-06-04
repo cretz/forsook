@@ -3,10 +3,9 @@ package org.forsook.parser.java.ast.decl;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("9.6.1")
@@ -16,14 +15,14 @@ public class AnnotationTypeElementDeclaration extends BodyDeclaration {
     private Modifier modifiers;
     private Type type;
     private Identifier name;
-    private Expression defaultValue;
+    private ElementValue defaultValue;
     
     public AnnotationTypeElementDeclaration() {
     }
 
     public AnnotationTypeElementDeclaration(JavadocComment javadoc, 
             List<AnnotationExpression> annotations, Modifier modifiers, Type type,
-            Identifier name, Expression defaultValue) {
+            Identifier name, ElementValue defaultValue) {
         super(javadoc, annotations);
         this.modifiers = modifiers;
         this.type = type;
@@ -55,11 +54,11 @@ public class AnnotationTypeElementDeclaration extends BodyDeclaration {
         this.name = name;
     }
 
-    public Expression getDefaultValue() {
+    public ElementValue getDefaultValue() {
         return defaultValue;
     }
 
-    public void setDefaultValue(Expression defaultValue) {
+    public void setDefaultValue(ElementValue defaultValue) {
         this.defaultValue = defaultValue;
     }
 

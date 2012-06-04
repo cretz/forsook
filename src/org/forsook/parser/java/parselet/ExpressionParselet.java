@@ -10,9 +10,9 @@ import org.forsook.parser.java.ast.ClassExpression;
 import org.forsook.parser.java.ast.ClassInstanceCreationExpression;
 import org.forsook.parser.java.ast.ConditionalExpression;
 import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.LiteralExpression;
 import org.forsook.parser.java.ast.ParenthesizedExpression;
 import org.forsook.parser.java.ast.ThisExpression;
+import org.forsook.parser.java.ast.lexical.LiteralExpression;
 
 @JlsReference("15.27")
 @ParseletDefinition(

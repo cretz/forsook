@@ -4,7 +4,7 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.JavaModel;
 
-@JlsReference("14.4")
+@JlsReference("8.3")
 @SuppressWarnings("serial")
 public class VariableDeclarator extends JavaModel {
     

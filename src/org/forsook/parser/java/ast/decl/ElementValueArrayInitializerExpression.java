@@ -7,20 +7,20 @@ import org.forsook.parser.java.ast.Expression;
 @SuppressWarnings("serial")
 public class ElementValueArrayInitializerExpression extends Expression {
 
-    private List<Expression> values;
+    private List<ElementValue> values;
     
     public ElementValueArrayInitializerExpression() {
     }
 
-    public ElementValueArrayInitializerExpression(List<Expression> values) {
+    public ElementValueArrayInitializerExpression(List<ElementValue> values) {
         this.values = values;
     }
 
-    public List<Expression> getValues() {
+    public List<ElementValue> getValues() {
         return values;
     }
     
-    public void setValues(List<Expression> values) {
+    public void setValues(List<ElementValue> values) {
         this.values = values;
     }
 

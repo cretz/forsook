@@ -6,18 +6,19 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
-import org.forsook.parser.java.ast.JavadocComment;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.AnnotationTypeElementDeclaration;
+import org.forsook.parser.java.ast.decl.ElementValue;
 import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("9.6.1")
 @ParseletDefinition(
         name = "forsook.java.annotationTypeElementDeclaration",
-        emits = AnnotationTypeElementDeclarationParselet.class
+        emits = AnnotationTypeElementDeclarationParselet.class,
+        needs = { Type.class, Identifier.class, ElementValue.class }
 )
 public class AnnotationTypeElementDeclarationParselet 
         extends BodyDeclarationParselet<AnnotationTypeElementDeclaration> {
@@ -53,10 +54,10 @@ public class AnnotationTypeElementDeclarationParselet
         parseWhiteSpaceAndComments(parser);
         //TODO: dims
         //default
-        Expression defaultValue = null;
+        ElementValue defaultValue = null;
         if (parser.peekPresentAndSkip("default")) {
             parseWhiteSpaceAndComments(parser);
-            defaultValue = AnnotationExpressionParselet.parseElementValue(this, parser);
+            defaultValue = parser.next(ElementValue.class);
             if (defaultValue == null) {
                 return null;
             }

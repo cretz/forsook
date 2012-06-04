@@ -3,7 +3,7 @@ package org.forsook.parser.java.ast.decl;
 import java.util.List;
 
 import org.forsook.parser.java.ast.JavaModel;
-import org.forsook.parser.java.ast.JavadocComment;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
 
 @SuppressWarnings("serial")
 public abstract class BodyDeclaration extends JavaModel {

@@ -3,7 +3,6 @@ package org.forsook.parser.java.ast.decl;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Expression;
 import org.forsook.parser.java.ast.JavaModel;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.name.QualifiedName;
@@ -64,12 +63,12 @@ public class NormalAnnotationExpression extends AnnotationExpression {
     public static class ElementValuePair extends JavaModel {
         
         private Identifier name;
-        private Expression value;
+        private ElementValue value;
         
         public ElementValuePair() {
         }
          
-        public ElementValuePair(Identifier name, Expression value) {
+        public ElementValuePair(Identifier name, ElementValue value) {
             this.name = name;
             this.value = value;
         }
@@ -82,11 +81,11 @@ public class NormalAnnotationExpression extends AnnotationExpression {
             this.name = name;
         }
         
-        public Expression getValue() {
+        public ElementValue getValue() {
             return value;
         }
         
-        public void setValue(Expression value) {
+        public void setValue(ElementValue value) {
             this.value = value;
         }
 

@@ -1,7 +1,7 @@
 package org.forsook.parser.java.parselet;
 
-import org.forsook.parser.java.ast.LiteralExpression;
-import org.forsook.parser.java.ast.LiteralExpression.LiteralExpressionType;
+import org.forsook.parser.java.ast.lexical.LiteralExpression;
+import org.forsook.parser.java.ast.lexical.LiteralExpression.LiteralExpressionType;
 import org.junit.Test;
 
 public class LiteralExpressionParseletTest extends ParseletTestBase {

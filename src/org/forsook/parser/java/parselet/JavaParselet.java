@@ -5,15 +5,15 @@ import java.util.List;
 import org.forsook.parser.Parselet;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
-import org.forsook.parser.java.ast.Comment;
-import org.forsook.parser.java.ast.WhiteSpace;
+import org.forsook.parser.java.ast.lexical.Comment;
+import org.forsook.parser.java.ast.lexical.WhiteSpace;
 
 @ParseletDefinition(
         needs = { WhiteSpace.class, Comment.class }
 )
 public abstract class JavaParselet<T> implements Parselet<T> {
-
-    public List<?> parseWhiteSpaceAndComments(Parser parser) {
+    
+    protected List<?> parseWhiteSpaceAndComments(Parser parser) {
         return parser.any(WhiteSpace.class, Comment.class);
     }
     
