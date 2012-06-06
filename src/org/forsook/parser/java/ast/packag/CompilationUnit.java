@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.JavaModel;
-import org.forsook.parser.java.ast.decl.TypeDeclaration;
 
 @JlsReference("7.3")
 @SuppressWarnings("serial")
@@ -12,13 +11,13 @@ public class CompilationUnit extends JavaModel {
     
     private PackageDeclaration packageDeclaration;
     private List<ImportDeclaration> imports;
-    private List<TypeDeclaration> types;
+    private List<TypeDeclaration<?>> types;
     
     public CompilationUnit() {
     }
     
     public CompilationUnit(PackageDeclaration packageDeclaration, 
-            List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+            List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
         this.packageDeclaration = packageDeclaration;
         this.imports = imports;
         this.types = types;
@@ -40,11 +39,11 @@ public class CompilationUnit extends JavaModel {
         this.imports = imports;
     }
     
-    public List<TypeDeclaration> getTypes() {
+    public List<TypeDeclaration<?>> getTypes() {
         return types;
     }
     
-    public void setTypes(List<TypeDeclaration> types) {
+    public void setTypes(List<TypeDeclaration<?>> types) {
         this.types = types;
     }
 

@@ -13,6 +13,7 @@ import org.forsook.parser.java.ast.decl.EnumDeclaration;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
+import org.forsook.parser.java.parselet.packag.TypeDeclarationParselet;
 
 @JlsReference("8.9")
 @ParseletDefinition(

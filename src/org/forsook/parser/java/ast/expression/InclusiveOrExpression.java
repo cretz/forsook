@@ -2,7 +2,7 @@ package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
 
-@JlsReference("15.25")
-public interface ConditionalExpression extends AssignmentExpression {
+@JlsReference("15.22")
+public interface InclusiveOrExpression extends ConditionalAndExpression {
 
 }

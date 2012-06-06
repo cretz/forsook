@@ -12,6 +12,7 @@ import org.forsook.parser.java.ast.decl.AnnotationTypeBody;
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
+import org.forsook.parser.java.parselet.packag.TypeDeclarationParselet;
 
 @JlsReference("9.6")
 @ParseletDefinition(

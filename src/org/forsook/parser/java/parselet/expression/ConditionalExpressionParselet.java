@@ -2,70 +2,23 @@ package org.forsook.parser.java.parselet.expression;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
+import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.ConditionalExpression;
+import org.forsook.parser.java.ast.expression.ConditionalOperatorExpression;
+import org.forsook.parser.java.ast.expression.ConditionalOrExpression;
+import org.forsook.parser.java.ast.expression.Expression;
 
+@JlsReference("15.25")
 @ParseletDefinition(
         name = "forsook.java.conditionalExpression",
-        emits = ConditionalExpression.class
+        emits = ConditionalExpression.class,
+        needs = { ConditionalOrExpression.class, ConditionalOperatorExpression.class }
 )
-public class ConditionalExpressionParselet extends ExpressionParselet<ConditionalExpression> {
+public class ConditionalExpressionParselet extends ExpressionParselet<Expression> {
 
     @Override
-    public ConditionalExpression parse(Parser parser) {
-        //first, a conditional or expression
-        return null;
+    public Expression parse(Parser parser) {
+        return (Expression) parser.first(ConditionalOrExpression.class, 
+                ConditionalOperatorExpression.class); 
     }
-
-//TODO
-//    private ConditionalExpression parseConditionalOrExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseConditionalAndExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseInclusiveOrExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseExclusiveOrExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseAndExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseEqualityExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseRelationalExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseShiftExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseAdditiveExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseMultiplicativeExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseUnaryExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parseCastExpression(Parser parser) {
-//        
-//    }
-//    
-//    private ConditionalExpression parsePostfixExpression(Parser parser) {
-//        
-//    }
 }

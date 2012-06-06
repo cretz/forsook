@@ -7,7 +7,7 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
-import org.forsook.parser.java.ast.decl.TypeDeclarationStatement;
+import org.forsook.parser.java.ast.packag.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.statement.BlockStatement;
 import org.forsook.parser.java.ast.statement.ExpressionStatement;
 import org.forsook.parser.java.ast.statement.Statement;

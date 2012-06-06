@@ -8,6 +8,9 @@ import org.forsook.parser.java.ast.expression.RelationalExpression;
 import org.forsook.parser.java.ast.expression.RelationalOperatorExpression;
 import org.forsook.parser.java.ast.expression.RelationalOperatorExpression.RelationalOperator;
 import org.forsook.parser.java.ast.expression.ShiftExpression;
+import org.forsook.parser.java.ast.expression.TypeExpression;
+import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("15.20")
 @ParseletDefinition(
@@ -45,7 +48,15 @@ public class RelationalOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(ShiftExpression.class);
+        Expression right = null;
+        if (operator == RelationalOperator.INSTANCE_OF) {
+            Type type = parser.next(ReferenceType.class);
+            if (type != null) {
+                right = new TypeExpression(type);
+            }
+        } else {
+            right = (Expression) parser.next(ShiftExpression.class);
+        }
         if (right == null) {
             return null;
         }

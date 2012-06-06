@@ -3,13 +3,30 @@ package org.forsook.parser.java.parselet.packag;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
-import org.forsook.parser.java.ast.decl.TypeDeclaration;
+import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
+import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
+import org.forsook.parser.java.ast.decl.EnumDeclaration;
 import org.forsook.parser.java.ast.packag.CompilationUnit;
 import org.forsook.parser.java.ast.packag.ImportDeclaration;
 import org.forsook.parser.java.ast.packag.PackageDeclaration;
+import org.forsook.parser.java.ast.packag.TypeDeclaration;
 import org.forsook.parser.java.parselet.JavaParselet;
 
+@JlsReference("7.3")
+@ParseletDefinition(
+        name = "forsook.java.compilationUnit",
+        emits = CompilationUnit.class,
+        needs = {
+            PackageDeclaration.class,
+            ImportDeclaration.class,
+            ClassOrInterfaceDeclaration.class,
+            AnnotationTypeDeclaration.class,
+            EnumDeclaration.class
+        }
+)
 public class CompilationUnitParselet extends JavaParselet<CompilationUnit> {
 
     @Override
@@ -28,14 +45,22 @@ public class CompilationUnitParselet extends JavaParselet<CompilationUnit> {
             }
         } while (true);
         //types
-        List<TypeDeclaration> types = new ArrayList<TypeDeclaration>();
+        List<TypeDeclaration<?>> types = new ArrayList<TypeDeclaration<?>>();
         do {
-            //spacing
-            parseWhiteSpaceAndComments(parser);
+            //no spacing here so declarations can get javadoc
             //type
-            TypeDeclaration type = parser.next(TypeDeclaration.class);
+            TypeDeclaration<?> type = (TypeDeclaration<?>) parser.first(
+                    ClassOrInterfaceDeclaration.class,
+                    AnnotationTypeDeclaration.class, EnumDeclaration.class);
             if (type == null) {
-                break;
+                //spacing 
+                parseWhiteSpaceAndComments(parser);
+                //semicolon
+                if (!parser.peekPresentAndSkip(';')) {
+                    break;
+                }
+            } else {
+                types.add(type);
             }
         } while (true);
         return new CompilationUnit(packageDeclaration, imports, types);

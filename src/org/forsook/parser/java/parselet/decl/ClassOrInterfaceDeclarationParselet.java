@@ -14,6 +14,7 @@ import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.TypeParameter;
+import org.forsook.parser.java.parselet.packag.TypeDeclarationParselet;
 
 @JlsReference({ "8.1", "9.1" })
 @ParseletDefinition(

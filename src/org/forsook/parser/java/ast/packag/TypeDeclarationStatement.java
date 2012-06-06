@@ -1,4 +1,4 @@
-package org.forsook.parser.java.ast.decl;
+package org.forsook.parser.java.ast.packag;
 
 import org.forsook.parser.java.ast.statement.Statement;
 

@@ -3,8 +3,12 @@ package org.forsook.parser.java.parselet.statement;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.expression.AssignmentExpression;
+import org.forsook.parser.java.ast.expression.AssignmentOperatorExpression;
+import org.forsook.parser.java.ast.expression.ClassInstanceCreationExpression;
 import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.MethodInvocationExpression;
+import org.forsook.parser.java.ast.expression.PostfixIncrementExpression;
+import org.forsook.parser.java.ast.expression.PrefixIncrementExpression;
 import org.forsook.parser.java.ast.statement.ExpressionStatement;
 
 @JlsReference("14.8")
@@ -12,7 +16,7 @@ import org.forsook.parser.java.ast.statement.ExpressionStatement;
         name = "forsook.java.expressionStatement",
         emits = ExpressionStatement.class,
         needs = {
-            AssignmentExpression.class,
+            AssignmentOperatorExpression.class,
             PrefixIncrementExpression.class,
             PostfixIncrementExpression.class,
             MethodInvocationExpression.class,
@@ -24,7 +28,7 @@ public class ExpressionStatementParselet extends StatementParselet<ExpressionSta
     @Override
     public ExpressionStatement parse(Parser parser) {
         Expression expr = (Expression) parser.first(
-                AssignmentExpression.class,
+                AssignmentOperatorExpression.class,
                 PrefixIncrementExpression.class,
                 PostfixIncrementExpression.class,
                 MethodInvocationExpression.class,
