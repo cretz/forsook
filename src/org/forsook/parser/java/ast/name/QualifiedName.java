@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.PostfixExpression;
 import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("6.5")
 @SuppressWarnings("serial")
-public class QualifiedName extends Expression {
+public class QualifiedName extends Expression implements PostfixExpression {
 
     private List<Identifier> identifiers;
     

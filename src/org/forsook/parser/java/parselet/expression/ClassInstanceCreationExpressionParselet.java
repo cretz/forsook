@@ -96,6 +96,8 @@ public class ClassInstanceCreationExpressionParselet
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //spacing
+        parseWhiteSpaceAndComments(parser);
         //arguments
         List<Expression> arguments = new ArrayList<Expression>();
         do {
@@ -110,6 +112,7 @@ public class ClassInstanceCreationExpressionParselet
                     return null;
                 }
             }
+            arguments.add(argument);
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (parser.peekPresentAndSkip(','));

@@ -6,20 +6,25 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.ArrayAccessExpression;
 import org.forsook.parser.java.ast.expression.ArrayCreationExpression;
 import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.PrimaryNoNewArrayExpression;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.13")
 @ParseletDefinition(
         name = "forsook.java.arrayAccessExpression",
         emits = ArrayAccessExpression.class,
-        needs = { QualifiedName.class, Expression.class }
+        needs = { 
+            PrimaryNoNewArrayExpression.class,
+            QualifiedName.class, 
+            Expression.class 
+        }
 )
 public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAccessExpression> {
 
     @Override
     public ArrayAccessExpression parse(Parser parser) {
-        //try primary no new array
-        Expression name = parser.next(Expression.class);
+        //name
+        Expression name = (Expression) parser.next(PrimaryNoNewArrayExpression.class);
         if (name == null || name instanceof ArrayCreationExpression) {
             //ok, just string
             name = parser.next(QualifiedName.class);

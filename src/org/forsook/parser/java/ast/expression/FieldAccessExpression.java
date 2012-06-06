@@ -9,38 +9,49 @@ import org.forsook.parser.java.ast.name.QualifiedName;
 public class FieldAccessExpression extends Expression {
 
     private Expression scope;
-    private QualifiedName superName;
+    private QualifiedName className;
+    private boolean superPresent;
     private Identifier field;
     
     public FieldAccessExpression() {
     }
-    
-    public FieldAccessExpression(Expression scope, QualifiedName superName, Identifier field) {
+
+    public FieldAccessExpression(Expression scope, QualifiedName className,
+            boolean superPresent, Identifier field) {
         this.scope = scope;
-        this.superName = superName;
+        this.className = className;
+        this.superPresent = superPresent;
         this.field = field;
     }
-    
+
     public Expression getScope() {
         return scope;
     }
-    
+
     public void setScope(Expression scope) {
         this.scope = scope;
     }
-    
-    public QualifiedName getSuperName() {
-        return superName;
+
+    public QualifiedName getClassName() {
+        return className;
     }
-    
-    public void setSuperName(QualifiedName superName) {
-        this.superName = superName;
+
+    public void setClassName(QualifiedName className) {
+        this.className = className;
     }
-    
+
+    public boolean isSuperPresent() {
+        return superPresent;
+    }
+
+    public void setSuperPresent(boolean superPresent) {
+        this.superPresent = superPresent;
+    }
+
     public Identifier getField() {
         return field;
     }
-    
+
     public void setField(Identifier field) {
         this.field = field;
     }
@@ -49,10 +60,11 @@ public class FieldAccessExpression extends Expression {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result
+                + ((className == null) ? 0 : className.hashCode());
         result = prime * result + ((field == null) ? 0 : field.hashCode());
         result = prime * result + ((scope == null) ? 0 : scope.hashCode());
-        result = prime * result
-                + ((superName == null) ? 0 : superName.hashCode());
+        result = prime * result + (superPresent ? 1231 : 1237);
         return result;
     }
 
@@ -68,6 +80,13 @@ public class FieldAccessExpression extends Expression {
             return false;
         }
         FieldAccessExpression other = (FieldAccessExpression) obj;
+        if (className == null) {
+            if (other.className != null) {
+                return false;
+            }
+        } else if (!className.equals(other.className)) {
+            return false;
+        }
         if (field == null) {
             if (other.field != null) {
                 return false;
@@ -82,15 +101,9 @@ public class FieldAccessExpression extends Expression {
         } else if (!scope.equals(other.scope)) {
             return false;
         }
-        if (superName == null) {
-            if (other.superName != null) {
-                return false;
-            }
-        } else if (!superName.equals(other.superName)) {
+        if (superPresent != other.superPresent) {
             return false;
         }
         return true;
     }
-    
-    
 }

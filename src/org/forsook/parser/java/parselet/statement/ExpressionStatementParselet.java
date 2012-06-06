@@ -13,8 +13,8 @@ import org.forsook.parser.java.ast.statement.ExpressionStatement;
         emits = ExpressionStatement.class,
         needs = {
             AssignmentExpression.class,
-            PrefixExpression.class,
-            PostfixExpression.class,
+            PrefixIncrementExpression.class,
+            PostfixIncrementExpression.class,
             MethodInvocationExpression.class,
             ClassInstanceCreationExpression.class
         }
@@ -25,8 +25,8 @@ public class ExpressionStatementParselet extends StatementParselet<ExpressionSta
     public ExpressionStatement parse(Parser parser) {
         Expression expr = (Expression) parser.first(
                 AssignmentExpression.class,
-                PrefixExpression.class,
-                PostfixExpression.class,
+                PrefixIncrementExpression.class,
+                PostfixIncrementExpression.class,
                 MethodInvocationExpression.class,
                 ClassInstanceCreationExpression.class
             );

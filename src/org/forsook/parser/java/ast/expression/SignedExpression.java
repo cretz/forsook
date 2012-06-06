@@ -1,35 +1,34 @@
 package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.type.Type;
 
-@JlsReference("15.16")
+@JlsReference("15.15")
 @SuppressWarnings("serial")
-public class CastExpression extends Expression implements UnaryNotPlusMinusExpression {
+public class SignedExpression extends Expression implements UnaryExpression {
 
-    private Type type;
+    private boolean positive;
     private Expression expression;
     
-    public CastExpression() {
+    public SignedExpression() {
     }
-    
-    public CastExpression(Type type, Expression expression) {
-        this.type = type;
+
+    public SignedExpression(boolean positive, Expression expression) {
+        this.positive = positive;
         this.expression = expression;
     }
-    
-    public Type getType() {
-        return type;
+
+    public boolean isPositive() {
+        return positive;
     }
-    
-    public void setType(Type type) {
-        this.type = type;
+
+    public void setPositive(boolean positive) {
+        this.positive = positive;
     }
-    
+
     public Expression getExpression() {
         return expression;
     }
-    
+
     public void setExpression(Expression expression) {
         this.expression = expression;
     }
@@ -40,7 +39,7 @@ public class CastExpression extends Expression implements UnaryNotPlusMinusExpre
         int result = 1;
         result = prime * result
                 + ((expression == null) ? 0 : expression.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + (positive ? 1231 : 1237);
         return result;
     }
 
@@ -55,7 +54,7 @@ public class CastExpression extends Expression implements UnaryNotPlusMinusExpre
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CastExpression other = (CastExpression) obj;
+        SignedExpression other = (SignedExpression) obj;
         if (expression == null) {
             if (other.expression != null) {
                 return false;
@@ -63,11 +62,7 @@ public class CastExpression extends Expression implements UnaryNotPlusMinusExpre
         } else if (!expression.equals(other.expression)) {
             return false;
         }
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
+        if (positive != other.positive) {
             return false;
         }
         return true;

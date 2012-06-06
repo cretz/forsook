@@ -8,18 +8,31 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
+import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
+import org.forsook.parser.java.ast.decl.ExplicitConstructorInvocationStatement;
 import org.forsook.parser.java.ast.decl.Parameter;
+import org.forsook.parser.java.ast.decl.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.statement.BlockStatement;
+import org.forsook.parser.java.ast.statement.ExpressionStatement;
+import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
+import org.forsook.parser.java.ast.statement.Statement;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.TypeParameter;
 
 @JlsReference("8.8")
 @ParseletDefinition(
         name = "forsook.java.constructorDeclaration",
-        emits = ConstructorDeclaration.class
+        emits = ConstructorDeclaration.class,
+        needs = {
+            Identifier.class,
+            ExplicitConstructorInvocationStatement.class,
+            ClassOrInterfaceDeclaration.class,
+            LocalVariableDeclarationExpression.class,
+            Statement.class
+        }
 )
 public class ConstructorDeclarationParselet extends BodyDeclarationParselet<ConstructorDeclaration> {
 
@@ -57,12 +70,41 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
             return null;
         }
         //block
-        BlockStatement block = parser.next(BlockStatement.class);
-        if (block == null) {
+        if (!parser.peekPresentAndSkip('{')) {
             return null;
         }
+        //statements
+        List<Statement> statements = new ArrayList<Statement>();
+        //local class gets no javadoc IMO
+        parseWhiteSpaceAndComments(parser);
+        do {
+            Statement stmt = parser.next(ExplicitConstructorInvocationStatement.class);
+            if (stmt == null) {
+                //local class?
+                ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclaration.class);
+                if (decl != null && !decl.isInterface()) {
+                    stmt = new TypeDeclarationStatement(decl);
+                } else {
+                    //variable declaration?
+                    LocalVariableDeclarationExpression expr = 
+                            parser.next(LocalVariableDeclarationExpression.class);
+                    if (expr != null) {
+                        stmt = new ExpressionStatement(expr);
+                    } else {
+                        //regular statement
+                        stmt = parser.next(Statement.class);
+                        if (stmt == null) {
+                            return null;
+                        }
+                    }
+                }
+            }
+            statements.add(stmt);
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+        } while (!parser.peekPresentAndSkip('}'));
         return new ConstructorDeclaration(javadoc, annotations, modifiers, 
-                typeParameters, name, parameters, throwsList, block);
+                typeParameters, name, parameters, throwsList, new BlockStatement(statements));
     }
 
 }

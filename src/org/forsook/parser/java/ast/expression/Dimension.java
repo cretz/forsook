@@ -1,29 +1,19 @@
 package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.type.Type;
+import org.forsook.parser.java.ast.JavaModel;
 
-@JlsReference("15.16")
+@JlsReference("15.10")
 @SuppressWarnings("serial")
-public class CastExpression extends Expression implements UnaryNotPlusMinusExpression {
+public class Dimension extends JavaModel {
 
-    private Type type;
     private Expression expression;
     
-    public CastExpression() {
+    public Dimension() {
     }
     
-    public CastExpression(Type type, Expression expression) {
-        this.type = type;
+    public Dimension(Expression expression) {
         this.expression = expression;
-    }
-    
-    public Type getType() {
-        return type;
-    }
-    
-    public void setType(Type type) {
-        this.type = type;
     }
     
     public Expression getExpression() {
@@ -40,7 +30,6 @@ public class CastExpression extends Expression implements UnaryNotPlusMinusExpre
         int result = 1;
         result = prime * result
                 + ((expression == null) ? 0 : expression.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
 
@@ -55,19 +44,12 @@ public class CastExpression extends Expression implements UnaryNotPlusMinusExpre
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CastExpression other = (CastExpression) obj;
+        Dimension other = (Dimension) obj;
         if (expression == null) {
             if (other.expression != null) {
                 return false;
             }
         } else if (!expression.equals(other.expression)) {
-            return false;
-        }
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
             return false;
         }
         return true;

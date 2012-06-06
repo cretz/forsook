@@ -6,16 +6,20 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.CastExpression;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.expression.UnaryExpression;
+import org.forsook.parser.java.ast.expression.UnaryNotPlusMinusExpression;
+import org.forsook.parser.java.ast.type.PrimitiveType;
 import org.forsook.parser.java.ast.type.ReferenceType;
+import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("15.16")
 @ParseletDefinition(
         name = "forsook.java.castExpression",
         emits = CastExpression.class,
         needs = {
+            PrimitiveType.class,
             ReferenceType.class,
             UnaryExpression.class,
-            CastExpression.class
+            UnaryNotPlusMinusExpression.class
         }
 )
 public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
@@ -29,7 +33,7 @@ public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
         //spacing
         parseWhiteSpaceAndComments(parser);
         //type
-        ReferenceType type = parser.next(ReferenceType.class);
+        Type type = (Type) parser.first(PrimitiveType.class, ReferenceType.class);
         if (type == null) {
             return null;
         }
@@ -42,13 +46,10 @@ public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression
-        Expression expression = (Expression) parser.first(
-                UnaryExpression.class, CastExpression.class);
+        Expression expression = (Expression) parser.next(type instanceof PrimitiveType ?
+                UnaryExpression.class : UnaryNotPlusMinusExpression.class);
         if (expression == null) {
-            expression = parsePrimaryExpression(parser, true);
-            if (expression == null) {
-                return null;
-            }
+            return null;
         }
         return new CastExpression(type, expression);
     }
