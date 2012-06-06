@@ -5,23 +5,26 @@ import java.util.List;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.lexical.Identifier;
+import org.forsook.parser.java.ast.lexical.JavadocComment;
 
 @JlsReference("8.9.1")
 @SuppressWarnings("serial")
 public class EnumConstantDeclaration extends BodyDeclaration {
 
     private Identifier name;
-    private Expression arguments;
-    private List<BodyDeclaration> members;
+    private List<Expression> arguments;
+    private ClassOrInterfaceBody body;
     
     public EnumConstantDeclaration() {
     }
 
-    public EnumConstantDeclaration(Identifier name, Expression arguments,
-            List<BodyDeclaration> members) {
+    public EnumConstantDeclaration(JavadocComment javadoc, 
+            List<AnnotationExpression> annotations, Identifier name, 
+            List<Expression> arguments, ClassOrInterfaceBody body) {
+        super(javadoc, annotations);
         this.name = name;
         this.arguments = arguments;
-        this.members = members;
+        this.body = body;
     }
 
     public Identifier getName() {
@@ -32,20 +35,20 @@ public class EnumConstantDeclaration extends BodyDeclaration {
         this.name = name;
     }
 
-    public Expression getArguments() {
+    public List<Expression> getArguments() {
         return arguments;
     }
 
-    public void setArguments(Expression arguments) {
+    public void setArguments(List<Expression> arguments) {
         this.arguments = arguments;
     }
 
-    public List<BodyDeclaration> getMembers() {
-        return members;
+    public ClassOrInterfaceBody getBody() {
+        return body;
     }
-
-    public void setMembers(List<BodyDeclaration> members) {
-        this.members = members;
+    
+    public void setBody(ClassOrInterfaceBody body) {
+        this.body = body;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class EnumConstantDeclaration extends BodyDeclaration {
         int result = super.hashCode();
         result = prime * result
                 + ((arguments == null) ? 0 : arguments.hashCode());
-        result = prime * result + ((members == null) ? 0 : members.hashCode());
+        result = prime * result + ((body == null) ? 0 : body.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -78,11 +81,11 @@ public class EnumConstantDeclaration extends BodyDeclaration {
         } else if (!arguments.equals(other.arguments)) {
             return false;
         }
-        if (members == null) {
-            if (other.members != null) {
+        if (body == null) {
+            if (other.body != null) {
                 return false;
             }
-        } else if (!members.equals(other.members)) {
+        } else if (!body.equals(other.body)) {
             return false;
         }
         if (name == null) {

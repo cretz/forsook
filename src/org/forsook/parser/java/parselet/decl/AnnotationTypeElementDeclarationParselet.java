@@ -17,7 +17,7 @@ import org.forsook.parser.java.ast.type.Type;
 @JlsReference("9.6.1")
 @ParseletDefinition(
         name = "forsook.java.annotationTypeElementDeclaration",
-        emits = AnnotationTypeElementDeclarationParselet.class,
+        emits = AnnotationTypeElementDeclaration.class,
         needs = { Type.class, Identifier.class, ElementValue.class }
 )
 public class AnnotationTypeElementDeclarationParselet 

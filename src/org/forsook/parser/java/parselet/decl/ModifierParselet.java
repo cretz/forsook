@@ -1,11 +1,12 @@
-package org.forsook.parser.java.parselet;
+package org.forsook.parser.java.parselet.decl;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.Modifier;
+import org.forsook.parser.java.parselet.JavaParselet;
 
-@JlsReference("6.6") //TODO: add the rest
+@JlsReference({ "8.1.1", "8.3.1", "8.4.1", "8.4.3", "8.8.3", "9.1.1", "9.3", "9.4" })
 @ParseletDefinition(
         name = "forsook.java.modifier",
         emits = Modifier.class
