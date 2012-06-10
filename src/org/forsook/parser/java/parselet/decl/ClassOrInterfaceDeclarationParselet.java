@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -28,12 +29,20 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
     public ClassOrInterfaceDeclaration parse(Parser parser) {
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
-        //modifiers
-        Modifier modifiers = parseModifiers(parser);
+        List<Modifier> modifiers = new ArrayList<Modifier>();
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations,
+                modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE,
+                Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.STRICTFP)) {
+            return null;
+        }
         //interface/class
         boolean iface = parser.peekPresentAndSkip("interface");
         if (!iface && !parser.peekPresentAndSkip("class")) {
+            return null;
+        }
+        //can't be final
+        if (iface && modifiers.contains(Modifier.FINAL)) {
             return null;
         }
         //some spacing required
@@ -48,7 +57,6 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
         parseWhiteSpaceAndComments(parser);
         //type parameters
         List<TypeParameter> parameters = parseTypeParameters(parser);
-        parseWhiteSpaceAndComments(parser);
         //extends
         List<ClassOrInterfaceType> extendsList = 
                 parseExtendsOrImplementsList("extends", parser);
@@ -60,7 +68,7 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
         if (body == null) {
             return null;
         }
-        return new ClassOrInterfaceDeclaration(javadoc, annotations, name, modifiers, 
+        return new ClassOrInterfaceDeclaration(javadoc.get(), annotations, name, modifiers, 
                 body, iface, parameters, extendsList, implementsList);
     }
 

@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -27,11 +28,16 @@ public class MethodDeclarationParselet extends BodyDeclarationParselet<MethodDec
 
     @Override
     public MethodDeclaration parse(Parser parser) {
-        //javadoc and annotations
+        //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
-        //modifiers
-        Modifier modifier = parseModifiers(parser);
+        List<Modifier> modifiers = new ArrayList<Modifier>();
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations,
+                modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE,
+                Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, 
+                Modifier.SYNCHRONIZED, Modifier.NATIVE, Modifier.STRICTFP)) {
+            return null;
+        }
         //type parameters
         List<TypeParameter> typeParameters = parseTypeParameters(parser);
         //result
@@ -66,7 +72,7 @@ public class MethodDeclarationParselet extends BodyDeclarationParselet<MethodDec
                 return null;
             }
         }
-        return new MethodDeclaration(javadoc, annotations, modifier, typeParameters, 
+        return new MethodDeclaration(javadoc.get(), annotations, modifiers, typeParameters, 
                 result, name, parameters, throwsList, block);
     }
 

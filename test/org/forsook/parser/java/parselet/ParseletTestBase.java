@@ -1,5 +1,8 @@
 package org.forsook.parser.java.parselet;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
@@ -24,9 +27,28 @@ public abstract class ParseletTestBase {
             }
         }
     }
+    
+    protected static String streamToString(InputStream stream) {
+        Reader reader = new InputStreamReader(stream);
+        try {
+            StringBuilder builder = new StringBuilder();
+            char[] buffer = new char[8192];
+            int read;
+            while ((read = reader.read(buffer, 0, buffer.length)) > 0) {
+                builder.append(buffer, 0, read);
+            }
+            return builder.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                reader.close();
+            } catch (Exception e) { }
+        }
+    }
 
     protected Parser buildParser(String source) {
-        return new SimpleParser(source, ParserUtils.buildParseletMap(allLocalParseletsEnabled));
+        return new SimpleParser(source, ParserUtils.buildParseletMap(null));
     }
     
     protected void assertParse(String source, Object expected) {

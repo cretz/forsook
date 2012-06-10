@@ -1,7 +1,9 @@
 package org.forsook.parser.java.parselet.type;
 
+import org.forsook.parser.java.ast.type.ArrayType;
 import org.forsook.parser.java.ast.type.PrimitiveType;
 import org.forsook.parser.java.ast.type.PrimitiveType.Primitive;
+import org.forsook.parser.java.ast.type.Type;
 import org.forsook.parser.java.parselet.ParseletTestBase;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,5 +36,19 @@ public class TypeParseletTest extends ParseletTestBase {
     @Ignore("TODO")
     public void testReferenceType() {
         
+    }
+    
+    @Test
+    public void testArrayType() {
+        //test the recursion
+        Type type = new PrimitiveType(Primitive.INT);
+        String string = "int";
+        for (int i = 0; i < 20; i++) {
+            type = new ArrayType(type);
+            string += "[]";
+            System.out.println(i);
+            assertParse(string, type);
+        }
+        //TODO: more
     }
 }

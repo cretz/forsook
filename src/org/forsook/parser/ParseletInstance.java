@@ -11,16 +11,18 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
     private final Set<Class<? extends Parselet<?>>> replaces;
     private final BigDecimal precedence;
     private final Parselet<?> parselet;
+    private final Integer recursiveMinimumSize;
     
     ParseletInstance(String name, Set<Class<?>> emits, Set<Class<?>> needs,
             Set<Class<? extends Parselet<?>>> replaces, BigDecimal precedence,
-            Parselet<?> parselet) {
+            Parselet<?> parselet, int recursiveMinimumSize) {
         this.name = name;
         this.emits = emits;
         this.needs = needs;
         this.replaces = replaces;
         this.precedence = precedence;
         this.parselet = parselet;
+        this.recursiveMinimumSize = recursiveMinimumSize > 0 ? recursiveMinimumSize : null;
     }
 
     String getName() {
@@ -45,6 +47,10 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
 
     Parselet<?> getParselet() {
         return parselet;
+    }
+    
+    Integer getRecursiveMinimumSize() {
+        return recursiveMinimumSize;
     }
 
     @Override

@@ -31,8 +31,6 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
                 } else {
                     break;
                 }
-            } else {
-                parser.skip(1);
             }
             //spacing
             parseWhiteSpaceAndComments(parser);

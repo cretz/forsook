@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -28,9 +29,12 @@ public class EnumConstantDeclarationParselet
 
     @Override
     public EnumConstantDeclaration parse(Parser parser) {
-        //annotations and javadoc
+        //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations, null)) {
+            return null;
+        }
         //identifier
         Identifier name = parser.next(Identifier.class);
         if (name == null) {
@@ -64,7 +68,7 @@ public class EnumConstantDeclarationParselet
         parseWhiteSpaceAndComments(parser);
         //body
         ClassOrInterfaceBody body = parser.next(ClassOrInterfaceBody.class);
-        return new EnumConstantDeclaration(javadoc, annotations, name, arguments, body);
+        return new EnumConstantDeclaration(javadoc.get(), annotations, name, arguments, body);
     }
 
 }

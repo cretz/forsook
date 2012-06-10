@@ -16,7 +16,8 @@ import org.forsook.parser.java.ast.expression.Expression;
             ConditionalOrExpression.class,
             Expression.class,
             ConditionalExpression.class
-        }
+        },
+        recursiveMinimumSize = 4
 )
 public class ConditionalOperatorExpressionParselet 
         extends ExpressionParselet<ConditionalOperatorExpression> {

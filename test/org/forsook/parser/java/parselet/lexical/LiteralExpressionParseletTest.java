@@ -29,9 +29,6 @@ public class LiteralExpressionParseletTest extends ParseletTestBase {
         assertParse("5_0", LiteralExpressionType.DECIMAL_INTEGER);
         assertParse("5_0_1_6l", LiteralExpressionType.DECIMAL_INTEGER);
         assertParse("5_0_1_6L", LiteralExpressionType.DECIMAL_INTEGER);
-        //these are some that barely miss other parts, so are just zeros here
-        assertParse("0X_5", "0", LiteralExpressionType.DECIMAL_INTEGER);
-        assertParse("0B_1", "0", LiteralExpressionType.DECIMAL_INTEGER);
         assertParse("0.e", "0", LiteralExpressionType.DECIMAL_INTEGER);
         assertParse("0.0e", "0", LiteralExpressionType.DECIMAL_INTEGER);
         assertParse("0e", "0", LiteralExpressionType.DECIMAL_INTEGER);

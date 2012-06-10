@@ -11,7 +11,8 @@ import org.forsook.parser.java.ast.expression.PostfixIncrementExpression;
 @ParseletDefinition(
         name = "forsook.java.postfixIncrementExpression",
         emits = PostfixIncrementExpression.class,
-        needs = PostfixExpression.class
+        needs = PostfixExpression.class,
+        recursiveMinimumSize = 2
 )
 public class PostfixIncrementExpressionParselet extends ExpressionParselet<PostfixIncrementExpression> {
 

@@ -111,10 +111,18 @@ public interface Parser {
     int getCursor();
     
     /**
-     * Set the cursor position. Note, this is very dangerous during
-     * recursive parsing. Please use wisely.
+     * Get the current cursor line. Note, if {@link #setCursor(int)} is called,
+     * the cache is reset for this making it slower.
      * 
-     * @param cursor
+     * @return
      */
-    void setCursor(int cursor);
+    int getLine();
+    
+    /**
+     * Get the current cursor column. Note, if {@link #setCursor(int)} is called,
+     * the cache is reset for this making it slower.
+     * 
+     * @return
+     */
+    int getColumn();
 }

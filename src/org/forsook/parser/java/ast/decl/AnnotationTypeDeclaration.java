@@ -16,7 +16,7 @@ public class AnnotationTypeDeclaration extends TypeDeclaration<AnnotationTypeBod
     }
     
     public AnnotationTypeDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, AnnotationTypeBody members) {
+            Identifier name, List<Modifier> modifiers, AnnotationTypeBody members) {
         super(javadoc, annotations, name, modifiers, members);
     }
 }

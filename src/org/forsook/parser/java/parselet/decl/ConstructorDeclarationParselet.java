@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -38,11 +39,14 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
 
     @Override
     public ConstructorDeclaration parse(Parser parser) {
-        //javadoc and annotations
+        //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
-        //modifiers
-        Modifier modifiers = parseModifiers(parser);
+        List<Modifier> modifiers = new ArrayList<Modifier>();
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations,
+                modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE)) {
+            return null;
+        }
         //type parameters
         List<TypeParameter> typeParameters = parseTypeParameters(parser);
         if (typeParameters == null) {
@@ -55,10 +59,6 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
-        //parentheses
-        if (!parser.peekPresentAndSkip('(')) {
-            return null;
-        }
         //parameters
         List<Parameter> parameters = parseParameters(parser);
         if (parameters == null) {
@@ -103,7 +103,7 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (!parser.peekPresentAndSkip('}'));
-        return new ConstructorDeclaration(javadoc, annotations, modifiers, 
+        return new ConstructorDeclaration(javadoc.get(), annotations, modifiers, 
                 typeParameters, name, parameters, throwsList, new BlockStatement(statements));
     }
 

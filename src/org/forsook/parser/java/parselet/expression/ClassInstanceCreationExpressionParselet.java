@@ -26,7 +26,8 @@ import org.forsook.parser.java.ast.type.TypeArguments;
             Identifier.class,
             Expression.class,
             ClassOrInterfaceBody.class
-        }
+        },
+        recursiveMinimumSize = 6
 )
 public class ClassInstanceCreationExpressionParselet 
         extends ExpressionParselet<ClassInstanceCreationExpression> {

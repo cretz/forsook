@@ -12,7 +12,7 @@ import org.forsook.parser.java.ast.type.Type;
 @SuppressWarnings("serial")
 public class AnnotationTypeElementDeclaration extends BodyDeclaration {
 
-    private Modifier modifiers;
+    private List<Modifier> modifiers;
     private Type type;
     private Identifier name;
     private ElementValue defaultValue;
@@ -21,7 +21,7 @@ public class AnnotationTypeElementDeclaration extends BodyDeclaration {
     }
 
     public AnnotationTypeElementDeclaration(JavadocComment javadoc, 
-            List<AnnotationExpression> annotations, Modifier modifiers, Type type,
+            List<AnnotationExpression> annotations, List<Modifier> modifiers, Type type,
             Identifier name, ElementValue defaultValue) {
         super(javadoc, annotations);
         this.modifiers = modifiers;
@@ -30,11 +30,11 @@ public class AnnotationTypeElementDeclaration extends BodyDeclaration {
         this.defaultValue = defaultValue;
     }
 
-    public Modifier getModifiers() {
+    public List<Modifier> getModifiers() {
         return modifiers;
     }
-
-    public void setModifiers(Modifier modifiers) {
+    
+    public void setModifiers(List<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
 

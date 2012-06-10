@@ -12,7 +12,8 @@ import org.forsook.parser.java.ast.expression.Expression;
 @ParseletDefinition(
         name = "forsook.java.conditionalAndOperatorExpression",
         emits = ConditionalAndOperatorExpression.class,
-        needs = { ConditionalAndExpression.class, InclusiveOrExpression.class }
+        needs = { ConditionalAndExpression.class, InclusiveOrExpression.class },
+        recursiveMinimumSize = 3
 )
 public class ConditionalAndOperatorExpressionParselet 
         extends ExpressionParselet<ConditionalAndOperatorExpression> {

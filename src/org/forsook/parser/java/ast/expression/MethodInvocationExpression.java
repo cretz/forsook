@@ -8,7 +8,8 @@ import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.12")
 @SuppressWarnings("serial")
-public class MethodInvocationExpression extends Expression {
+public class MethodInvocationExpression extends Expression
+        implements PrimaryNoNewArrayExpression {
 
     private Expression scope;
     private QualifiedName className;

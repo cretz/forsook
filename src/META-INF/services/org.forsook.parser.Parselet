@@ -74,12 +74,16 @@ org.forsook.parser.java.parselet.expression.UnaryExpressionParselet
 org.forsook.parser.java.parselet.expression.UnaryNotPlusMinusExpressionParselet
 
 # lexical
+org.forsook.parser.java.parselet.lexical.BinaryIntegerLiteralParselet
 org.forsook.parser.java.parselet.lexical.BooleanAndNullLiteralExpressionParselet
 org.forsook.parser.java.parselet.lexical.CharacterAndStringLiteralExpressionParselet
 org.forsook.parser.java.parselet.lexical.CommentParselet
-org.forsook.parser.java.parselet.lexical.FloatingPointLiteralExpressionParselet
+org.forsook.parser.java.parselet.lexical.DecimalFloatingPointLiteralExpressionParselet
+org.forsook.parser.java.parselet.lexical.DecimalIntegerLiteralParselet
+org.forsook.parser.java.parselet.lexical.HexadecimalFloatingPointLiteralExpressionParselet
+org.forsook.parser.java.parselet.lexical.HexIntegerLiteralParselet
 org.forsook.parser.java.parselet.lexical.IdentifierParselet
-org.forsook.parser.java.parselet.lexical.IntegerLiteralExpressionParselet
+org.forsook.parser.java.parselet.lexical.OctalIntegerLiteralParselet
 org.forsook.parser.java.parselet.lexical.WhiteSpaceParselet
 
 # name

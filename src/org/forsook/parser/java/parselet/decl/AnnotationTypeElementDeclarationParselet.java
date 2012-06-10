@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -27,9 +28,12 @@ public class AnnotationTypeElementDeclarationParselet
     public AnnotationTypeElementDeclaration parse(Parser parser) {
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
-        //modifiers
-        Modifier modifiers = parseModifiers(parser);
+        List<Modifier> modifiers = new ArrayList<Modifier>();
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations,
+                modifiers, Modifier.PUBLIC, Modifier.ABSTRACT)) {
+            return null;
+        }
         //type
         Type type = parser.next(Type.class);
         if (type == null) {
@@ -67,7 +71,7 @@ public class AnnotationTypeElementDeclarationParselet
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
-        return new AnnotationTypeElementDeclaration(javadoc, annotations, 
+        return new AnnotationTypeElementDeclaration(javadoc.get(), annotations, 
                 modifiers, type, name, defaultValue);
     }
 

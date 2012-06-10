@@ -13,7 +13,8 @@ import org.forsook.parser.java.ast.expression.EqualityExpression;
 @ParseletDefinition(
         name = "forsook.java.equalityOperatorExpression",
         emits = EqualityOperatorExpression.class,
-        needs = { EqualityExpression.class, RelationalExpression.class }
+        needs = { EqualityExpression.class, RelationalExpression.class },
+        recursiveMinimumSize = 3
 )
 public class EqualityOperatorExpressionParselet 
         extends ExpressionParselet<EqualityOperatorExpression> {

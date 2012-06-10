@@ -24,7 +24,8 @@ import org.forsook.parser.java.ast.name.QualifiedName;
             NonWildTypeArguments.class,
             Identifier.class,
             Expression.class
-        }
+        },
+        recursiveMinimumSize = 2
 )
 public class MethodInvocationExpressionParselet
         extends ExpressionParselet<MethodInvocationExpression> {
@@ -70,7 +71,7 @@ public class MethodInvocationExpressionParselet
         }
         //type arguments
         NonWildTypeArguments typeArguments = null;
-        if (methodName != null) {
+        if (methodName == null) {
             typeArguments = parser.next(NonWildTypeArguments.class);
             if (!superPresent && typeArguments == null) {
                 return null;

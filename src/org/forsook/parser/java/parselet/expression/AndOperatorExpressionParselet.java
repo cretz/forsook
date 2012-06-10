@@ -12,7 +12,8 @@ import org.forsook.parser.java.ast.expression.Expression;
 @ParseletDefinition(
         name = "forsook.java.andOperatorExpression",
         emits = AndOperatorExpression.class,
-        needs = { AndExpression.class, EqualityExpression.class }
+        needs = { AndExpression.class, EqualityExpression.class },
+        recursiveMinimumSize = 2
 )
 public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperatorExpression> {
 

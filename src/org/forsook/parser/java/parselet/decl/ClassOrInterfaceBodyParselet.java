@@ -34,6 +34,7 @@ public class ClassOrInterfaceBodyParselet extends TypeBodyParselet<ClassOrInterf
     @Override
     @SuppressWarnings("unchecked")
     public ClassOrInterfaceBody parse(Parser parser) {
+        //members
         List<BodyDeclaration> members = parseTypeMembers(parser, true, 
                 AnnotationTypeDeclaration.class,
                 FieldDeclaration.class, 

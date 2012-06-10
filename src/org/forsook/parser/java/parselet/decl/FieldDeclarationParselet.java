@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -23,11 +24,15 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
 
     @Override
     public FieldDeclaration parse(Parser parser) {
-        //annotations and javadoc
+        //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
-        //modifiers
-        Modifier modifiers = parseModifiers(parser);
+        List<Modifier> modifiers = new ArrayList<Modifier>();
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations,
+                modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE,
+                Modifier.STATIC, Modifier.FINAL, Modifier.TRANSIENT, Modifier.VOLATILE)) {
+            return null;
+        }
         //type
         Type type = parser.next(Type.class);
         if (type == null) {
@@ -50,7 +55,7 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
-        return new FieldDeclaration(javadoc, annotations, modifiers, type, variables);
+        return new FieldDeclaration(javadoc.get(), annotations, modifiers, type, variables);
     }
 
 }

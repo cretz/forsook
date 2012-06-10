@@ -17,7 +17,7 @@ public class ReferenceTypeParselet extends TypeParselet<ReferenceType> {
     
     @Override
     public ReferenceType parse(Parser parser) {
-        return (ReferenceType) parser.first(ClassOrInterfaceType.class, ArrayType.class);
+        return (ReferenceType) parser.first(ArrayType.class, ClassOrInterfaceType.class);
     }
 
 }

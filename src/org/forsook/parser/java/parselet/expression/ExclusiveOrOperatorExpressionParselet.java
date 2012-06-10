@@ -12,7 +12,8 @@ import org.forsook.parser.java.ast.expression.Expression;
 @ParseletDefinition(
         name = "forsook.java.exclusiveOrOperatorExpression",
         emits = ExclusiveOrOperatorExpression.class,
-        needs = { ExclusiveOrExpression.class, AndExpression.class }
+        needs = { ExclusiveOrExpression.class, AndExpression.class },
+        recursiveMinimumSize = 2
 )
 public class ExclusiveOrOperatorExpressionParselet 
         extends ExpressionParselet<ExclusiveOrOperatorExpression> {

@@ -1,8 +1,8 @@
 package org.forsook.parser.java.parselet.decl;
 
-import java.lang.reflect.Modifier;
 import java.util.Collections;
 
+import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.packag.PackageDeclaration;
 import org.forsook.parser.java.parselet.ParseletTestBase;
 import org.junit.Ignore;
@@ -19,28 +19,20 @@ public class DeclarationParseletTest extends ParseletTestBase {
         //TODO: annotations
     }
     
-    private void assertModifier(String name, int value) {
+    private void assertModifier(String name, Modifier value) {
         //normal
-        assertParse(name, new org.forsook.parser.java.ast.Modifier(value));
+        assertParse(name, value);
         //wrong w/ bad char
-        assertNull("1" + name, org.forsook.parser.java.ast.Modifier.class);
+        assertNull("1" + name, Modifier.class);
         //wrong w/ one char taken away
-        assertNull(name.substring(0, name.length() - 1), org.forsook.parser.java.ast.Modifier.class);
+        assertNull(name.substring(0, name.length() - 1), Modifier.class);
     }
     
     @Test
     public void testModifier() {
-        assertModifier("public", Modifier.PUBLIC);
-        assertModifier("static", Modifier.STATIC);
-        assertModifier("protected", Modifier.PROTECTED);
-        assertModifier("private", Modifier.PRIVATE);
-        assertModifier("final", Modifier.FINAL);
-        assertModifier("abstract", Modifier.ABSTRACT);
-        assertModifier("synchronized", Modifier.SYNCHRONIZED);
-        assertModifier("native", Modifier.NATIVE);
-        assertModifier("transient", Modifier.TRANSIENT);
-        assertModifier("volatile", Modifier.VOLATILE);
-        assertModifier("strictfp", Modifier.STRICT);
+        for (Modifier modifier : Modifier.values()) {
+            assertModifier(modifier.getLowerCase(), modifier);
+        }
     }
     
     @Test

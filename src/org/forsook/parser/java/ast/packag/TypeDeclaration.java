@@ -15,14 +15,14 @@ import org.forsook.parser.java.ast.lexical.JavadocComment;
 public abstract class TypeDeclaration<T extends TypeBody> extends BodyDeclaration {
     
     private Identifier name;
-    private Modifier modifiers;
+    private List<Modifier> modifiers;
     private T body;
     
     public TypeDeclaration() {
     }
     
     public TypeDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, T members) {
+            Identifier name, List<Modifier> modifiers, T members) {
         super(javadoc, annotations);
         this.name = name;
         this.modifiers = modifiers;
@@ -37,12 +37,8 @@ public abstract class TypeDeclaration<T extends TypeBody> extends BodyDeclaratio
         this.name = name;
     }
 
-    public Modifier getModifiers() {
+    public List<Modifier> getModifiers() {
         return modifiers;
-    }
-    
-    public void setModifiers(Modifier modifiers) {
-        this.modifiers = modifiers;
     }
 
     public T getBody() {

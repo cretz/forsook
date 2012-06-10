@@ -6,7 +6,7 @@ import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.11")
 @SuppressWarnings("serial")
-public class FieldAccessExpression extends Expression {
+public class FieldAccessExpression extends Expression implements PrimaryNoNewArrayExpression {
 
     private Expression scope;
     private QualifiedName className;

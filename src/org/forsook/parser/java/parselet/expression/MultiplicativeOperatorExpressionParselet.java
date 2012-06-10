@@ -13,7 +13,8 @@ import org.forsook.parser.java.ast.expression.MultiplicativeOperatorExpression.M
 @ParseletDefinition(
         name = "forsook.java.multiplicativeOperatorExpression",
         emits = MultiplicativeOperatorExpression.class,
-        needs = { UnaryExpression.class, MultiplicativeExpression.class }
+        needs = { UnaryExpression.class, MultiplicativeExpression.class },
+        recursiveMinimumSize = 2
 )
 public class MultiplicativeOperatorExpressionParselet 
         extends ExpressionParselet<MultiplicativeOperatorExpression> {

@@ -1,6 +1,7 @@
 package org.forsook.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -15,7 +16,13 @@ public class SimpleParser implements Parser {
     private final String source;
     private final Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap;
     
+    private final Map<Class<?>, Map<Integer, RecursiveTypeMemo>> memoTable =
+            new HashMap<Class<?>, Map<Integer, RecursiveTypeMemo>>();
+    
     private int cursor = -1;
+    private int lastLocationCheckCursor = 0;
+    private int lastKnownLine = 0;
+    private int lastKnownColumn = 0;
     
     public SimpleParser(String source, Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap) {
         this.source = source;
@@ -114,11 +121,39 @@ public class SimpleParser implements Parser {
             throw new RuntimeException("No parselets that emit type " + type);
         }
         for (ParseletInstance parselet : parseletSet) {
+            //need to check whether this is impossible recursive
+            if (parselet.getRecursiveMinimumSize() != null) {
+                //in the map?
+                Map<Integer, RecursiveTypeMemo> map = memoTable.get(type);
+                if (map == null) {
+                    map = new HashMap<Integer, RecursiveTypeMemo>();
+                    memoTable.put(type, map);
+                }
+                RecursiveTypeMemo memo = map.get(cursor);
+                if (memo == null) {
+                    memo = new RecursiveTypeMemo(0);
+                    map.put(cursor, memo);
+                }
+                //is this over the length allowed?
+                if (memo.minimumNeeded > source.length() - cursor - 1) {
+                    return null;
+                } else {
+                    memo.minimumNeeded += parselet.getRecursiveMinimumSize();
+                }
+            }
+            //hold on to the cursor so we can roll back
             int oldCursor = cursor;
+            //parse
             T object = (T) parselet.getParselet().parse(this);
+            //actually get something?
             if (object != null) {
+                //if we had a recursive minimum, remove it
+                if (parselet.getRecursiveMinimumSize() != null) {
+                    memoTable.get(type).remove(oldCursor);
+                }
                 return object;
             }
+            //we didn't? reset the cursor
             cursor = oldCursor;
         }
         return null;
@@ -129,8 +164,48 @@ public class SimpleParser implements Parser {
         return cursor;
     }
     
+    private void updateLineAndColumn() {
+        if (lastLocationCheckCursor > cursor) {
+            lastLocationCheckCursor = 0;
+            lastKnownLine = 0;
+            lastKnownColumn = 0;
+        }
+        for (int i = lastLocationCheckCursor; i <= cursor && i < source.length(); i++) {
+            //is a new line
+            char chr = source.charAt(i);
+            if (chr == '\n' || (chr == '\r' && 
+                    (i + 1 == source.length() || source.charAt(i + 1) != '\n'))) {
+                //reset
+                lastKnownLine++;
+                lastKnownColumn = 0;
+            } else {
+                lastKnownColumn++;
+            }
+        }
+        lastLocationCheckCursor = cursor;
+    }
+    
     @Override
-    public void setCursor(int cursor) {
-        this.cursor = cursor;
+    public int getLine() {
+        if (cursor != lastLocationCheckCursor) {
+            updateLineAndColumn();
+        }
+        return lastKnownLine;
+    }
+    
+    @Override
+    public int getColumn() {
+        if (cursor != lastLocationCheckCursor) {
+            updateLineAndColumn();
+        }
+        return lastKnownColumn;
+    }
+    
+    private static class RecursiveTypeMemo {
+        private int minimumNeeded;
+        
+        private RecursiveTypeMemo(int minimumNeeded) {
+            this.minimumNeeded = minimumNeeded;
+        }
     }
 }

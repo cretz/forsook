@@ -30,23 +30,21 @@ public class ParameterParselet extends JavaParselet<Parameter> {
     public Parameter parse(Parser parser) {
         //annotations
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
+        boolean finalPresent = false;
         do {
             parseWhiteSpaceAndComments(parser);
-            AnnotationExpression annotation = parser.next(AnnotationExpression.class);
-            if (annotation == null) {
+            Object object = parser.first(AnnotationExpression.class, Modifier.class);
+            if (object == null) {
                 break;
+            } else if (object instanceof AnnotationExpression) {
+                annotations.add((AnnotationExpression) object);
+            } else {
+                if (object != Modifier.FINAL) {
+                    return null;
+                }
+                finalPresent = true;
             }
-            annotations.add(annotation);
         } while (true);
-        //spacing
-        parseWhiteSpaceAndComments(parser);
-        //final?
-        int modifier = 0;
-        if (parser.peekPresentAndSkip("final")) {
-            modifier = java.lang.reflect.Modifier.FINAL;
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-        }
         //type
         Type type = parser.next(Type.class);
         if (type == null) {
@@ -66,7 +64,7 @@ public class ParameterParselet extends JavaParselet<Parameter> {
         if (name == null) {
             return null;
         }
-        return new Parameter(new Modifier(modifier), annotations, type, varArgs, name);
+        return new Parameter(finalPresent, annotations, type, varArgs, name);
     }
 
 }

@@ -19,7 +19,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumBody> {
     }
     
     public EnumDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, EnumBody body,
+            Identifier name, List<Modifier> modifiers, EnumBody body,
             List<ClassOrInterfaceType> implementsList) {
         super(javadoc, annotations, name, modifiers, body);
         this.implementsList = implementsList;

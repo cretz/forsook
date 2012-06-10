@@ -20,7 +20,8 @@ import org.forsook.parser.java.ast.name.QualifiedName;
             FieldAccessExpression.class,
             ArrayAccessExpression.class,
             AssignmentExpression.class
-        }
+        },
+        recursiveMinimumSize = 2
 )
 public class AssignmentOperatorExpressionParselet
         extends ExpressionParselet<AssignmentOperatorExpression> {

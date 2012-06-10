@@ -12,7 +12,8 @@ import org.forsook.parser.java.ast.expression.Expression;
 @ParseletDefinition(
         name = "forsook.java.inclusiveOrOperatorExpression",
         emits = InclusiveOrOperatorExpression.class,
-        needs = { InclusiveOrExpression.class, ExclusiveOrExpression.class }
+        needs = { InclusiveOrExpression.class, ExclusiveOrExpression.class },
+        recursiveMinimumSize = 2
 )
 public class InclusiveOrOperatorExpressionParselet 
         extends ExpressionParselet<InclusiveOrOperatorExpression> {

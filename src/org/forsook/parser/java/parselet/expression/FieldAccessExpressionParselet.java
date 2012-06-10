@@ -17,7 +17,8 @@ import org.forsook.parser.java.ast.name.QualifiedName;
             PrimaryExpression.class,
             QualifiedName.class,
             Identifier.class
-        }
+        },
+        recursiveMinimumSize = 2
 )
 public class FieldAccessExpressionParselet extends ExpressionParselet<FieldAccessExpression> {
 

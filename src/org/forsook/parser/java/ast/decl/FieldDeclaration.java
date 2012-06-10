@@ -11,7 +11,7 @@ import org.forsook.parser.java.ast.type.Type;
 @SuppressWarnings("serial")
 public class FieldDeclaration extends BodyDeclaration {
 
-    private Modifier modifier;
+    private List<Modifier> modifiers;
     private Type type;
     private List<VariableDeclarator> variables;
     
@@ -19,19 +19,19 @@ public class FieldDeclaration extends BodyDeclaration {
     }
     
     public FieldDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Modifier modifier, Type type, List<VariableDeclarator> variables) {
+            List<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
         super(javadoc, annotations);
-        this.modifier = modifier;
+        this.modifiers = modifiers;
         this.type = type;
         this.variables = variables;
     }
     
-    public Modifier getModifier() {
-        return modifier;
+    public List<Modifier> getModifiers() {
+        return modifiers;
     }
     
-    public void setModifier(Modifier modifier) {
-        this.modifier = modifier;
+    public void setModifiers(List<Modifier> modifiers) {
+        this.modifiers = modifiers;
     }
     
     public Type getType() {
@@ -55,7 +55,7 @@ public class FieldDeclaration extends BodyDeclaration {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result
-                + ((modifier == null) ? 0 : modifier.hashCode());
+                + ((modifiers == null) ? 0 : modifiers.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result
                 + ((variables == null) ? 0 : variables.hashCode());
@@ -74,11 +74,11 @@ public class FieldDeclaration extends BodyDeclaration {
             return false;
         }
         FieldDeclaration other = (FieldDeclaration) obj;
-        if (modifier == null) {
-            if (other.modifier != null) {
+        if (modifiers == null) {
+            if (other.modifiers != null) {
                 return false;
             }
-        } else if (!modifier.equals(other.modifier)) {
+        } else if (!modifiers.equals(other.modifiers)) {
             return false;
         }
         if (type == null) {

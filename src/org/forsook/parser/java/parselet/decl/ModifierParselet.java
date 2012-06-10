@@ -21,30 +21,11 @@ public class ModifierParselet extends JavaParselet<Modifier> {
             return null;
         }
         //get which one
-        if (parser.peekPresentAndSkip("public")) {
-            return new Modifier(java.lang.reflect.Modifier.PUBLIC);
-        } else if (parser.peekPresentAndSkip("static")) {
-            return new Modifier(java.lang.reflect.Modifier.STATIC);
-        } else if (parser.peekPresentAndSkip("protected")) {
-            return new Modifier(java.lang.reflect.Modifier.PROTECTED);
-        } else if (parser.peekPresentAndSkip("private")) {
-            return new Modifier(java.lang.reflect.Modifier.PRIVATE);
-        } else if (parser.peekPresentAndSkip("final")) {
-            return new Modifier(java.lang.reflect.Modifier.FINAL);
-        } else if (parser.peekPresentAndSkip("abstract")) {
-            return new Modifier(java.lang.reflect.Modifier.ABSTRACT);
-        } else if (parser.peekPresentAndSkip("synchronized")) {
-            return new Modifier(java.lang.reflect.Modifier.SYNCHRONIZED);
-        } else if (parser.peekPresentAndSkip("native")) {
-            return new Modifier(java.lang.reflect.Modifier.NATIVE);
-        } else if (parser.peekPresentAndSkip("transient")) {
-            return new Modifier(java.lang.reflect.Modifier.TRANSIENT);
-        } else if (parser.peekPresentAndSkip("volatile")) {
-            return new Modifier(java.lang.reflect.Modifier.VOLATILE);
-        } else if (parser.peekPresentAndSkip("strictfp")) {
-            return new Modifier(java.lang.reflect.Modifier.STRICT);
-        } else {
-            return null;
+        for (Modifier modifier : Modifier.values()) {
+            if (parser.peekPresentAndSkip(modifier.getLowerCase())) {
+                return modifier;
+            }
         }
+        return null;
     }
 }

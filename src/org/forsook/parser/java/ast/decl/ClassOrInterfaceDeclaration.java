@@ -23,7 +23,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
     
     public ClassOrInterfaceDeclaration(JavadocComment javadoc, List<AnnotationExpression> annotations,
-            Identifier name, Modifier modifiers, ClassOrInterfaceBody body,
+            Identifier name, List<Modifier> modifiers, ClassOrInterfaceBody body,
             boolean _interface, List<TypeParameter> typeParameters,
             List<ClassOrInterfaceType> extendsList, List<ClassOrInterfaceType> implementsList) {
         super(javadoc, annotations, name, modifiers, body);

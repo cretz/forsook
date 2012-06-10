@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.JavaModel;
-import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("8.4.1")
 @SuppressWarnings("serial")
 public class Parameter extends JavaModel {
 
-    private Modifier modifier;
+    private boolean finalPresent;
     private List<AnnotationExpression> annotations;
     private Type type;
     private boolean varArgs;
@@ -20,21 +19,21 @@ public class Parameter extends JavaModel {
     public Parameter() {
     }
 
-    public Parameter(Modifier modifier, List<AnnotationExpression> annotations,
+    public Parameter(boolean finalPresent, List<AnnotationExpression> annotations,
             Type type, boolean varArgs, VariableDeclaratorId name) {
-        this.modifier = modifier;
+        this.finalPresent = finalPresent;
         this.annotations = annotations;
         this.type = type;
         this.varArgs = varArgs;
         this.name = name;
     }
 
-    public Modifier getModifier() {
-        return modifier;
+    public boolean isFinalPresent() {
+        return finalPresent;
     }
-
-    public void setModifier(Modifier modifier) {
-        this.modifier = modifier;
+    
+    public void setFinalPresent(boolean finalPresent) {
+        this.finalPresent = finalPresent;
     }
 
     public List<AnnotationExpression> getAnnotations() {
@@ -75,8 +74,7 @@ public class Parameter extends JavaModel {
         int result = 1;
         result = prime * result
                 + ((annotations == null) ? 0 : annotations.hashCode());
-        result = prime * result
-                + ((modifier == null) ? 0 : modifier.hashCode());
+        result = prime * result + (finalPresent ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + (varArgs ? 1231 : 1237);
@@ -102,11 +100,7 @@ public class Parameter extends JavaModel {
         } else if (!annotations.equals(other.annotations)) {
             return false;
         }
-        if (modifier == null) {
-            if (other.modifier != null) {
-                return false;
-            }
-        } else if (!modifier.equals(other.modifier)) {
+        if (finalPresent != other.finalPresent) {
             return false;
         }
         if (name == null) {

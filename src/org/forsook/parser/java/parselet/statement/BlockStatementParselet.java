@@ -49,7 +49,7 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
                     //regular statement
                     stmt = parser.next(Statement.class);
                     if (stmt == null) {
-                        return null;
+                        break;
                     }
                 }
             }

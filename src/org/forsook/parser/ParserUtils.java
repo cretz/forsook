@@ -14,7 +14,8 @@ import java.util.TreeSet;
 
 public class ParserUtils {
     
-    public static Map<Class<?>, NavigableSet<ParseletInstance>> buildParseletMap(Properties properties) {
+    public static Map<Class<?>, NavigableSet<ParseletInstance>> buildParseletMap(
+            Properties properties) {
         Map<Class<? extends Parselet<?>>, ParseletInstance> instances = 
                 new HashMap<Class<? extends Parselet<?>>, ParseletInstance>();
         //loop through to create instances
@@ -22,7 +23,8 @@ public class ParserUtils {
             applyInstance(parselet, properties, instances);
         }
         //now loop through the instances making the final map by what it emits
-        Map<Class<?>, NavigableSet<ParseletInstance>> map = new HashMap<Class<?>, NavigableSet<ParseletInstance>>();
+        Map<Class<?>, NavigableSet<ParseletInstance>> map = 
+                new HashMap<Class<?>, NavigableSet<ParseletInstance>>();
         for (ParseletInstance instance : instances.values()) {
             for (Class<?> emit : instance.getEmits()) {
                 NavigableSet<ParseletInstance> instanceSet = map.get(emit);
@@ -52,7 +54,8 @@ public class ParserUtils {
         ParseletDefinition definition = parselet.getClass().getAnnotation(ParseletDefinition.class);
         if (definition == null) {
             throw new RuntimeException("ParseletDefinition required for " + parselet.getClass());
-        } else if (!"true".equals(properties.getProperty(definition.name() + ".enabled"))) {
+        } else if (properties != null && !"true".equals(
+                properties.getProperty(definition.name() + ".enabled"))) {
             //gotta be enabled
             return;
         }
@@ -70,19 +73,20 @@ public class ParserUtils {
                 throw new RuntimeException("ParseletDefinition emits required for " + parselet.getClass());
             }
         }
-        //get emits and needs
-        Set<Class<?>> emits = new HashSet<Class<?>>();
+        //emits
+        Set<Class<?>> emits = new HashSet<Class<?>>(Arrays.asList(definition.emits()));
+        //needs
         Set<Class<?>> needs = new HashSet<Class<?>>();
         Class<?> superClass = parselet.getClass();
         do {
             ParseletDefinition superDefinition = superClass.getAnnotation(ParseletDefinition.class);
-            emits.addAll(Arrays.asList(superDefinition.emits()));
             needs.addAll(Arrays.asList(superDefinition.needs()));
             superClass = superClass.getSuperclass();
         } while (superClass.isAnnotationPresent(ParseletDefinition.class));
         //build instance
         ParseletInstance instance = new ParseletInstance(definition.name(), emits, needs, 
-                new HashSet<Class<? extends Parselet<?>>>(Arrays.asList(definition.replaces())), precedence, parselet);
+                new HashSet<Class<? extends Parselet<?>>>(Arrays.asList(definition.replaces())), 
+                precedence, parselet, definition.recursiveMinimumSize());
         if (!instance.getReplaces().isEmpty()) {
             //go replacing...
             for (Class<? extends Parselet<?>> replace : instance.getReplaces()) {

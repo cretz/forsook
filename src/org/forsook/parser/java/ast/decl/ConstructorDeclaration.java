@@ -14,7 +14,7 @@ import org.forsook.parser.java.ast.type.TypeParameter;
 @SuppressWarnings("serial")
 public class ConstructorDeclaration extends BodyDeclaration {
 
-    private Modifier modifier;
+    private List<Modifier> modifiers;
     private List<TypeParameter> typeParameters;
     private Identifier name;
     private List<Parameter> parameters;
@@ -25,12 +25,12 @@ public class ConstructorDeclaration extends BodyDeclaration {
     }
 
     public ConstructorDeclaration(JavadocComment javadoc, 
-            List<AnnotationExpression> annotations, Modifier modifier,
+            List<AnnotationExpression> annotations, List<Modifier> modifiers,
             List<TypeParameter> typeParameters, Identifier name,
             List<Parameter> parameters, List<ClassOrInterfaceType> throwsList,
             BlockStatement block) {
         super(javadoc, annotations);
-        this.modifier = modifier;
+        this.modifiers = modifiers;
         this.typeParameters = typeParameters;
         this.name = name;
         this.parameters = parameters;
@@ -38,12 +38,12 @@ public class ConstructorDeclaration extends BodyDeclaration {
         this.block = block;
     }
 
-    public Modifier getModifier() {
-        return modifier;
+    public List<Modifier> getModifiers() {
+        return modifiers;
     }
-
-    public void setModifier(Modifier modifier) {
-        this.modifier = modifier;
+    
+    public void setModifiers(List<Modifier> modifiers) {
+        this.modifiers = modifiers;
     }
 
     public List<TypeParameter> getTypeParameters() {
@@ -92,7 +92,7 @@ public class ConstructorDeclaration extends BodyDeclaration {
         int result = super.hashCode();
         result = prime * result + ((block == null) ? 0 : block.hashCode());
         result = prime * result
-                + ((modifier == null) ? 0 : modifier.hashCode());
+                + ((modifiers == null) ? 0 : modifiers.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result
                 + ((parameters == null) ? 0 : parameters.hashCode());
@@ -122,11 +122,11 @@ public class ConstructorDeclaration extends BodyDeclaration {
         } else if (!block.equals(other.block)) {
             return false;
         }
-        if (modifier == null) {
-            if (other.modifier != null) {
+        if (modifiers == null) {
+            if (other.modifiers != null) {
                 return false;
             }
-        } else if (!modifier.equals(other.modifier)) {
+        } else if (!modifiers.equals(other.modifiers)) {
             return false;
         }
         if (name == null) {

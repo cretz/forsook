@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -27,9 +28,13 @@ public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclara
     public EnumDeclaration parse(Parser parser) {
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        JavadocComment javadoc = parseJavadocAndAnnotations(parser, annotations);
-        //modifiers
-        Modifier modifiers = parseModifiers(parser);
+        List<Modifier> modifiers = new ArrayList<Modifier>();
+        AtomicReference<JavadocComment> javadoc = new AtomicReference<JavadocComment>();
+        if (!parseJavadocAndModifiers(parser, javadoc, annotations,
+                modifiers, Modifier.PUBLIC, Modifier.PROTECTED, Modifier.PRIVATE,
+                Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.STRICTFP)) {
+            return null;
+        }
         //enum
         if (!parser.peekPresentAndSkip("enum")) {
             return null;
@@ -52,7 +57,8 @@ public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclara
         if (body == null) {
             return null;
         }
-        return new EnumDeclaration(javadoc, annotations, name, modifiers, body, implementsList);
+        return new EnumDeclaration(javadoc.get(), annotations, name, 
+                modifiers, body, implementsList);
     }
 
 }

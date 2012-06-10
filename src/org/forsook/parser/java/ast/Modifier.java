@@ -2,50 +2,34 @@ package org.forsook.parser.java.ast;
 
 import org.forsook.parser.java.JlsReference;
 
-@JlsReference("6.6") //TODO: add the rest
-@SuppressWarnings("serial")
-public class Modifier extends JavaModel {
+@JlsReference({ "8.1.1", "8.3.1", "8.4.1", "8.4.3", "8.8.3", "9.1.1", "9.3", "9.4" })
+public enum Modifier {
 
-    private int modifier;
+    PUBLIC(java.lang.reflect.Modifier.PUBLIC),
+    PRIVATE(java.lang.reflect.Modifier.PRIVATE),
+    PROTECTED(java.lang.reflect.Modifier.PROTECTED),
+    STATIC(java.lang.reflect.Modifier.STATIC),
+    FINAL(java.lang.reflect.Modifier.FINAL),
+    SYNCHRONIZED(java.lang.reflect.Modifier.SYNCHRONIZED),
+    VOLATILE(java.lang.reflect.Modifier.VOLATILE),
+    TRANSIENT(java.lang.reflect.Modifier.TRANSIENT),
+    NATIVE(java.lang.reflect.Modifier.NATIVE),
+    ABSTRACT(java.lang.reflect.Modifier.ABSTRACT),
+    STRICTFP(java.lang.reflect.Modifier.STRICT);
     
-    public Modifier() {
-    }
+    private final int modifier;
+    private final String lowerCase;
     
-    public Modifier(int modifier) {
+    private Modifier(int modifier) {
         this.modifier = modifier;
+        this.lowerCase = name().toLowerCase();
     }
     
     public int getModifier() {
         return modifier;
     }
     
-    public void setModifier(int modifier) {
-        this.modifier = modifier;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + modifier;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Modifier other = (Modifier) obj;
-        if (modifier != other.modifier) {
-            return false;
-        }
-        return true;
+    public String getLowerCase() {
+        return lowerCase;
     }
 }

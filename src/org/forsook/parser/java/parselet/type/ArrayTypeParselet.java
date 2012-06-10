@@ -10,7 +10,8 @@ import org.forsook.parser.java.ast.type.Type;
 @ParseletDefinition(
         name = "forsook.java.arrayType",
         emits = ArrayType.class,
-        needs = Type.class
+        needs = Type.class,
+        recursiveMinimumSize = 2
 )
 public class ArrayTypeParselet extends TypeParselet<ArrayType> {
 
@@ -24,11 +25,11 @@ public class ArrayTypeParselet extends TypeParselet<ArrayType> {
         //brackets
         parseWhiteSpaceAndComments(parser);
         if (!parser.peekPresentAndSkip('[')) {
-            return null;
+            return type instanceof ArrayType ? (ArrayType) type : null;
         }
         parseWhiteSpaceAndComments(parser);
         if (!parser.peekPresentAndSkip(']')) {
-            return null;
+            return type instanceof ArrayType ? (ArrayType) type : null;
         }
         return new ArrayType(type);
     }

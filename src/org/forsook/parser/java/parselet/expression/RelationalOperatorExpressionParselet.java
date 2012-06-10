@@ -16,7 +16,8 @@ import org.forsook.parser.java.ast.type.Type;
 @ParseletDefinition(
         name = "forsook.java.relationalOperatorExpression",
         emits = RelationalOperatorExpression.class,
-        needs = { ShiftExpression.class, RelationalExpression.class }
+        needs = { ShiftExpression.class, RelationalExpression.class },
+        recursiveMinimumSize = 2
 )
 public class RelationalOperatorExpressionParselet 
         extends ExpressionParselet<RelationalOperatorExpression> {

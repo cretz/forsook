@@ -2,6 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
@@ -29,32 +30,57 @@ import org.forsook.parser.java.parselet.JavaParselet;
 )
 public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends JavaParselet<T> {
 
-    protected JavadocComment parseJavadocAndAnnotations(Parser parser, 
-            List<AnnotationExpression> annotations) {
-        JavadocComment javadoc = null;
+    /**
+     * Parse the javadoc and the modifiers (including annotations). This handles
+     * all whitespace on either side. If the result is false, parsing was invalid.
+     * 
+     * @param parser
+     * @param javadoc
+     * @param annotations
+     * @param modifiers
+     * @param allowedModifiers
+     * @return
+     */
+    protected boolean parseJavadocAndModifiers(Parser parser, 
+            AtomicReference<JavadocComment> javadoc,
+            List<AnnotationExpression> annotations, 
+            List<Modifier> modifiers, Modifier... allowedModifiers) {
         for (Object found : parser.any(WhiteSpace.class, Comment.class, 
-                AnnotationExpression.class)) {
+                AnnotationExpression.class, Modifier.class)) {
             if (found instanceof JavadocComment) {
-                javadoc = (JavadocComment) found;
+                javadoc.set((JavadocComment) found);
             } else if (found instanceof AnnotationExpression) {
                 annotations.add((AnnotationExpression) found);
+            } else if (found instanceof Modifier) {
+                Modifier modifier = (Modifier) found;
+                //allowed?
+                boolean foundModifier = false;
+                for (Modifier allowedModifier : allowedModifiers) {
+                    if (allowedModifier == modifier) {
+                        foundModifier = true;
+                        break;
+                    }
+                }
+                if (!foundModifier) {
+                    return false;
+                }
+                //already there?
+                if (modifiers.contains(modifier)) {
+                    return false;
+                }
+                modifiers.add(modifier); 
             }
         }
-        return javadoc;
+        return true;
     }
     
-    protected Modifier parseModifiers(Parser parser) {
-        Modifier modifier;
-        int modifiers = 0;
-        do {
-           //spacing
-           parseWhiteSpaceAndComments(parser);
-           //modifier
-           modifier = parser.next(Modifier.class);
-        } while (modifier != null);
-        return new Modifier(modifiers);
-    }
-    
+    /**
+     * Parse the type parameters. This handles the &lt; and &gt;. This does NOT 
+     * handle whitespace at the beginning, but does at the end.
+     * 
+     * @param parser
+     * @return
+     */
     protected List<TypeParameter> parseTypeParameters(Parser parser) {
         List<TypeParameter> typeParameters = new ArrayList<TypeParameter>();
         if (parser.peekPresentAndSkip('<')) {
@@ -82,7 +108,18 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
         return typeParameters;
     }
     
+    /**
+     * Parses parameters. This handles the parentheses. This does NOT
+     * handle the whitespace at the beginning, but does at the end.
+     * 
+     * @param parser
+     * @return
+     */
     protected List<Parameter> parseParameters(Parser parser) {
+        //parentheses
+        if (!parser.peekPresentAndSkip('(')) {
+            return null;
+        }
         List<Parameter> parameters = new ArrayList<Parameter>();
         do {
             //spacing
@@ -96,6 +133,7 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
                     return null;
                 }
             }
+            parameters.add(parameter);
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (parser.peekPresentAndSkip(','));
@@ -108,6 +146,13 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
         return parameters;
     }
     
+    /**
+     * Parse the throws list. This handles the throws keyword. This does NOT
+     * handle whitespace at the beginning, but does at the end.
+     * 
+     * @param parser
+     * @return
+     */
     protected List<ClassOrInterfaceType> parseThrows(Parser parser) {
         List<ClassOrInterfaceType> throwsList = new ArrayList<ClassOrInterfaceType>();
         if (parser.peekPresentAndSkip("throws")) {

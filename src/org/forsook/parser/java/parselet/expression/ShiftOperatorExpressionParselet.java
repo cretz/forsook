@@ -13,7 +13,8 @@ import org.forsook.parser.java.ast.expression.ShiftOperatorExpression.ShiftOpera
 @ParseletDefinition(
         name = "forsook.java.shiftOperatorExpression",
         emits = ShiftOperatorExpression.class,
-        needs = { AdditiveExpression.class, ShiftExpression.class }
+        needs = { AdditiveExpression.class, ShiftExpression.class },
+        recursiveMinimumSize = 3
 )
 public class ShiftOperatorExpressionParselet 
         extends ExpressionParselet<ShiftOperatorExpression> {
