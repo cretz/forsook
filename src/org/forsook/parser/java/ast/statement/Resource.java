@@ -1,8 +1,10 @@
 package org.forsook.parser.java.ast.statement;
 
+import java.util.List;
+
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.JavaModel;
-import org.forsook.parser.java.ast.Modifier;
+import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.VariableDeclaratorId;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.type.Type;
@@ -11,7 +13,8 @@ import org.forsook.parser.java.ast.type.Type;
 @SuppressWarnings("serial")
 public class Resource extends JavaModel {
 
-    private Modifier modifiers;
+    private List<AnnotationExpression> annotations;
+    private boolean finalPresent;
     private Type type;
     private VariableDeclaratorId name;
     private Expression expression;
@@ -19,20 +22,29 @@ public class Resource extends JavaModel {
     public Resource() {
     }
 
-    public Resource(Modifier modifiers, Type type, VariableDeclaratorId name,
-            Expression expression) {
-        this.modifiers = modifiers;
+    public Resource(List<AnnotationExpression> annotations, boolean finalPresent, 
+            Type type, VariableDeclaratorId name, Expression expression) {
+        this.annotations = annotations;
+        this.finalPresent = finalPresent;
         this.type = type;
         this.name = name;
         this.expression = expression;
     }
 
-    public Modifier getModifiers() {
-        return modifiers;
+    public List<AnnotationExpression> getAnnotations() {
+        return annotations;
     }
-
-    public void setModifiers(Modifier modifiers) {
-        this.modifiers = modifiers;
+    
+    public void setAnnotations(List<AnnotationExpression> annotations) {
+        this.annotations = annotations;
+    }
+    
+    public boolean isFinalPresent() {
+        return finalPresent;
+    }
+    
+    public void setFinalPresent(boolean finalPresent) {
+        this.finalPresent = finalPresent;
     }
 
     public Type getType() {
@@ -64,9 +76,10 @@ public class Resource extends JavaModel {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((expression == null) ? 0 : expression.hashCode());
+                + ((annotations == null) ? 0 : annotations.hashCode());
         result = prime * result
-                + ((modifiers == null) ? 0 : modifiers.hashCode());
+                + ((expression == null) ? 0 : expression.hashCode());
+        result = prime * result + (finalPresent ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
@@ -84,6 +97,13 @@ public class Resource extends JavaModel {
             return false;
         }
         Resource other = (Resource) obj;
+        if (annotations == null) {
+            if (other.annotations != null) {
+                return false;
+            }
+        } else if (!annotations.equals(other.annotations)) {
+            return false;
+        }
         if (expression == null) {
             if (other.expression != null) {
                 return false;
@@ -91,11 +111,7 @@ public class Resource extends JavaModel {
         } else if (!expression.equals(other.expression)) {
             return false;
         }
-        if (modifiers == null) {
-            if (other.modifiers != null) {
-                return false;
-            }
-        } else if (!modifiers.equals(other.modifiers)) {
+        if (finalPresent != other.finalPresent) {
             return false;
         }
         if (name == null) {

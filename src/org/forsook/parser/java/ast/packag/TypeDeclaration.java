@@ -3,9 +3,9 @@ package org.forsook.parser.java.ast.packag;
 import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.BodyDeclaration;
+import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.TypeBody;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;

@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
-import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.BodyDeclaration;
+import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.Parameter;
 import org.forsook.parser.java.ast.lexical.Comment;
 import org.forsook.parser.java.ast.lexical.JavadocComment;

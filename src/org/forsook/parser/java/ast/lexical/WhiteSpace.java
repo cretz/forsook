@@ -65,11 +65,22 @@ public class WhiteSpace extends JavaModel {
     }
 
     public static enum WhiteSpaceType {
-        SPACE,
-        TAB,
-        FORM_FEED,
-        NEWLINE,
-        RETURN,
-        NEWLINE_RETURN
+        SPACE(" "),
+        TAB("\t"),
+        FORM_FEED("\f"),
+        NEWLINE("\n"),
+        RETURN("\r"),
+        NEWLINE_RETURN("\r\f");
+        
+        private final String string;
+        
+        private WhiteSpaceType(String string) {
+            this.string = string;
+        }
+        
+        @Override
+        public String toString() {
+            return string;
+        }
     }
 }

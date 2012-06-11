@@ -2,7 +2,7 @@ package org.forsook.parser.java.parselet.decl;
 
 import java.util.Collections;
 
-import org.forsook.parser.java.ast.Modifier;
+import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.packag.PackageDeclaration;
 import org.forsook.parser.java.parselet.ParseletTestBase;
 import org.junit.Ignore;

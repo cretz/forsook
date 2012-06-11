@@ -122,6 +122,7 @@ public class SimpleParser implements Parser {
         }
         for (ParseletInstance parselet : parseletSet) {
             //need to check whether this is impossible recursive
+            RecursiveTypeMemo memo = null;
             if (parselet.getRecursiveMinimumSize() != null) {
                 //in the map?
                 Map<Integer, RecursiveTypeMemo> map = memoTable.get(type);
@@ -129,13 +130,20 @@ public class SimpleParser implements Parser {
                     map = new HashMap<Integer, RecursiveTypeMemo>();
                     memoTable.put(type, map);
                 }
-                RecursiveTypeMemo memo = map.get(cursor);
+                memo = map.get(cursor);
                 if (memo == null) {
                     memo = new RecursiveTypeMemo(0);
                     map.put(cursor, memo);
                 }
                 //is this over the length allowed?
                 if (memo.minimumNeeded > source.length() - cursor - 1) {
+                    //did we have one here before?
+                    if (memo.previouslyFound != null) {
+                        //we did, so reset the cursor and return the object
+                        cursor = memo.previousFoundEndingCursor;
+                        return (T) memo.previouslyFound;
+                    }
+                    //nope, recursion gone too far
                     return null;
                 } else {
                     memo.minimumNeeded += parselet.getRecursiveMinimumSize();
@@ -147,11 +155,16 @@ public class SimpleParser implements Parser {
             T object = (T) parselet.getParselet().parse(this);
             //actually get something?
             if (object != null) {
-                //if we had a recursive minimum, remove it
-                if (parselet.getRecursiveMinimumSize() != null) {
-                    memoTable.get(type).remove(oldCursor);
+                //if we had a recursive minimum, say we found an object
+                if (memo != null) {
+                    memo.previouslyFound = object;
+                    memo.previousFoundEndingCursor = cursor;
                 }
                 return object;
+            } else if (memo != null && memo.previouslyFound != null) {
+                //we had one earlier in this cursor and type, so update cursor and return it
+                cursor = memo.previousFoundEndingCursor;
+                return (T) memo.previouslyFound;
             }
             //we didn't? reset the cursor
             cursor = oldCursor;
@@ -203,6 +216,8 @@ public class SimpleParser implements Parser {
     
     private static class RecursiveTypeMemo {
         private int minimumNeeded;
+        private Object previouslyFound;
+        private int previousFoundEndingCursor;
         
         private RecursiveTypeMemo(int minimumNeeded) {
             this.minimumNeeded = minimumNeeded;

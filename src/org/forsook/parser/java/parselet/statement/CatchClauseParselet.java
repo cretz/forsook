@@ -6,8 +6,8 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
+import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.VariableDeclaratorId;
 import org.forsook.parser.java.ast.statement.BlockStatement;
 import org.forsook.parser.java.ast.statement.CatchClause;
@@ -45,14 +45,14 @@ public class CatchClauseParselet extends JavaParselet<CatchClause> {
         parseWhiteSpaceAndComments(parser);
         //annotations and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        Modifier modifiers = null;
+        boolean finalPresent = false;
         do {
             Object object = parser.first(AnnotationExpression.class, Modifier.class);
             if (object instanceof Modifier) {
-                if (((Modifier) object).getModifier() != java.lang.reflect.Modifier.FINAL) {
+                if (((Modifier) object) != Modifier.FINAL || finalPresent) {
                     return null;
                 }
-                modifiers = (Modifier) object;
+                finalPresent = true;
             } else if (object instanceof AnnotationExpression) {
                 annotations.add((AnnotationExpression) object);
             } else {
@@ -90,7 +90,7 @@ public class CatchClauseParselet extends JavaParselet<CatchClause> {
         if (block == null) {
             return null;
         }
-        return new CatchClause(annotations, modifiers, types, name, block);
+        return new CatchClause(annotations, finalPresent, types, name, block);
     }
 
 }

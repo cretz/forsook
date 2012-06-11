@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.JavaModel;
-import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.VariableDeclaratorId;
 import org.forsook.parser.java.ast.type.Type;
@@ -14,7 +13,7 @@ import org.forsook.parser.java.ast.type.Type;
 public class CatchClause extends JavaModel {
 
     private List<AnnotationExpression> annotations;
-    private Modifier modifiers;
+    private boolean finalPresent;
     private List<Type> types;
     private VariableDeclaratorId name;
     private BlockStatement block;
@@ -22,10 +21,10 @@ public class CatchClause extends JavaModel {
     public CatchClause() {
     }
 
-    public CatchClause(List<AnnotationExpression> annotations, Modifier modifiers, 
+    public CatchClause(List<AnnotationExpression> annotations, boolean finalPresent, 
             List<Type> types, VariableDeclaratorId name, BlockStatement block) {
         this.annotations = annotations;
-        this.modifiers = modifiers;
+        this.finalPresent = finalPresent;
         this.types = types;
         this.name = name;
         this.block = block;
@@ -39,12 +38,12 @@ public class CatchClause extends JavaModel {
         this.annotations = annotations;
     }
 
-    public Modifier getModifiers() {
-        return modifiers;
+    public boolean isFinalPresent() {
+        return finalPresent;
     }
-
-    public void setModifiers(Modifier modifiers) {
-        this.modifiers = modifiers;
+    
+    public void setFinalPresent(boolean finalPresent) {
+        this.finalPresent = finalPresent;
     }
 
     public List<Type> getTypes() {
@@ -78,8 +77,7 @@ public class CatchClause extends JavaModel {
         result = prime * result
                 + ((annotations == null) ? 0 : annotations.hashCode());
         result = prime * result + ((block == null) ? 0 : block.hashCode());
-        result = prime * result
-                + ((modifiers == null) ? 0 : modifiers.hashCode());
+        result = prime * result + (finalPresent ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((types == null) ? 0 : types.hashCode());
         return result;
@@ -111,11 +109,7 @@ public class CatchClause extends JavaModel {
         } else if (!block.equals(other.block)) {
             return false;
         }
-        if (modifiers == null) {
-            if (other.modifiers != null) {
-                return false;
-            }
-        } else if (!modifiers.equals(other.modifiers)) {
+        if (finalPresent != other.finalPresent) {
             return false;
         }
         if (name == null) {

@@ -19,6 +19,6 @@ public class TypeParselet<T extends Type> extends JavaParselet<T> {
     @Override
     @SuppressWarnings("unchecked")
     public T parse(Parser parser) {
-        return (T) parser.first(PrimitiveType.class, ReferenceType.class);
+        return (T) parser.first(ReferenceType.class, PrimitiveType.class);
     }
 }

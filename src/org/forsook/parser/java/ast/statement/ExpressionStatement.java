@@ -3,7 +3,7 @@ package org.forsook.parser.java.ast.statement;
 import org.forsook.parser.java.ast.expression.Expression;
 
 @SuppressWarnings("serial")
-public class ExpressionStatement extends Statement {
+public class ExpressionStatement extends Statement implements StatementWithoutTrailingSubstatement {
 
     private Expression expression;
     

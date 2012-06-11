@@ -6,8 +6,8 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.Modifier;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
+import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.VariableDeclaratorId;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.statement.Resource;
@@ -32,14 +32,14 @@ public class ResourceParselet extends JavaParselet<Resource> {
     public Resource parse(Parser parser) {
         //annotations and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
-        Modifier modifiers = null;
+        boolean finalPresent = false;
         do {
             Object object = parser.first(AnnotationExpression.class, Modifier.class);
             if (object instanceof Modifier) {
-                if (((Modifier) object).getModifier() != java.lang.reflect.Modifier.FINAL) {
+                if (((Modifier) object) != Modifier.FINAL || finalPresent) {
                     return null;
                 }
-                modifiers = (Modifier) object;
+                finalPresent = true;
             } else if (object instanceof AnnotationExpression) {
                 annotations.add((AnnotationExpression) object);
             } else {
@@ -70,7 +70,7 @@ public class ResourceParselet extends JavaParselet<Resource> {
         parseWhiteSpaceAndComments(parser);
         //expression
         Expression expression = parser.next(Expression.class);
-        return new Resource(modifiers, type, name, expression);
+        return new Resource(annotations, finalPresent, type, name, expression);
     }
 
 }

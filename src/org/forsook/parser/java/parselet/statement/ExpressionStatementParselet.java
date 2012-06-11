@@ -37,6 +37,12 @@ public class ExpressionStatementParselet extends StatementParselet<ExpressionSta
         if (expr == null) {
             return null;
         }
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //semi-colon
+        if (!parser.peekPresentAndSkip(';')) {
+            return null;
+        }
         return new ExpressionStatement(expr);
     }
 }

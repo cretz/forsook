@@ -6,7 +6,7 @@ import org.forsook.parser.java.JlsReference;
 
 @JlsReference("14.2")
 @SuppressWarnings("serial")
-public class BlockStatement extends Statement {
+public class BlockStatement extends Statement implements StatementWithoutTrailingSubstatement {
     
     private List<Statement> statements;
     

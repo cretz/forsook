@@ -4,7 +4,7 @@ import org.forsook.parser.java.JlsReference;
 
 @JlsReference("14.6")
 @SuppressWarnings("serial")
-public class EmptyStatement extends Statement {
+public class EmptyStatement extends Statement implements StatementWithoutTrailingSubstatement {
 
     @Override
     public int hashCode() {
