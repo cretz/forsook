@@ -18,7 +18,7 @@ public class RelationalExpressionParselet extends ExpressionParselet<Expression>
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(ShiftExpression.class, 
-                RelationalOperatorExpression.class); 
+        return (Expression) parser.first(RelationalOperatorExpression.class,
+                ShiftExpression.class);
     }
 }

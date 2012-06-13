@@ -18,7 +18,7 @@ public class ConditionalExpressionParselet extends ExpressionParselet<Expression
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(ConditionalOrExpression.class, 
-                ConditionalOperatorExpression.class); 
+        return (Expression) parser.first(ConditionalOperatorExpression.class,
+                ConditionalOrExpression.class);
     }
 }

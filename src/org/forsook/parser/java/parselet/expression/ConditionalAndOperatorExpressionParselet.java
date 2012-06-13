@@ -20,6 +20,10 @@ public class ConditionalAndOperatorExpressionParselet
 
     @Override
     public ConditionalAndOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead("&&")) {
+            
+        }
         //left
         Expression left = (Expression) parser.next(ConditionalAndExpression.class);
         if (left == null) {

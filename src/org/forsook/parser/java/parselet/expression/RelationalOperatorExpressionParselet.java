@@ -24,6 +24,10 @@ public class RelationalOperatorExpressionParselet
 
     @Override
     public RelationalOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead("<=", ">=", "<", ">", "instanceof")) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(RelationalExpression.class);
         if (left == null) {

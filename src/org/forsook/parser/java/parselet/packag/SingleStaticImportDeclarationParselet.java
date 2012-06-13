@@ -26,7 +26,7 @@ public class SingleStaticImportDeclarationParselet
             return null;
         }
         //needs "static" to be present
-        if (!parser.peekPresentAndSkip("import")) {
+        if (!parser.peekPresentAndSkip("static")) {
             return null;
         }
         //whitespace required here

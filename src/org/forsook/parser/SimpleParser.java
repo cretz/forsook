@@ -173,6 +173,26 @@ public class SimpleParser implements Parser {
     }
     
     @Override
+    public boolean lookAhead(char... items) {
+        for (char item : items) {
+            if (source.indexOf(item, cursor) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean lookAhead(String... items) {
+        for (String item : items) {
+            if (source.indexOf(item, cursor) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
     public int getCursor() {
         return cursor;
     }
@@ -203,7 +223,7 @@ public class SimpleParser implements Parser {
         if (cursor != lastLocationCheckCursor) {
             updateLineAndColumn();
         }
-        return lastKnownLine;
+        return lastKnownLine + 1;
     }
     
     @Override
@@ -211,7 +231,7 @@ public class SimpleParser implements Parser {
         if (cursor != lastLocationCheckCursor) {
             updateLineAndColumn();
         }
-        return lastKnownColumn;
+        return lastKnownColumn + 1;
     }
     
     private static class RecursiveTypeMemo {

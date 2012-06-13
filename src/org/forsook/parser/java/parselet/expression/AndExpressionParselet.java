@@ -18,7 +18,7 @@ public class AndExpressionParselet extends ExpressionParselet<Expression> {
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(EqualityExpression.class, 
-                AndOperatorExpression.class); 
+        return (Expression) parser.first(AndOperatorExpression.class,
+                EqualityExpression.class); 
     }
 }

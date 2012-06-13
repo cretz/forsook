@@ -18,7 +18,7 @@ public class AdditiveExpressionParselet extends ExpressionParselet<Expression> {
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(MultiplicativeExpression.class, 
-                AdditiveOperatorExpression.class); 
+        return (Expression) parser.first(AdditiveOperatorExpression.class,
+                MultiplicativeExpression.class); 
     }
 }

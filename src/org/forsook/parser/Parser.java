@@ -104,6 +104,24 @@ public interface Parser {
     <T> T next(Class<T> type);
     
     /**
+     * Checks to see whether any of the given items are 
+     * anywhere in the source starting at the given cursor
+     * 
+     * @param items
+     * @return
+     */
+    boolean lookAhead(char... items);
+    
+    /**
+     * Checks to see whether any of the given items are 
+     * anywhere in the source starting at the given cursor
+     * 
+     * @param items
+     * @return
+     */
+    boolean lookAhead(String... items);
+    
+    /**
      * Get the current cursor position
      * 
      * @return

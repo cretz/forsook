@@ -21,6 +21,10 @@ public class EqualityOperatorExpressionParselet
 
     @Override
     public EqualityOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead("==", "!=")) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(RelationalExpression.class);
         if (left == null) {

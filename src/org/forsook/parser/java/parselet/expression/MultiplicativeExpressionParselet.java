@@ -18,7 +18,7 @@ public class MultiplicativeExpressionParselet extends ExpressionParselet<Express
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(UnaryExpression.class, 
-                MultiplicativeOperatorExpression.class); 
+        return (Expression) parser.first(MultiplicativeOperatorExpression.class,
+                UnaryExpression.class);
     }
 }

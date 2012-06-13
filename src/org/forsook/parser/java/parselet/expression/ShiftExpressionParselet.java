@@ -18,7 +18,7 @@ public class ShiftExpressionParselet extends ExpressionParselet<Expression> {
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(AdditiveExpression.class, 
-                ShiftOperatorExpression.class); 
+        return (Expression) parser.first(ShiftOperatorExpression.class,
+                AdditiveExpression.class); 
     }
 }

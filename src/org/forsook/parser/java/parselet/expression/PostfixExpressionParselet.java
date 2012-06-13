@@ -23,8 +23,8 @@ public class PostfixExpressionParselet extends ExpressionParselet<Expression> {
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(PrimaryExpression.class,
-                PostfixIncrementExpression.class,
+        return (Expression) parser.first(PostfixIncrementExpression.class,
+                PrimaryExpression.class,
                 QualifiedName.class);
     }
 }

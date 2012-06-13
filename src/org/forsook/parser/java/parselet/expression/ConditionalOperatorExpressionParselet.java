@@ -24,6 +24,10 @@ public class ConditionalOperatorExpressionParselet
 
     @Override
     public ConditionalOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('?')) {
+            return null;
+        }
         //condition
         Expression condition = (Expression) parser.next(ConditionalOrExpression.class);
         if (condition == null) {

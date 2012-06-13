@@ -24,6 +24,10 @@ public class FieldAccessExpressionParselet extends ExpressionParselet<FieldAcces
 
     @Override
     public FieldAccessExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('.')) {
+            return null;
+        }
         //scope
         Expression scope = (Expression) parser.next(PrimaryExpression.class);
         //class name

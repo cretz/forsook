@@ -7,6 +7,7 @@ import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.AnnotationTypeBody;
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
 import org.forsook.parser.java.ast.decl.AnnotationTypeElementDeclaration;
+import org.forsook.parser.java.ast.decl.ClassOrInterfaceBody;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
 import org.forsook.parser.java.ast.decl.ElementValue;
@@ -84,6 +85,7 @@ import org.forsook.parser.java.ast.statement.LabeledStatement;
 import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 import org.forsook.parser.java.ast.statement.Resource;
 import org.forsook.parser.java.ast.statement.ReturnStatement;
+import org.forsook.parser.java.ast.statement.Statement;
 import org.forsook.parser.java.ast.statement.SwitchBlockStatementGroup;
 import org.forsook.parser.java.ast.statement.SwitchStatement;
 import org.forsook.parser.java.ast.statement.SynchronizedStatement;
@@ -101,8 +103,8 @@ import org.forsook.parser.java.visitor.JavaModelVisitor;
 
 public class JavaSourceWriter {
 
-    private String indent;
-    private String newline;
+    private String indent = "    ";
+    private String newline = "\n";
     private StringBuilder builder;
     private int statementDepth = 0;
     
@@ -143,11 +145,18 @@ public class JavaSourceWriter {
             }
         }
         
+        private void visitBlockOrIndentedStatement(Statement statement) {
+            if (!(statement instanceof BlockStatement)) {
+                builder.append(newline);
+                indent();
+            }
+        }
+        
         @Override
         public void visit(AdditiveOperatorExpression a) {
             visit(a.getLeft());
-            visit(a.getOperator() == AdditiveOperator.PLUS ? " + " : " - ");
-            builder.append(a.getRight());
+            builder.append(a.getOperator() == AdditiveOperator.PLUS ? " + " : " - ");
+            visit(a.getRight());
         }
         @Override
         public void visit(AndOperatorExpression a) {
@@ -158,17 +167,27 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(AnnotationTypeBody a) {
-            throw new UnsupportedOperationException();
+            visit((TypeBody) a);
         }
 
         @Override
         public void visit(AnnotationTypeDeclaration a) {
-            throw new UnsupportedOperationException();
+            if (a.getJavadoc() != null) {
+                visit(a.getJavadoc());
+                builder.append(newline);
+            }
+            indent();
+            for (Modifier modifier : a.getModifiers()) {
+                builder.append(modifier.getLowerCase()).append(' ');
+            }
+            builder.append("@interface ");
+            visit(a.getName());
+            builder.append(' ');
+            visit(a.getBody());
         }
 
         @Override
         public void visit(AnnotationTypeElementDeclaration a) {
-            builder.append(newline);
             if (a.getJavadoc() != null) {
                 visit(a.getJavadoc());
                 builder.append(newline);
@@ -191,7 +210,6 @@ public class JavaSourceWriter {
                 visit(a.getDefaultValue());
                 builder.append(';');
             }
-            builder.append(newline);
         }
 
         @Override
@@ -241,7 +259,7 @@ public class JavaSourceWriter {
                 builder.append(" : ");
                 builder.append(a.getMessage());
             }
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
@@ -264,15 +282,16 @@ public class JavaSourceWriter {
             builder.append(';');
             visitSeparated(a.getUpdate(), ", ");
             builder.append(") ");
-            visit(a.getBody());
-            builder.append(newline);
+            visitBlockOrIndentedStatement(a.getBody());
         }
 
         @Override
         public void visit(BlockStatement a) {
             builder.append('{');
             if (a.getStatements().isEmpty()) {
-                builder.append(" }");
+                builder.append(newline);
+                indent();
+                builder.append("}");
             } else {
                 statementDepth++;
                 builder.append(newline);
@@ -292,7 +311,7 @@ public class JavaSourceWriter {
                 builder.append(' ');
                 visit(a.getLabel());
             }
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
@@ -348,11 +367,20 @@ public class JavaSourceWriter {
                 visit(a.getAnonymousBody());
             }
         }
+        
+        @Override
+        public void visit(ClassOrInterfaceBody a) {
+            visit((TypeBody) a);
+        }
 
         @Override
         public void visit(ClassOrInterfaceDeclaration a) {
             if (a.getJavadoc() != null) {
                 visit(a.getJavadoc());
+                builder.append(newline);
+            }
+            if (a.getAnnotations() != null && !a.getAnnotations().isEmpty()) {
+                visitSeparated(a.getAnnotations(), newline, true);
                 builder.append(newline);
             }
             indent();
@@ -378,7 +406,6 @@ public class JavaSourceWriter {
                 builder.append(' ');
             }
             visit(a.getBody());
-            builder.append(newline);
         }
 
         @Override
@@ -400,8 +427,10 @@ public class JavaSourceWriter {
                 visit(a.getPackageDeclaration());
                 builder.append(newline).append(newline);
             }
-            visitSeparated(a.getImports(), newline);
-            builder.append(newline);
+            if (a.getImports() != null & !a.getImports().isEmpty()) {
+                visitSeparated(a.getImports(), newline);
+                builder.append(newline);
+            }
             visitSeparated(a.getTypes(), newline + newline);
             builder.append(newline);
         }
@@ -468,17 +497,17 @@ public class JavaSourceWriter {
                 builder.append(' ');
                 visit(a.getLabel());
             }
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
         public void visit(DoStatement a) {
             indent();
             builder.append("do ");
-            visit(a.getStatement());
+            visitBlockOrIndentedStatement(a.getStatement());
             builder.append(" while (");
             visit(a.getCondition());
-            builder.append(");").append(newline);
+            builder.append(");");
         }
 
         @Override
@@ -500,8 +529,7 @@ public class JavaSourceWriter {
             builder.append(" : ");
             visit(a.getIterable());
             builder.append(") ");
-            visit(a.getBody());
-            builder.append(newline);
+            visitBlockOrIndentedStatement(a.getBody());
         }
 
         @Override
@@ -520,7 +548,7 @@ public class JavaSourceWriter {
             statementDepth--;
             builder.append(newline);
             indent();
-            builder.append('}').append(newline);
+            builder.append('}');
         }
 
         @Override
@@ -598,14 +626,14 @@ public class JavaSourceWriter {
             }
             builder.append(a.isThisPresent() ? "this(" : "super(");
             visitSeparated(a.getArguments(), ", ");
-            builder.append(");").append(newline);
+            builder.append(");");
         }
 
         @Override
         public void visit(ExpressionStatement a) {
             indent();
             visit(a.getExpression());
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
@@ -640,7 +668,7 @@ public class JavaSourceWriter {
             visit(a.getType());
             builder.append(' ');
             visitSeparated(a.getVariables(), ", ");
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
@@ -654,12 +682,11 @@ public class JavaSourceWriter {
             builder.append("if (");
             visit(a.getCondition());
             builder.append(") ");
-            visit(a.getThenStatement());
+            visitBlockOrIndentedStatement(a.getThenStatement());
             if (a.getElseStatement() != null) {
                 builder.append(" else ");
-                visit(a.getElseStatement());
+                visitBlockOrIndentedStatement(a.getElseStatement());
             }
-            builder.append(newline);
         }
 
         @Override
@@ -705,6 +732,7 @@ public class JavaSourceWriter {
             visit(a.getType());
             builder.append(' ');
             visitSeparated(a.getVariables(), ", ");
+            builder.append(';');
         }
 
         @Override
@@ -748,7 +776,6 @@ public class JavaSourceWriter {
             } else {
                 builder.append(';');
             }
-            builder.append(newline);
         }
 
         @Override
@@ -896,7 +923,6 @@ public class JavaSourceWriter {
                 visit(a.getExpression());
             }
             builder.append(';');
-            builder.append(newline);
         }
 
         @Override
@@ -970,7 +996,7 @@ public class JavaSourceWriter {
             visitSeparated(a.getEntries(), newline);
             builder.append(newline);
             indent();
-            builder.append('}').append(newline);
+            builder.append('}');
         }
 
         @Override
@@ -996,7 +1022,7 @@ public class JavaSourceWriter {
             indent();
             builder.append("throw ");
             visit(a.getExpression());
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
@@ -1023,7 +1049,13 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(TypeBody a) {
+            builder.append('{').append(newline).append(newline);
+            statementDepth++;
             visitSeparated(a.getMembers(), newline);
+            statementDepth--;
+            builder.append(newline);
+            indent();
+            builder.append('}');
         }
 
         @Override
@@ -1071,7 +1103,6 @@ public class JavaSourceWriter {
             visit(a.getCondition());
             builder.append(") ");
             visit(a.getBody());
-            builder.append(newline);
         }
 
         @Override

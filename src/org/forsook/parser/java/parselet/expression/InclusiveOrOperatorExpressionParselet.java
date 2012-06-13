@@ -20,6 +20,10 @@ public class InclusiveOrOperatorExpressionParselet
 
     @Override
     public InclusiveOrOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('|')) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(InclusiveOrExpression.class);
         if (left == null) {
@@ -28,7 +32,7 @@ public class InclusiveOrOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //operator
-        if (!parser.peekPresentAndSkip('&')) {
+        if (!parser.peekPresentAndSkip('|')) {
             return null;
         }
         //spacing

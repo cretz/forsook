@@ -13,6 +13,7 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.ParserUtils;
 import org.forsook.parser.SimpleParser;
+import org.forsook.parser.java.JavaSourceWriter;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 public abstract class ParseletTestBase {
@@ -62,6 +63,12 @@ public abstract class ParseletTestBase {
     protected void assertParse(String source, Class<?> classToEmit, Object expected) {
         Object actual = buildParser(source).next(classToEmit);
         Assert.assertEquals("Results unequal for class: " + classToEmit, expected, actual);
+    }
+    
+    protected void assertString(String source, Class<?> classToEmit) {
+        Object actual = buildParser(source).next(classToEmit);
+        Assert.assertNotNull("Result null for class: " + classToEmit, actual);
+        Assert.assertEquals(source, new JavaSourceWriter().build(actual).toString());
     }
     
     protected QualifiedName getQualifiedName(String value) {

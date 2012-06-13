@@ -25,8 +25,21 @@ import org.forsook.parser.java.ast.name.QualifiedName;
 )
 public class AssignmentOperatorExpressionParselet
         extends ExpressionParselet<AssignmentOperatorExpression> {
+    
+    private static String[] lookAhead;
+    
+    static {
+        lookAhead = new String[AssignmentOperator.values().length];
+        for (int i = 0; i < lookAhead.length; i++) {
+            lookAhead[i] = AssignmentOperator.values()[i].toString();
+        }
+    }
 
     public AssignmentOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead(lookAhead)) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.first(QualifiedName.class, 
                 FieldAccessExpression.class, ArrayAccessExpression.class);

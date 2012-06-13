@@ -20,6 +20,10 @@ public class ExclusiveOrOperatorExpressionParselet
 
     @Override
     public ExclusiveOrOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('|')) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(ExclusiveOrExpression.class);
         if (left == null) {

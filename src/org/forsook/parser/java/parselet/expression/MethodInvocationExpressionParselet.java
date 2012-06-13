@@ -32,6 +32,10 @@ public class MethodInvocationExpressionParselet
 
     @Override
     public MethodInvocationExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('(')) {
+            return null;
+        }
         //scope
         Expression scope = (Expression) parser.next(PrimaryExpression.class);
         QualifiedName className = null;
@@ -85,7 +89,7 @@ public class MethodInvocationExpressionParselet
             }
             //needs to be mutable list
             methodName = new QualifiedName(
-                    new ArrayList<Identifier>(Arrays.asList(methodIdentifier)));
+                    new ArrayList<Identifier>(Arrays.asList(methodIdentifier)), false);
             //spacing
             parseWhiteSpaceAndComments(parser);
         }

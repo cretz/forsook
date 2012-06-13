@@ -18,6 +18,10 @@ public class PostfixIncrementExpressionParselet extends ExpressionParselet<Postf
 
     @Override
     public PostfixIncrementExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead("++", "--")) {
+            return null;
+        }
         //expression
         Expression expression = (Expression) parser.next(PostfixExpression.class);
         if (expression == null) {

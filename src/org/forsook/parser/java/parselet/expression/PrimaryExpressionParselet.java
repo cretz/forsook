@@ -18,8 +18,8 @@ public class PrimaryExpressionParselet extends JavaParselet<PrimaryExpression> {
 
     @Override
     public PrimaryExpression parse(Parser parser) {
-        return (PrimaryExpression) parser.first(
-                PrimaryNoNewArrayExpression.class, ArrayCreationExpression.class);
+        return (PrimaryExpression) parser.first(ArrayCreationExpression.class,
+                PrimaryNoNewArrayExpression.class);
     }
 
 }

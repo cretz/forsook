@@ -21,12 +21,14 @@ public class QualifiedNameParselet extends JavaParselet<QualifiedName> {
     @Override
     public QualifiedName parse(Parser parser) {
         List<Identifier> identifiers = new ArrayList<Identifier>();
+        boolean endsWithDot = false;
         do {
             //spacing
             parseWhiteSpaceAndComments(parser);
             //identifier
             Identifier identifier = parser.next(Identifier.class);
             if (identifier == null) {
+                endsWithDot = true;
                 break;
             } else {
                 identifiers.add(identifier);
@@ -37,7 +39,7 @@ public class QualifiedNameParselet extends JavaParselet<QualifiedName> {
         if (identifiers.isEmpty()) {
             return null;
         } else {
-            return new QualifiedName(identifiers);
+            return new QualifiedName(identifiers, endsWithDot);
         }
     }
 

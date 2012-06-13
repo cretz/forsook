@@ -21,6 +21,10 @@ public class MultiplicativeOperatorExpressionParselet
 
     @Override
     public MultiplicativeOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('*', '/', '%')) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(MultiplicativeExpression.class);
         if (left == null) {

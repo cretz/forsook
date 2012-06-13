@@ -18,8 +18,8 @@ public class AssignmentExpressionParselet extends ExpressionParselet<Expression>
 
     @Override
     public Expression parse(Parser parser) {
-        return (Expression) parser.first(ConditionalExpression.class,
-                AssignmentOperatorExpression.class);
+        return (Expression) parser.first(AssignmentOperatorExpression.class,
+                ConditionalExpression.class);
     }
 
 }

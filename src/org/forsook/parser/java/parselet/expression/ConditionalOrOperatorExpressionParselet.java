@@ -20,6 +20,10 @@ public class ConditionalOrOperatorExpressionParselet
 
     @Override
     public ConditionalOrOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead("||")) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(ConditionalOrExpression.class);
         if (left == null) {

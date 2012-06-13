@@ -21,6 +21,9 @@ public class ShiftOperatorExpressionParselet
 
     @Override
     public ShiftOperatorExpression parse(Parser parser) {
+        if (!parser.lookAhead("<<", ">>")) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(ShiftExpression.class);
         if (left == null) {

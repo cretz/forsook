@@ -24,6 +24,10 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
 
     @Override
     public ArrayAccessExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('[')) {
+            return null;
+        }
         //name
         Expression name = (Expression) parser.next(PrimaryNoNewArrayExpression.class);
         if (name == null || name instanceof ArrayCreationExpression) {

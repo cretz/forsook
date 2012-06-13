@@ -3,6 +3,7 @@ package org.forsook.parser.java.parselet.decl;
 import java.util.Collections;
 
 import org.forsook.parser.java.ast.decl.Modifier;
+import org.forsook.parser.java.ast.decl.VariableDeclarator;
 import org.forsook.parser.java.ast.packag.PackageDeclaration;
 import org.forsook.parser.java.parselet.ParseletTestBase;
 import org.junit.Ignore;
@@ -39,5 +40,10 @@ public class DeclarationParseletTest extends ParseletTestBase {
     @Ignore("TODO")
     public void testImportDeclaration() {
         //TODO
+    }
+    
+    @Test
+    public void testVariableDeclarator() {
+        assertString("i = 1 + 1", VariableDeclarator.class);
     }
 }

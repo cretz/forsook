@@ -21,6 +21,10 @@ public class AdditiveOperatorExpressionParselet
 
     @Override
     public AdditiveOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('+', '-')) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(AdditiveExpression.class);
         if (left == null) {

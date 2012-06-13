@@ -34,6 +34,10 @@ public class ClassInstanceCreationExpressionParselet
 
     @Override
     public ClassInstanceCreationExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead("new")) {
+            return null;
+        }
         //starts with primary expression?
         Expression scope = (Expression) parser.next(PrimaryExpression.class);
         if (scope != null) {
@@ -69,7 +73,7 @@ public class ClassInstanceCreationExpressionParselet
                 return null;
             }
             //make mutable list
-            name = new QualifiedName(new ArrayList<Identifier>(Arrays.asList(identifier)));
+            name = new QualifiedName(new ArrayList<Identifier>(Arrays.asList(identifier)), false);
         }
         //spacing
         parseWhiteSpaceAndComments(parser);

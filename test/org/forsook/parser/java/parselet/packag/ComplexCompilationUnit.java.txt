@@ -1,0 +1,17 @@
+package foo.bar.meh;
+
+import single.type.mport.Declaration;
+import type.on.demand.mport.declaration.*;
+import static single.stat.mport.Declaration;
+import static stat.on.demand.mport.declaration.*;
+
+@NormalAnnotation(value = "value")
+@MarkerAnnotation
+@SingleElementAnnotation("value")
+public class ComplexCompilationUnit {
+
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
+        int i = 0;
+    }
+}

@@ -63,6 +63,8 @@ public class CompilationUnitParselet extends JavaParselet<CompilationUnit> {
                 types.add(type);
             }
         } while (true);
+        //spacing
+        parseWhiteSpaceAndComments(parser);
         return new CompilationUnit(packageDeclaration, imports, types);
     }
 

@@ -19,6 +19,10 @@ public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperato
 
     @Override
     public AndOperatorExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.lookAhead('&')) {
+            return null;
+        }
         //left
         Expression left = (Expression) parser.next(AndExpression.class);
         if (left == null) {
