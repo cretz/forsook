@@ -27,6 +27,10 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
     
     @Override
     public ClassOrInterfaceDeclaration parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead("class", "interface")) {
+            return null;
+        }
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         List<Modifier> modifiers = new ArrayList<Modifier>();
@@ -41,6 +45,8 @@ public class ClassOrInterfaceDeclarationParselet extends TypeDeclarationParselet
         if (!iface && !parser.peekPresentAndSkip("class")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //can't be final
         if (iface && modifiers.contains(Modifier.FINAL)) {
             return null;

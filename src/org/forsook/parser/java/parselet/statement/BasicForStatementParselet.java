@@ -8,9 +8,9 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.statement.BasicForStatement;
-import org.forsook.parser.java.ast.statement.ExpressionStatement;
 import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 import org.forsook.parser.java.ast.statement.Statement;
+import org.forsook.parser.java.ast.statement.StatementExpression;
 
 @JlsReference("14.14.1")
 @ParseletDefinition(
@@ -19,7 +19,8 @@ import org.forsook.parser.java.ast.statement.Statement;
         needs = {
             LocalVariableDeclarationExpression.class,
             Expression.class,
-            Statement.class
+            Statement.class,
+            StatementExpression.class
         }
 )
 public class BasicForStatementParselet extends ForStatementParselet<BasicForStatement> {
@@ -33,6 +34,10 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
         parseWhiteSpaceAndComments(parser);
         //parentheses
         if (!parser.peekPresentAndSkip('(')) {
+            return null;
+        }
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
             return null;
         }
         //spacing
@@ -49,11 +54,11 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
                 //spacing
                 parseWhiteSpaceAndComments(parser);
                 //expression
-                ExpressionStatement exprStmt = parser.next(ExpressionStatement.class);
-                if (exprStmt == null) {
+                expr = (Expression) parser.next(StatementExpression.class);
+                if (expr == null) {
                     break;
                 }
-                init.add(exprStmt.getExpression());
+                init.add(expr);
                 //spacing
                 parseWhiteSpaceAndComments(parser);
             } while (parser.peekPresentAndSkip(','));
@@ -62,6 +67,12 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
         parseWhiteSpaceAndComments(parser);
         //semicolon
         if (!parser.peekPresentAndSkip(';')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
             return null;
         }
         //spacing
@@ -74,18 +85,23 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //update
         List<Expression> update = new ArrayList<Expression>();
         do {
             //spacing
             parseWhiteSpaceAndComments(parser);
             //expression
-            //TODO: limit to statement expressions
-            ExpressionStatement exprStmt = parser.next(ExpressionStatement.class);
-            if (exprStmt == null) {
+            expr = (Expression) parser.next(StatementExpression.class);
+            if (expr == null) {
                 break;
             }
-            update.add(exprStmt.getExpression());
+            update.add(expr);
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (parser.peekPresentAndSkip(','));
@@ -95,6 +111,8 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //body

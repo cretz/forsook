@@ -1,24 +1,24 @@
 package org.forsook.parser.java.parselet.type;
 
 import org.forsook.parser.java.ast.type.ArrayType;
+import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.PrimitiveType;
 import org.forsook.parser.java.ast.type.PrimitiveType.Primitive;
+import org.forsook.parser.java.ast.type.TypeArguments;
+import org.forsook.parser.java.ast.type.TypeParameter;
 import org.forsook.parser.java.parselet.ParseletTestBase;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TypeParseletTest extends ParseletTestBase {
 
     @Test
-    @Ignore("TODO")
     public void testClassOrInterfaceType() {
-        //"a.b.c"  
-        //"java.util.Map<K, V>"  
-        //"Pair<A, Pair<A, /*comment*/ B>>" 
-        //"Pair<?, ?>"
-        //"List<? extends List<?>>"
-        //"List<? super List<?>>"
-        //null - "List<? extends ?>"
+        assertString("a.b.c", ClassOrInterfaceType.class);  
+        assertString("java.util.Map<K, V>", ClassOrInterfaceType.class);  
+        assertString("Pair<A, Pair<A, B>>", ClassOrInterfaceType.class); 
+        assertString("Pair<?, ?>", ClassOrInterfaceType.class);
+        assertString("List<? extends List<?>>", ClassOrInterfaceType.class);
+        assertString("List<? super List<?>>", ClassOrInterfaceType.class);
     }
     
     @Test
@@ -32,23 +32,23 @@ public class TypeParseletTest extends ParseletTestBase {
     }
     
     @Test
-    @Ignore("TODO")
-    public void testReferenceType() {
-        
+    public void testArrayType() {
+        //test recursion
+        String string = "int";
+        for (int i = 0; i < 20; i++) {
+            string += "[]";
+            assertString(string, ArrayType.class);
+        }
     }
     
     @Test
-    public void testArrayType() {
-        //test the recursion
-//        Type type = new PrimitiveType(Primitive.INT);
-//        String string = "int";
-//        for (int i = 0; i < 20; i++) {
-//            type = new ArrayType(type);
-//            string += "[]";
-//            System.out.println(i);
-//            assertParse(string, type);
-//        }
-        assertParse("int[][]", new ArrayType(new ArrayType(new PrimitiveType(Primitive.INT))));
-        //TODO: more
+    public void testTypeArguments() {
+        assertString("<Foo, ? extends Bar>", TypeArguments.class);
+        assertString("<? super Bar, Foo>", TypeArguments.class);
+    }
+    
+    @Test
+    public void testTypeParameters() {
+        assertString("T extends Foo & Bar", TypeParameter.class);
     }
 }

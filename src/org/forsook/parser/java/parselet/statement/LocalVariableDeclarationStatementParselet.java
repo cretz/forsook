@@ -16,6 +16,10 @@ public class LocalVariableDeclarationStatementParselet extends StatementParselet
     
     @Override
     public LocalVariableDeclarationStatement parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
+            return null;
+        }
         //declaration
         LocalVariableDeclarationExpression expression = parser.next(
                 LocalVariableDeclarationExpression.class);
@@ -28,6 +32,8 @@ public class LocalVariableDeclarationStatementParselet extends StatementParselet
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new LocalVariableDeclarationStatement(expression);
     }
 

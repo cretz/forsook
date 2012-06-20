@@ -24,6 +24,11 @@ public class ArrayInitializerExpressionParselet
         if (!parser.peekPresentAndSkip('{')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('}')) {
+            return null;
+        }
+        //values
         List<Expression> values = new ArrayList<Expression>();
         int commaCount = 0;
         do {
@@ -46,6 +51,8 @@ public class ArrayInitializerExpressionParselet
             if (parser.peekPresentAndSkip(',')) {
                 commaCount++;
             } else if (parser.peekPresentAndSkip('}')) {
+                //pop lookahead
+                parser.popLookAhead();
                 break;
             } else {
                 return null;

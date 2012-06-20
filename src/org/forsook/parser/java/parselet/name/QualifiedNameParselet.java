@@ -35,7 +35,7 @@ public class QualifiedNameParselet extends JavaParselet<QualifiedName> {
             }
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (parser.peekPresentAndSkip('.'));
+        } while (!parser.peekPresent("..") && parser.peekPresentAndSkip('.'));
         if (identifiers.isEmpty()) {
             return null;
         } else {

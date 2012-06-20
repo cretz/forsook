@@ -17,6 +17,10 @@ public class ClassExpressionParselet extends ExpressionParselet<ClassExpression>
 
     @Override
     public ClassExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead("class")) {
+            return null;
+        }
         //type
         Type type = (Type) parser.first(Type.class, VoidType.class);
         if (type == null) {
@@ -34,6 +38,8 @@ public class ClassExpressionParselet extends ExpressionParselet<ClassExpression>
         if (!parser.peekPresentAndSkip("class")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new ClassExpression(type);
     }
 }

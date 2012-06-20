@@ -30,6 +30,10 @@ public class ResourceParselet extends JavaParselet<Resource> {
 
     @Override
     public Resource parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead('=')) {
+            return null;
+        }
         //annotations and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         boolean finalPresent = false;
@@ -66,6 +70,8 @@ public class ResourceParselet extends JavaParselet<Resource> {
         if (!parser.peekPresentAndSkip('=')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression

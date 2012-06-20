@@ -25,6 +25,10 @@ public class NormalAnnotationExpressionParselet
         if (!parser.peekPresentAndSkip('@')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('(')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //name
@@ -33,6 +37,12 @@ public class NormalAnnotationExpressionParselet
         parseWhiteSpaceAndComments(parser);
         //parentheses
         if (!parser.peekPresentAndSkip('(')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
             return null;
         }
         //element value pairs
@@ -66,6 +76,8 @@ public class NormalAnnotationExpressionParselet
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new NormalAnnotationExpression(name, pairs);
     }
 

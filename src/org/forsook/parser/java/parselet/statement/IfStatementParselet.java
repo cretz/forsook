@@ -31,6 +31,10 @@ public class IfStatementParselet extends StatementParselet<IfStatement> {
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //condition
@@ -44,6 +48,8 @@ public class IfStatementParselet extends StatementParselet<IfStatement> {
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //then statement

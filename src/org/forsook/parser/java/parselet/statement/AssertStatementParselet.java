@@ -19,6 +19,10 @@ public class AssertStatementParselet extends StatementParselet<AssertStatement> 
         if (!parser.peekPresentAndSkip("assert")) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //condition
@@ -45,6 +49,8 @@ public class AssertStatementParselet extends StatementParselet<AssertStatement> 
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new AssertStatement(condition, message);
     }
 }

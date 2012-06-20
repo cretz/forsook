@@ -16,6 +16,10 @@ public class ThisExpressionParselet extends ExpressionParselet<ThisExpression> {
 
     @Override
     public ThisExpression parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead("this")) {
+            return null;
+        }
         //name
         QualifiedName name = parser.next(QualifiedName.class);
         if (name != null) {
@@ -32,6 +36,8 @@ public class ThisExpressionParselet extends ExpressionParselet<ThisExpression> {
         if (!parser.peekPresentAndSkip("this")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new ThisExpression(name);
     }
 

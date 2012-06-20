@@ -1,10 +1,12 @@
 package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.statement.StatementExpression;
 
 @JlsReference("15.15")
 @SuppressWarnings("serial")
-public class PrefixIncrementExpression extends Expression implements UnaryExpression {
+public class PrefixIncrementExpression extends Expression 
+        implements UnaryExpression, StatementExpression {
 
     private boolean increment;
     private Expression expression;

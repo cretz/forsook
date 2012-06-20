@@ -23,6 +23,10 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
         if (!parser.peekPresentAndSkip('{')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('}')) {
+            return null;
+        }
         //statements
         List<Statement> statements = new ArrayList<Statement>();
         //local class gets no javadoc IMO
@@ -40,6 +44,8 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
         if (!parser.peekPresentAndSkip('}')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new BlockStatement(statements);
     }
 

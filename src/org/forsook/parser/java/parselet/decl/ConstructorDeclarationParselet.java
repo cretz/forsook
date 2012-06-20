@@ -34,6 +34,10 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
 
     @Override
     public ConstructorDeclaration parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead('{')) {
+            return null;
+        }
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         List<Modifier> modifiers = new ArrayList<Modifier>();
@@ -68,6 +72,12 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
         if (!parser.peekPresentAndSkip('{')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead('}')) {
+            return null;
+        }
         //statements
         List<Statement> statements = new ArrayList<Statement>();
         //local class gets no javadoc IMO
@@ -94,6 +104,8 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
         if (!parser.peekPresentAndSkip('}')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new ConstructorDeclaration(javadoc.get(), annotations, modifiers, 
                 typeParameters, name, parameters, throwsList, new BlockStatement(statements));
     }

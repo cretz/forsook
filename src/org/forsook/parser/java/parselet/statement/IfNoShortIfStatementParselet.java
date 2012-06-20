@@ -10,7 +10,7 @@ import org.forsook.parser.java.ast.statement.Statement;
 
 @JlsReference("14.9")
 @ParseletDefinition(
-        name = "forsook.java.ifNoShortIdStatement",
+        name = "forsook.java.ifNoShortIfStatement",
         emits = IfNoShortIfStatement.class,
         needs = { 
             Expression.class, 
@@ -30,6 +30,10 @@ public class IfNoShortIfStatementParselet extends StatementParselet<IfNoShortIfS
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //condition
@@ -43,6 +47,8 @@ public class IfNoShortIfStatementParselet extends StatementParselet<IfNoShortIfS
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //then statement

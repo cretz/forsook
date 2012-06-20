@@ -40,7 +40,7 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
             type = new ClassOrInterfaceType(type, name, typeArguments);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (parser.peekPresent('.'));
+        } while (!parser.peekPresent("...") && parser.peekPresentAndSkip('.'));
         return type;
     }
 

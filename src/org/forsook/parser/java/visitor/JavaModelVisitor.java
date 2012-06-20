@@ -119,6 +119,7 @@ import org.forsook.parser.java.ast.statement.NoShortIfStatement;
 import org.forsook.parser.java.ast.statement.Resource;
 import org.forsook.parser.java.ast.statement.ReturnStatement;
 import org.forsook.parser.java.ast.statement.Statement;
+import org.forsook.parser.java.ast.statement.StatementExpression;
 import org.forsook.parser.java.ast.statement.StatementWithoutTrailingSubstatement;
 import org.forsook.parser.java.ast.statement.SwitchBlockStatementGroup;
 import org.forsook.parser.java.ast.statement.SwitchStatement;
@@ -714,10 +715,10 @@ public class JavaModelVisitor {
     public void visit(ConditionalAndExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof InclusiveOrExpression) {
-            visit((InclusiveOrExpression) a);
         } else if (a instanceof ConditionalAndOperatorExpression) {
             visit((ConditionalAndOperatorExpression) a);
+        } else if (a instanceof InclusiveOrExpression) {
+            visit((InclusiveOrExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -741,10 +742,10 @@ public class JavaModelVisitor {
     public void visit(ConditionalExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof ConditionalOrExpression) {
-            visit((ConditionalOrExpression) a);
         } else if (a instanceof ConditionalOperatorExpression) {
             visit((ConditionalOperatorExpression) a);
+        } else if (a instanceof ConditionalOrExpression) {
+            visit((ConditionalOrExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -772,10 +773,10 @@ public class JavaModelVisitor {
     public void visit(ConditionalOrExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof ConditionalOrOperatorExpression) {
-            visit((ConditionalOrOperatorExpression) a);
         } else if (a instanceof ConditionalAndExpression) {
             visit((ConditionalAndExpression) a);
+        } else if (a instanceof ConditionalOrOperatorExpression) {
+            visit((ConditionalOrOperatorExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -937,26 +938,26 @@ public class JavaModelVisitor {
     public void visit(Enum a) {
         if (a == null) {
             return;
-        } else if (a instanceof AssignmentOperator) {
-            visit((AssignmentOperator) a);
-        } else if (a instanceof MultiplicativeOperator) {
-            visit((MultiplicativeOperator) a);
-        } else if (a instanceof Primitive) {
-            visit((Primitive) a);
-        } else if (a instanceof EqualityOperator) {
-            visit((EqualityOperator) a);
-        } else if (a instanceof AdditiveOperator) {
-            visit((AdditiveOperator) a);
         } else if (a instanceof ShiftOperator) {
             visit((ShiftOperator) a);
         } else if (a instanceof RelationalOperator) {
             visit((RelationalOperator) a);
-        } else if (a instanceof WhiteSpaceType) {
-            visit((WhiteSpaceType) a);
+        } else if (a instanceof AdditiveOperator) {
+            visit((AdditiveOperator) a);
+        } else if (a instanceof MultiplicativeOperator) {
+            visit((MultiplicativeOperator) a);
+        } else if (a instanceof EqualityOperator) {
+            visit((EqualityOperator) a);
         } else if (a instanceof LiteralExpressionType) {
             visit((LiteralExpressionType) a);
         } else if (a instanceof Modifier) {
             visit((Modifier) a);
+        } else if (a instanceof AssignmentOperator) {
+            visit((AssignmentOperator) a);
+        } else if (a instanceof Primitive) {
+            visit((Primitive) a);
+        } else if (a instanceof WhiteSpaceType) {
+            visit((WhiteSpaceType) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -1135,72 +1136,72 @@ public class JavaModelVisitor {
     public void visit(Expression a) {
         if (a == null) {
             return;
+        } else if (a instanceof MultiplicativeOperatorExpression) {
+            visit((MultiplicativeOperatorExpression) a);
         } else if (a instanceof SingleElementAnnotationExpression) {
             visit((SingleElementAnnotationExpression) a);
-        } else if (a instanceof LiteralExpression) {
-            visit((LiteralExpression) a);
-        } else if (a instanceof AnnotationExpression) {
-            visit((AnnotationExpression) a);
-        } else if (a instanceof LocalVariableDeclarationExpression) {
-            visit((LocalVariableDeclarationExpression) a);
-        } else if (a instanceof AdditiveOperatorExpression) {
-            visit((AdditiveOperatorExpression) a);
-        } else if (a instanceof MethodInvocationExpression) {
-            visit((MethodInvocationExpression) a);
-        } else if (a instanceof ShiftOperatorExpression) {
-            visit((ShiftOperatorExpression) a);
+        } else if (a instanceof NegatedExpression) {
+            visit((NegatedExpression) a);
+        } else if (a instanceof ConditionalOperatorExpression) {
+            visit((ConditionalOperatorExpression) a);
         } else if (a instanceof FieldAccessExpression) {
             visit((FieldAccessExpression) a);
+        } else if (a instanceof AnnotationExpression) {
+            visit((AnnotationExpression) a);
+        } else if (a instanceof ExclusiveOrOperatorExpression) {
+            visit((ExclusiveOrOperatorExpression) a);
+        } else if (a instanceof AdditiveOperatorExpression) {
+            visit((AdditiveOperatorExpression) a);
+        } else if (a instanceof RelationalOperatorExpression) {
+            visit((RelationalOperatorExpression) a);
         } else if (a instanceof ThisExpression) {
             visit((ThisExpression) a);
+        } else if (a instanceof LiteralExpression) {
+            visit((LiteralExpression) a);
+        } else if (a instanceof AssignmentOperatorExpression) {
+            visit((AssignmentOperatorExpression) a);
         } else if (a instanceof ArrayInitializerExpression) {
             visit((ArrayInitializerExpression) a);
-        } else if (a instanceof ClassInstanceCreationExpression) {
-            visit((ClassInstanceCreationExpression) a);
         } else if (a instanceof MarkerAnnotationExpression) {
             visit((MarkerAnnotationExpression) a);
         } else if (a instanceof PrefixIncrementExpression) {
             visit((PrefixIncrementExpression) a);
-        } else if (a instanceof NegatedExpression) {
-            visit((NegatedExpression) a);
-        } else if (a instanceof PostfixIncrementExpression) {
-            visit((PostfixIncrementExpression) a);
-        } else if (a instanceof InclusiveOrOperatorExpression) {
-            visit((InclusiveOrOperatorExpression) a);
         } else if (a instanceof CastExpression) {
             visit((CastExpression) a);
-        } else if (a instanceof MultiplicativeOperatorExpression) {
-            visit((MultiplicativeOperatorExpression) a);
-        } else if (a instanceof AssignmentOperatorExpression) {
-            visit((AssignmentOperatorExpression) a);
-        } else if (a instanceof ConditionalAndOperatorExpression) {
-            visit((ConditionalAndOperatorExpression) a);
+        } else if (a instanceof PostfixIncrementExpression) {
+            visit((PostfixIncrementExpression) a);
+        } else if (a instanceof LocalVariableDeclarationExpression) {
+            visit((LocalVariableDeclarationExpression) a);
+        } else if (a instanceof MethodInvocationExpression) {
+            visit((MethodInvocationExpression) a);
+        } else if (a instanceof ShiftOperatorExpression) {
+            visit((ShiftOperatorExpression) a);
+        } else if (a instanceof InclusiveOrOperatorExpression) {
+            visit((InclusiveOrOperatorExpression) a);
+        } else if (a instanceof ParenthesizedExpression) {
+            visit((ParenthesizedExpression) a);
+        } else if (a instanceof SignedExpression) {
+            visit((SignedExpression) a);
         } else if (a instanceof ArrayAccessExpression) {
             visit((ArrayAccessExpression) a);
         } else if (a instanceof ConditionalOrOperatorExpression) {
             visit((ConditionalOrOperatorExpression) a);
-        } else if (a instanceof ParenthesizedExpression) {
-            visit((ParenthesizedExpression) a);
+        } else if (a instanceof ClassInstanceCreationExpression) {
+            visit((ClassInstanceCreationExpression) a);
         } else if (a instanceof AndOperatorExpression) {
             visit((AndOperatorExpression) a);
-        } else if (a instanceof SignedExpression) {
-            visit((SignedExpression) a);
+        } else if (a instanceof ConditionalAndOperatorExpression) {
+            visit((ConditionalAndOperatorExpression) a);
         } else if (a instanceof ClassExpression) {
             visit((ClassExpression) a);
         } else if (a instanceof NormalAnnotationExpression) {
             visit((NormalAnnotationExpression) a);
-        } else if (a instanceof ExclusiveOrOperatorExpression) {
-            visit((ExclusiveOrOperatorExpression) a);
-        } else if (a instanceof ConditionalOperatorExpression) {
-            visit((ConditionalOperatorExpression) a);
         } else if (a instanceof ArrayCreationExpression) {
             visit((ArrayCreationExpression) a);
         } else if (a instanceof QualifiedName) {
             visit((QualifiedName) a);
         } else if (a instanceof EqualityOperatorExpression) {
             visit((EqualityOperatorExpression) a);
-        } else if (a instanceof RelationalOperatorExpression) {
-            visit((RelationalOperatorExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -1272,10 +1273,10 @@ public class JavaModelVisitor {
     public void visit(ForStatement a) {
         if (a == null) {
             return;
-        } else if (a instanceof BasicForNoShortIfStatement) {
-            visit((BasicForNoShortIfStatement) a);
         } else if (a instanceof EnhancedForStatement) {
             visit((EnhancedForStatement) a);
+        } else if (a instanceof BasicForNoShortIfStatement) {
+            visit((BasicForNoShortIfStatement) a);
         } else if (a instanceof BasicForStatement) {
             visit((BasicForStatement) a);
         } else {
@@ -1333,14 +1334,14 @@ public class JavaModelVisitor {
     public void visit(ImportDeclaration a) {
         if (a == null) {
             return;
-        } else if (a instanceof TypeOnDemandImportDeclaration) {
-            visit((TypeOnDemandImportDeclaration) a);
-        } else if (a instanceof SingleStaticImportDeclaration) {
-            visit((SingleStaticImportDeclaration) a);
         } else if (a instanceof SingleTypeImportDeclaration) {
             visit((SingleTypeImportDeclaration) a);
+        } else if (a instanceof TypeOnDemandImportDeclaration) {
+            visit((TypeOnDemandImportDeclaration) a);
         } else if (a instanceof StaticOnDemandImportDeclaration) {
             visit((StaticOnDemandImportDeclaration) a);
+        } else if (a instanceof SingleStaticImportDeclaration) {
+            visit((SingleStaticImportDeclaration) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -1399,16 +1400,16 @@ public class JavaModelVisitor {
             return;
         } else if (a instanceof IfStatement) {
             visit((IfStatement) a);
-        } else if (a instanceof LocalVariableDeclarationStatement) {
-            visit((LocalVariableDeclarationStatement) a);
+        } else if (a instanceof LocalClassDeclarationStatement) {
+            visit((LocalClassDeclarationStatement) a);
         } else if (a instanceof StatementWithoutTrailingSubstatement) {
             visit((StatementWithoutTrailingSubstatement) a);
         } else if (a instanceof WhileStatement) {
             visit((WhileStatement) a);
+        } else if (a instanceof LocalVariableDeclarationStatement) {
+            visit((LocalVariableDeclarationStatement) a);
         } else if (a instanceof ForStatement) {
             visit((ForStatement) a);
-        } else if (a instanceof LocalClassDeclarationStatement) {
-            visit((LocalClassDeclarationStatement) a);
         } else if (a instanceof LabeledStatement) {
             visit((LabeledStatement) a);
         } else {
@@ -1419,112 +1420,106 @@ public class JavaModelVisitor {
     public void visit(JavaModel a) {
         if (a == null) {
             return;
-        } else if (a instanceof LocalVariableDeclarationStatement) {
-            visit((LocalVariableDeclarationStatement) a);
-        } else if (a instanceof LabeledNoShortIfStatement) {
-            visit((LabeledNoShortIfStatement) a);
-        } else if (a instanceof SynchronizedStatement) {
-            visit((SynchronizedStatement) a);
+        } else if (a instanceof NegatedExpression) {
+            visit((NegatedExpression) a);
+        } else if (a instanceof CatchClause) {
+            visit((CatchClause) a);
         } else if (a instanceof EnumDeclaration) {
             visit((EnumDeclaration) a);
-        } else if (a instanceof LocalVariableDeclarationExpression) {
-            visit((LocalVariableDeclarationExpression) a);
+        } else if (a instanceof ExclusiveOrOperatorExpression) {
+            visit((ExclusiveOrOperatorExpression) a);
+        } else if (a instanceof ElementValuePair) {
+            visit((ElementValuePair) a);
         } else if (a instanceof AnnotationTypeDeclaration) {
             visit((AnnotationTypeDeclaration) a);
+        } else if (a instanceof EmptyStatement) {
+            visit((EmptyStatement) a);
         } else if (a instanceof ClassOrInterfaceDeclaration) {
             visit((ClassOrInterfaceDeclaration) a);
         } else if (a instanceof AnnotationTypeElementDeclaration) {
             visit((AnnotationTypeElementDeclaration) a);
+        } else if (a instanceof JavadocComment) {
+            visit((JavadocComment) a);
         } else if (a instanceof MarkerAnnotationExpression) {
             visit((MarkerAnnotationExpression) a);
-        } else if (a instanceof InclusiveOrOperatorExpression) {
-            visit((InclusiveOrOperatorExpression) a);
-        } else if (a instanceof WhileNoShortIfStatement) {
-            visit((WhileNoShortIfStatement) a);
-        } else if (a instanceof TypeBody) {
-            visit((TypeBody) a);
+        } else if (a instanceof PostfixIncrementExpression) {
+            visit((PostfixIncrementExpression) a);
+        } else if (a instanceof MethodInvocationExpression) {
+            visit((MethodInvocationExpression) a);
+        } else if (a instanceof DoStatement) {
+            visit((DoStatement) a);
+        } else if (a instanceof TryStatement) {
+            visit((TryStatement) a);
         } else if (a instanceof FieldDeclaration) {
             visit((FieldDeclaration) a);
         } else if (a instanceof WhiteSpace) {
             visit((WhiteSpace) a);
         } else if (a instanceof EnumConstantDeclaration) {
             visit((EnumConstantDeclaration) a);
-        } else if (a instanceof LocalClassDeclarationStatement) {
-            visit((LocalClassDeclarationStatement) a);
-        } else if (a instanceof ConditionalAndOperatorExpression) {
-            visit((ConditionalAndOperatorExpression) a);
-        } else if (a instanceof ElementValuePair) {
-            visit((ElementValuePair) a);
-        } else if (a instanceof ContinueStatement) {
-            visit((ContinueStatement) a);
-        } else if (a instanceof ImportDeclaration) {
-            visit((ImportDeclaration) a);
         } else if (a instanceof PackageDeclaration) {
             visit((PackageDeclaration) a);
-        } else if (a instanceof EnumBody) {
-            visit((EnumBody) a);
-        } else if (a instanceof Dimension) {
-            visit((Dimension) a);
-        } else if (a instanceof EnhancedForStatement) {
-            visit((EnhancedForStatement) a);
-        } else if (a instanceof NormalAnnotationExpression) {
-            visit((NormalAnnotationExpression) a);
-        } else if (a instanceof SingleTypeImportDeclaration) {
-            visit((SingleTypeImportDeclaration) a);
-        } else if (a instanceof ExclusiveOrOperatorExpression) {
-            visit((ExclusiveOrOperatorExpression) a);
-        } else if (a instanceof ConditionalOperatorExpression) {
-            visit((ConditionalOperatorExpression) a);
-        } else if (a instanceof ArrayType) {
-            visit((ArrayType) a);
-        } else if (a instanceof SingleElementAnnotationExpression) {
-            visit((SingleElementAnnotationExpression) a);
-        } else if (a instanceof LiteralExpression) {
-            visit((LiteralExpression) a);
-        } else if (a instanceof AnnotationExpression) {
-            visit((AnnotationExpression) a);
-        } else if (a instanceof ExpressionStatement) {
-            visit((ExpressionStatement) a);
-        } else if (a instanceof ClassOrInterfaceType) {
-            visit((ClassOrInterfaceType) a);
-        } else if (a instanceof BasicForStatement) {
-            visit((BasicForStatement) a);
-        } else if (a instanceof MethodInvocationExpression) {
-            visit((MethodInvocationExpression) a);
-        } else if (a instanceof ShiftOperatorExpression) {
-            visit((ShiftOperatorExpression) a);
-        } else if (a instanceof SwitchStatement) {
-            visit((SwitchStatement) a);
-        } else if (a instanceof Statement) {
-            visit((Statement) a);
-        } else if (a instanceof StaticOnDemandImportDeclaration) {
-            visit((StaticOnDemandImportDeclaration) a);
-        } else if (a instanceof EmptyStatement) {
-            visit((EmptyStatement) a);
+        } else if (a instanceof SignedExpression) {
+            visit((SignedExpression) a);
         } else if (a instanceof CompilationUnit) {
             visit((CompilationUnit) a);
-        } else if (a instanceof JavadocComment) {
-            visit((JavadocComment) a);
-        } else if (a instanceof ConditionalOrOperatorExpression) {
-            visit((ConditionalOrOperatorExpression) a);
-        } else if (a instanceof ClassExpression) {
-            visit((ClassExpression) a);
+        } else if (a instanceof EnumBody) {
+            visit((EnumBody) a);
+        } else if (a instanceof NormalAnnotationExpression) {
+            visit((NormalAnnotationExpression) a);
         } else if (a instanceof ThrowStatement) {
             visit((ThrowStatement) a);
-        } else if (a instanceof ConstructorDeclaration) {
-            visit((ConstructorDeclaration) a);
-        } else if (a instanceof CatchClause) {
-            visit((CatchClause) a);
-        } else if (a instanceof ArrayCreationExpression) {
-            visit((ArrayCreationExpression) a);
+        } else if (a instanceof SingleElementAnnotationExpression) {
+            visit((SingleElementAnnotationExpression) a);
+        } else if (a instanceof ArrayType) {
+            visit((ArrayType) a);
+        } else if (a instanceof VoidType) {
+            visit((VoidType) a);
+        } else if (a instanceof AnnotationExpression) {
+            visit((AnnotationExpression) a);
+        } else if (a instanceof ClassOrInterfaceType) {
+            visit((ClassOrInterfaceType) a);
+        } else if (a instanceof Statement) {
+            visit((Statement) a);
+        } else if (a instanceof RelationalOperatorExpression) {
+            visit((RelationalOperatorExpression) a);
+        } else if (a instanceof AssignmentOperatorExpression) {
+            visit((AssignmentOperatorExpression) a);
+        } else if (a instanceof Dimension) {
+            visit((Dimension) a);
+        } else if (a instanceof LocalVariableDeclarationExpression) {
+            visit((LocalVariableDeclarationExpression) a);
+        } else if (a instanceof SingleStaticImportDeclaration) {
+            visit((SingleStaticImportDeclaration) a);
+        } else if (a instanceof InclusiveOrOperatorExpression) {
+            visit((InclusiveOrOperatorExpression) a);
         } else if (a instanceof IfNoShortIfStatement) {
             visit((IfNoShortIfStatement) a);
+        } else if (a instanceof SynchronizedStatement) {
+            visit((SynchronizedStatement) a);
+        } else if (a instanceof ExpressionStatement) {
+            visit((ExpressionStatement) a);
+        } else if (a instanceof ConditionalAndOperatorExpression) {
+            visit((ConditionalAndOperatorExpression) a);
+        } else if (a instanceof Resource) {
+            visit((Resource) a);
+        } else if (a instanceof ConstructorDeclaration) {
+            visit((ConstructorDeclaration) a);
+        } else if (a instanceof ArrayCreationExpression) {
+            visit((ArrayCreationExpression) a);
+        } else if (a instanceof TypeBody) {
+            visit((TypeBody) a);
         } else if (a instanceof VariableDeclarator) {
             visit((VariableDeclarator) a);
+        } else if (a instanceof ConditionalOperatorExpression) {
+            visit((ConditionalOperatorExpression) a);
         } else if (a instanceof ReferenceType) {
             visit((ReferenceType) a);
         } else if (a instanceof InitializerDeclaration) {
             visit((InitializerDeclaration) a);
+        } else if (a instanceof FieldAccessExpression) {
+            visit((FieldAccessExpression) a);
+        } else if (a instanceof WhileNoShortIfStatement) {
+            visit((WhileNoShortIfStatement) a);
         } else if (a instanceof BlockStatement) {
             visit((BlockStatement) a);
         } else if (a instanceof Expression) {
@@ -1535,96 +1530,102 @@ public class JavaModelVisitor {
             visit((AdditiveOperatorExpression) a);
         } else if (a instanceof IfStatement) {
             visit((IfStatement) a);
-        } else if (a instanceof FieldAccessExpression) {
-            visit((FieldAccessExpression) a);
+        } else if (a instanceof EnhancedForStatement) {
+            visit((EnhancedForStatement) a);
         } else if (a instanceof ThisExpression) {
             visit((ThisExpression) a);
+        } else if (a instanceof LiteralExpression) {
+            visit((LiteralExpression) a);
+        } else if (a instanceof ImportDeclaration) {
+            visit((ImportDeclaration) a);
         } else if (a instanceof Parameter) {
             visit((Parameter) a);
         } else if (a instanceof ArrayInitializerExpression) {
             visit((ArrayInitializerExpression) a);
-        } else if (a instanceof ClassInstanceCreationExpression) {
-            visit((ClassInstanceCreationExpression) a);
         } else if (a instanceof ElementValue) {
             visit((ElementValue) a);
-        } else if (a instanceof LabeledStatement) {
-            visit((LabeledStatement) a);
+        } else if (a instanceof CastExpression) {
+            visit((CastExpression) a);
+        } else if (a instanceof LabeledNoShortIfStatement) {
+            visit((LabeledNoShortIfStatement) a);
         } else if (a instanceof WildcardType) {
             visit((WildcardType) a);
-        } else if (a instanceof PrefixIncrementExpression) {
-            visit((PrefixIncrementExpression) a);
-        } else if (a instanceof NegatedExpression) {
-            visit((NegatedExpression) a);
+        } else if (a instanceof LabeledStatement) {
+            visit((LabeledStatement) a);
+        } else if (a instanceof SwitchStatement) {
+            visit((SwitchStatement) a);
         } else if (a instanceof TypeParameter) {
             visit((TypeParameter) a);
-        } else if (a instanceof BasicForNoShortIfStatement) {
-            visit((BasicForNoShortIfStatement) a);
-        } else if (a instanceof PostfixIncrementExpression) {
-            visit((PostfixIncrementExpression) a);
-        } else if (a instanceof SingleStaticImportDeclaration) {
-            visit((SingleStaticImportDeclaration) a);
-        } else if (a instanceof DoStatement) {
-            visit((DoStatement) a);
+        } else if (a instanceof TypeOnDemandImportDeclaration) {
+            visit((TypeOnDemandImportDeclaration) a);
+        } else if (a instanceof ParenthesizedExpression) {
+            visit((ParenthesizedExpression) a);
+        } else if (a instanceof ReturnStatement) {
+            visit((ReturnStatement) a);
         } else if (a instanceof ForStatement) {
             visit((ForStatement) a);
+        } else if (a instanceof AssertStatement) {
+            visit((AssertStatement) a);
         } else if (a instanceof Identifier) {
             visit((Identifier) a);
         } else if (a instanceof ArrayAccessExpression) {
             visit((ArrayAccessExpression) a);
+        } else if (a instanceof ContinueStatement) {
+            visit((ContinueStatement) a);
+        } else if (a instanceof SwitchBlockStatementGroup) {
+            visit((SwitchBlockStatementGroup) a);
+        } else if (a instanceof StaticOnDemandImportDeclaration) {
+            visit((StaticOnDemandImportDeclaration) a);
+        } else if (a instanceof ConditionalOrOperatorExpression) {
+            visit((ConditionalOrOperatorExpression) a);
         } else if (a instanceof AndOperatorExpression) {
             visit((AndOperatorExpression) a);
         } else if (a instanceof PrimitiveType) {
             visit((PrimitiveType) a);
-        } else if (a instanceof VoidType) {
-            visit((VoidType) a);
+        } else if (a instanceof ClassExpression) {
+            visit((ClassExpression) a);
+        } else if (a instanceof TypeArguments) {
+            visit((TypeArguments) a);
+        } else if (a instanceof LocalVariableDeclarationStatement) {
+            visit((LocalVariableDeclarationStatement) a);
         } else if (a instanceof QualifiedName) {
             visit((QualifiedName) a);
-        } else if (a instanceof EqualityOperatorExpression) {
-            visit((EqualityOperatorExpression) a);
         } else if (a instanceof VariableDeclaratorId) {
             visit((VariableDeclaratorId) a);
-        } else if (a instanceof RelationalOperatorExpression) {
-            visit((RelationalOperatorExpression) a);
-        } else if (a instanceof ReturnStatement) {
-            visit((ReturnStatement) a);
-        } else if (a instanceof Type) {
-            visit((Type) a);
-        } else if (a instanceof Resource) {
-            visit((Resource) a);
-        } else if (a instanceof TypeOnDemandImportDeclaration) {
-            visit((TypeOnDemandImportDeclaration) a);
-        } else if (a instanceof ExplicitConstructorInvocationStatement) {
-            visit((ExplicitConstructorInvocationStatement) a);
-        } else if (a instanceof BreakStatement) {
-            visit((BreakStatement) a);
-        } else if (a instanceof CastExpression) {
-            visit((CastExpression) a);
         } else if (a instanceof MultiplicativeOperatorExpression) {
             visit((MultiplicativeOperatorExpression) a);
-        } else if (a instanceof AssignmentOperatorExpression) {
-            visit((AssignmentOperatorExpression) a);
+        } else if (a instanceof BasicForNoShortIfStatement) {
+            visit((BasicForNoShortIfStatement) a);
+        } else if (a instanceof Type) {
+            visit((Type) a);
+        } else if (a instanceof SingleTypeImportDeclaration) {
+            visit((SingleTypeImportDeclaration) a);
+        } else if (a instanceof PrefixIncrementExpression) {
+            visit((PrefixIncrementExpression) a);
+        } else if (a instanceof BasicForStatement) {
+            visit((BasicForStatement) a);
+        } else if (a instanceof ShiftOperatorExpression) {
+            visit((ShiftOperatorExpression) a);
+        } else if (a instanceof LocalClassDeclarationStatement) {
+            visit((LocalClassDeclarationStatement) a);
+        } else if (a instanceof ExplicitConstructorInvocationStatement) {
+            visit((ExplicitConstructorInvocationStatement) a);
         } else if (a instanceof MethodDeclaration) {
             visit((MethodDeclaration) a);
         } else if (a instanceof NonWildTypeArguments) {
             visit((NonWildTypeArguments) a);
-        } else if (a instanceof AssertStatement) {
-            visit((AssertStatement) a);
         } else if (a instanceof AnnotationTypeBody) {
             visit((AnnotationTypeBody) a);
-        } else if (a instanceof SwitchBlockStatementGroup) {
-            visit((SwitchBlockStatementGroup) a);
-        } else if (a instanceof TryStatement) {
-            visit((TryStatement) a);
-        } else if (a instanceof ParenthesizedExpression) {
-            visit((ParenthesizedExpression) a);
+        } else if (a instanceof ClassInstanceCreationExpression) {
+            visit((ClassInstanceCreationExpression) a);
         } else if (a instanceof ClassOrInterfaceBody) {
             visit((ClassOrInterfaceBody) a);
-        } else if (a instanceof TypeArguments) {
-            visit((TypeArguments) a);
-        } else if (a instanceof SignedExpression) {
-            visit((SignedExpression) a);
         } else if (a instanceof WhileStatement) {
             visit((WhileStatement) a);
+        } else if (a instanceof BreakStatement) {
+            visit((BreakStatement) a);
+        } else if (a instanceof EqualityOperatorExpression) {
+            visit((EqualityOperatorExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -1875,16 +1876,16 @@ public class JavaModelVisitor {
     public void visit(NoShortIfStatement a) {
         if (a == null) {
             return;
-        } else if (a instanceof BasicForNoShortIfStatement) {
-            visit((BasicForNoShortIfStatement) a);
         } else if (a instanceof StatementWithoutTrailingSubstatement) {
             visit((StatementWithoutTrailingSubstatement) a);
-        } else if (a instanceof LabeledNoShortIfStatement) {
-            visit((LabeledNoShortIfStatement) a);
+        } else if (a instanceof BasicForNoShortIfStatement) {
+            visit((BasicForNoShortIfStatement) a);
         } else if (a instanceof WhileNoShortIfStatement) {
             visit((WhileNoShortIfStatement) a);
         } else if (a instanceof IfNoShortIfStatement) {
             visit((IfNoShortIfStatement) a);
+        } else if (a instanceof LabeledNoShortIfStatement) {
+            visit((LabeledNoShortIfStatement) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -1923,120 +1924,116 @@ public class JavaModelVisitor {
     public void visit(Object a) {
         if (a == null) {
             return;
-        } else if (a instanceof LocalVariableDeclarationStatement) {
-            visit((LocalVariableDeclarationStatement) a);
-        } else if (a instanceof LabeledNoShortIfStatement) {
-            visit((LabeledNoShortIfStatement) a);
-        } else if (a instanceof SynchronizedStatement) {
-            visit((SynchronizedStatement) a);
+        } else if (a instanceof NegatedExpression) {
+            visit((NegatedExpression) a);
+        } else if (a instanceof CatchClause) {
+            visit((CatchClause) a);
         } else if (a instanceof EnumDeclaration) {
             visit((EnumDeclaration) a);
-        } else if (a instanceof LocalVariableDeclarationExpression) {
-            visit((LocalVariableDeclarationExpression) a);
+        } else if (a instanceof ExclusiveOrOperatorExpression) {
+            visit((ExclusiveOrOperatorExpression) a);
+        } else if (a instanceof ElementValuePair) {
+            visit((ElementValuePair) a);
         } else if (a instanceof AnnotationTypeDeclaration) {
             visit((AnnotationTypeDeclaration) a);
+        } else if (a instanceof EmptyStatement) {
+            visit((EmptyStatement) a);
         } else if (a instanceof ClassOrInterfaceDeclaration) {
             visit((ClassOrInterfaceDeclaration) a);
         } else if (a instanceof AnnotationTypeElementDeclaration) {
             visit((AnnotationTypeElementDeclaration) a);
+        } else if (a instanceof JavadocComment) {
+            visit((JavadocComment) a);
         } else if (a instanceof MarkerAnnotationExpression) {
             visit((MarkerAnnotationExpression) a);
-        } else if (a instanceof InclusiveOrOperatorExpression) {
-            visit((InclusiveOrOperatorExpression) a);
-        } else if (a instanceof WhileNoShortIfStatement) {
-            visit((WhileNoShortIfStatement) a);
-        } else if (a instanceof TypeBody) {
-            visit((TypeBody) a);
+        } else if (a instanceof PostfixIncrementExpression) {
+            visit((PostfixIncrementExpression) a);
+        } else if (a instanceof MethodInvocationExpression) {
+            visit((MethodInvocationExpression) a);
+        } else if (a instanceof AdditiveOperator) {
+            visit((AdditiveOperator) a);
+        } else if (a instanceof DoStatement) {
+            visit((DoStatement) a);
+        } else if (a instanceof TryStatement) {
+            visit((TryStatement) a);
         } else if (a instanceof FieldDeclaration) {
             visit((FieldDeclaration) a);
         } else if (a instanceof WhiteSpace) {
             visit((WhiteSpace) a);
         } else if (a instanceof EnumConstantDeclaration) {
             visit((EnumConstantDeclaration) a);
-        } else if (a instanceof LocalClassDeclarationStatement) {
-            visit((LocalClassDeclarationStatement) a);
-        } else if (a instanceof ConditionalAndOperatorExpression) {
-            visit((ConditionalAndOperatorExpression) a);
-        } else if (a instanceof ElementValuePair) {
-            visit((ElementValuePair) a);
-        } else if (a instanceof ContinueStatement) {
-            visit((ContinueStatement) a);
-        } else if (a instanceof ImportDeclaration) {
-            visit((ImportDeclaration) a);
         } else if (a instanceof PackageDeclaration) {
             visit((PackageDeclaration) a);
-        } else if (a instanceof EnumBody) {
-            visit((EnumBody) a);
-        } else if (a instanceof Dimension) {
-            visit((Dimension) a);
-        } else if (a instanceof EnhancedForStatement) {
-            visit((EnhancedForStatement) a);
-        } else if (a instanceof NormalAnnotationExpression) {
-            visit((NormalAnnotationExpression) a);
-        } else if (a instanceof MultiplicativeOperator) {
-            visit((MultiplicativeOperator) a);
-        } else if (a instanceof SingleTypeImportDeclaration) {
-            visit((SingleTypeImportDeclaration) a);
-        } else if (a instanceof ExclusiveOrOperatorExpression) {
-            visit((ExclusiveOrOperatorExpression) a);
-        } else if (a instanceof ConditionalOperatorExpression) {
-            visit((ConditionalOperatorExpression) a);
-        } else if (a instanceof LiteralExpressionType) {
-            visit((LiteralExpressionType) a);
-        } else if (a instanceof ArrayType) {
-            visit((ArrayType) a);
-        } else if (a instanceof SingleElementAnnotationExpression) {
-            visit((SingleElementAnnotationExpression) a);
-        } else if (a instanceof LiteralExpression) {
-            visit((LiteralExpression) a);
-        } else if (a instanceof AdditiveOperator) {
-            visit((AdditiveOperator) a);
-        } else if (a instanceof AnnotationExpression) {
-            visit((AnnotationExpression) a);
-        } else if (a instanceof ExpressionStatement) {
-            visit((ExpressionStatement) a);
-        } else if (a instanceof ClassOrInterfaceType) {
-            visit((ClassOrInterfaceType) a);
-        } else if (a instanceof BasicForStatement) {
-            visit((BasicForStatement) a);
-        } else if (a instanceof ShiftOperatorExpression) {
-            visit((ShiftOperatorExpression) a);
-        } else if (a instanceof MethodInvocationExpression) {
-            visit((MethodInvocationExpression) a);
-        } else if (a instanceof SwitchStatement) {
-            visit((SwitchStatement) a);
-        } else if (a instanceof Statement) {
-            visit((Statement) a);
-        } else if (a instanceof StaticOnDemandImportDeclaration) {
-            visit((StaticOnDemandImportDeclaration) a);
-        } else if (a instanceof EmptyStatement) {
-            visit((EmptyStatement) a);
+        } else if (a instanceof SignedExpression) {
+            visit((SignedExpression) a);
         } else if (a instanceof CompilationUnit) {
             visit((CompilationUnit) a);
-        } else if (a instanceof JavadocComment) {
-            visit((JavadocComment) a);
-        } else if (a instanceof Modifier) {
-            visit((Modifier) a);
-        } else if (a instanceof ConditionalOrOperatorExpression) {
-            visit((ConditionalOrOperatorExpression) a);
-        } else if (a instanceof ClassExpression) {
-            visit((ClassExpression) a);
+        } else if (a instanceof EnumBody) {
+            visit((EnumBody) a);
+        } else if (a instanceof RelationalOperator) {
+            visit((RelationalOperator) a);
+        } else if (a instanceof NormalAnnotationExpression) {
+            visit((NormalAnnotationExpression) a);
+        } else if (a instanceof AssignmentOperator) {
+            visit((AssignmentOperator) a);
         } else if (a instanceof ThrowStatement) {
             visit((ThrowStatement) a);
-        } else if (a instanceof ConstructorDeclaration) {
-            visit((ConstructorDeclaration) a);
-        } else if (a instanceof CatchClause) {
-            visit((CatchClause) a);
-        } else if (a instanceof ArrayCreationExpression) {
-            visit((ArrayCreationExpression) a);
+        } else if (a instanceof SingleElementAnnotationExpression) {
+            visit((SingleElementAnnotationExpression) a);
+        } else if (a instanceof ArrayType) {
+            visit((ArrayType) a);
+        } else if (a instanceof VoidType) {
+            visit((VoidType) a);
+        } else if (a instanceof AnnotationExpression) {
+            visit((AnnotationExpression) a);
+        } else if (a instanceof ClassOrInterfaceType) {
+            visit((ClassOrInterfaceType) a);
+        } else if (a instanceof Statement) {
+            visit((Statement) a);
+        } else if (a instanceof RelationalOperatorExpression) {
+            visit((RelationalOperatorExpression) a);
+        } else if (a instanceof AssignmentOperatorExpression) {
+            visit((AssignmentOperatorExpression) a);
+        } else if (a instanceof Dimension) {
+            visit((Dimension) a);
+        } else if (a instanceof LocalVariableDeclarationExpression) {
+            visit((LocalVariableDeclarationExpression) a);
+        } else if (a instanceof SingleStaticImportDeclaration) {
+            visit((SingleStaticImportDeclaration) a);
+        } else if (a instanceof InclusiveOrOperatorExpression) {
+            visit((InclusiveOrOperatorExpression) a);
         } else if (a instanceof IfNoShortIfStatement) {
             visit((IfNoShortIfStatement) a);
+        } else if (a instanceof Modifier) {
+            visit((Modifier) a);
+        } else if (a instanceof SynchronizedStatement) {
+            visit((SynchronizedStatement) a);
+        } else if (a instanceof ExpressionStatement) {
+            visit((ExpressionStatement) a);
+        } else if (a instanceof ConditionalAndOperatorExpression) {
+            visit((ConditionalAndOperatorExpression) a);
+        } else if (a instanceof Resource) {
+            visit((Resource) a);
+        } else if (a instanceof ConstructorDeclaration) {
+            visit((ConstructorDeclaration) a);
+        } else if (a instanceof ArrayCreationExpression) {
+            visit((ArrayCreationExpression) a);
+        } else if (a instanceof TypeBody) {
+            visit((TypeBody) a);
+        } else if (a instanceof WhiteSpaceType) {
+            visit((WhiteSpaceType) a);
         } else if (a instanceof VariableDeclarator) {
             visit((VariableDeclarator) a);
+        } else if (a instanceof ConditionalOperatorExpression) {
+            visit((ConditionalOperatorExpression) a);
         } else if (a instanceof ReferenceType) {
             visit((ReferenceType) a);
         } else if (a instanceof InitializerDeclaration) {
             visit((InitializerDeclaration) a);
+        } else if (a instanceof FieldAccessExpression) {
+            visit((FieldAccessExpression) a);
+        } else if (a instanceof WhileNoShortIfStatement) {
+            visit((WhileNoShortIfStatement) a);
         } else if (a instanceof BlockStatement) {
             visit((BlockStatement) a);
         } else if (a instanceof Expression) {
@@ -2047,108 +2044,112 @@ public class JavaModelVisitor {
             visit((AdditiveOperatorExpression) a);
         } else if (a instanceof IfStatement) {
             visit((IfStatement) a);
-        } else if (a instanceof FieldAccessExpression) {
-            visit((FieldAccessExpression) a);
+        } else if (a instanceof ShiftOperator) {
+            visit((ShiftOperator) a);
+        } else if (a instanceof EnhancedForStatement) {
+            visit((EnhancedForStatement) a);
         } else if (a instanceof ThisExpression) {
             visit((ThisExpression) a);
+        } else if (a instanceof LiteralExpression) {
+            visit((LiteralExpression) a);
+        } else if (a instanceof ImportDeclaration) {
+            visit((ImportDeclaration) a);
         } else if (a instanceof Parameter) {
             visit((Parameter) a);
         } else if (a instanceof ArrayInitializerExpression) {
             visit((ArrayInitializerExpression) a);
-        } else if (a instanceof ClassInstanceCreationExpression) {
-            visit((ClassInstanceCreationExpression) a);
         } else if (a instanceof ElementValue) {
             visit((ElementValue) a);
-        } else if (a instanceof ShiftOperator) {
-            visit((ShiftOperator) a);
-        } else if (a instanceof LabeledStatement) {
-            visit((LabeledStatement) a);
-        } else if (a instanceof WildcardType) {
-            visit((WildcardType) a);
-        } else if (a instanceof PrefixIncrementExpression) {
-            visit((PrefixIncrementExpression) a);
-        } else if (a instanceof NegatedExpression) {
-            visit((NegatedExpression) a);
-        } else if (a instanceof TypeParameter) {
-            visit((TypeParameter) a);
-        } else if (a instanceof BasicForNoShortIfStatement) {
-            visit((BasicForNoShortIfStatement) a);
-        } else if (a instanceof PostfixIncrementExpression) {
-            visit((PostfixIncrementExpression) a);
-        } else if (a instanceof SingleStaticImportDeclaration) {
-            visit((SingleStaticImportDeclaration) a);
-        } else if (a instanceof DoStatement) {
-            visit((DoStatement) a);
-        } else if (a instanceof ForStatement) {
-            visit((ForStatement) a);
+        } else if (a instanceof CastExpression) {
+            visit((CastExpression) a);
         } else if (a instanceof EqualityOperator) {
             visit((EqualityOperator) a);
+        } else if (a instanceof LiteralExpressionType) {
+            visit((LiteralExpressionType) a);
+        } else if (a instanceof LabeledNoShortIfStatement) {
+            visit((LabeledNoShortIfStatement) a);
+        } else if (a instanceof WildcardType) {
+            visit((WildcardType) a);
+        } else if (a instanceof LabeledStatement) {
+            visit((LabeledStatement) a);
+        } else if (a instanceof SwitchStatement) {
+            visit((SwitchStatement) a);
+        } else if (a instanceof TypeParameter) {
+            visit((TypeParameter) a);
+        } else if (a instanceof TypeOnDemandImportDeclaration) {
+            visit((TypeOnDemandImportDeclaration) a);
+        } else if (a instanceof ParenthesizedExpression) {
+            visit((ParenthesizedExpression) a);
+        } else if (a instanceof ReturnStatement) {
+            visit((ReturnStatement) a);
+        } else if (a instanceof ForStatement) {
+            visit((ForStatement) a);
+        } else if (a instanceof AssertStatement) {
+            visit((AssertStatement) a);
         } else if (a instanceof Identifier) {
             visit((Identifier) a);
         } else if (a instanceof ArrayAccessExpression) {
             visit((ArrayAccessExpression) a);
+        } else if (a instanceof ContinueStatement) {
+            visit((ContinueStatement) a);
+        } else if (a instanceof SwitchBlockStatementGroup) {
+            visit((SwitchBlockStatementGroup) a);
+        } else if (a instanceof StaticOnDemandImportDeclaration) {
+            visit((StaticOnDemandImportDeclaration) a);
+        } else if (a instanceof ConditionalOrOperatorExpression) {
+            visit((ConditionalOrOperatorExpression) a);
         } else if (a instanceof AndOperatorExpression) {
             visit((AndOperatorExpression) a);
         } else if (a instanceof PrimitiveType) {
             visit((PrimitiveType) a);
-        } else if (a instanceof VoidType) {
-            visit((VoidType) a);
-        } else if (a instanceof AssignmentOperator) {
-            visit((AssignmentOperator) a);
-        } else if (a instanceof RelationalOperator) {
-            visit((RelationalOperator) a);
-        } else if (a instanceof QualifiedName) {
-            visit((QualifiedName) a);
-        } else if (a instanceof EqualityOperatorExpression) {
-            visit((EqualityOperatorExpression) a);
-        } else if (a instanceof VariableDeclaratorId) {
-            visit((VariableDeclaratorId) a);
-        } else if (a instanceof RelationalOperatorExpression) {
-            visit((RelationalOperatorExpression) a);
-        } else if (a instanceof ReturnStatement) {
-            visit((ReturnStatement) a);
-        } else if (a instanceof Type) {
-            visit((Type) a);
-        } else if (a instanceof TypeOnDemandImportDeclaration) {
-            visit((TypeOnDemandImportDeclaration) a);
-        } else if (a instanceof Resource) {
-            visit((Resource) a);
-        } else if (a instanceof Primitive) {
-            visit((Primitive) a);
-        } else if (a instanceof ExplicitConstructorInvocationStatement) {
-            visit((ExplicitConstructorInvocationStatement) a);
-        } else if (a instanceof BreakStatement) {
-            visit((BreakStatement) a);
-        } else if (a instanceof CastExpression) {
-            visit((CastExpression) a);
-        } else if (a instanceof MultiplicativeOperatorExpression) {
-            visit((MultiplicativeOperatorExpression) a);
-        } else if (a instanceof MethodDeclaration) {
-            visit((MethodDeclaration) a);
-        } else if (a instanceof AssignmentOperatorExpression) {
-            visit((AssignmentOperatorExpression) a);
-        } else if (a instanceof NonWildTypeArguments) {
-            visit((NonWildTypeArguments) a);
-        } else if (a instanceof AssertStatement) {
-            visit((AssertStatement) a);
-        } else if (a instanceof AnnotationTypeBody) {
-            visit((AnnotationTypeBody) a);
-        } else if (a instanceof WhiteSpaceType) {
-            visit((WhiteSpaceType) a);
-        } else if (a instanceof SwitchBlockStatementGroup) {
-            visit((SwitchBlockStatementGroup) a);
-        } else if (a instanceof TryStatement) {
-            visit((TryStatement) a);
-        } else if (a instanceof ParenthesizedExpression) {
-            visit((ParenthesizedExpression) a);
-        } else if (a instanceof ClassOrInterfaceBody) {
-            visit((ClassOrInterfaceBody) a);
+        } else if (a instanceof ClassExpression) {
+            visit((ClassExpression) a);
+        } else if (a instanceof MultiplicativeOperator) {
+            visit((MultiplicativeOperator) a);
         } else if (a instanceof TypeArguments) {
             visit((TypeArguments) a);
-        } else if (a instanceof SignedExpression) {
-            visit((SignedExpression) a);
+        } else if (a instanceof LocalVariableDeclarationStatement) {
+            visit((LocalVariableDeclarationStatement) a);
+        } else if (a instanceof QualifiedName) {
+            visit((QualifiedName) a);
+        } else if (a instanceof VariableDeclaratorId) {
+            visit((VariableDeclaratorId) a);
+        } else if (a instanceof MultiplicativeOperatorExpression) {
+            visit((MultiplicativeOperatorExpression) a);
+        } else if (a instanceof BasicForNoShortIfStatement) {
+            visit((BasicForNoShortIfStatement) a);
+        } else if (a instanceof Type) {
+            visit((Type) a);
+        } else if (a instanceof SingleTypeImportDeclaration) {
+            visit((SingleTypeImportDeclaration) a);
+        } else if (a instanceof PrefixIncrementExpression) {
+            visit((PrefixIncrementExpression) a);
+        } else if (a instanceof BasicForStatement) {
+            visit((BasicForStatement) a);
+        } else if (a instanceof ShiftOperatorExpression) {
+            visit((ShiftOperatorExpression) a);
+        } else if (a instanceof ExplicitConstructorInvocationStatement) {
+            visit((ExplicitConstructorInvocationStatement) a);
+        } else if (a instanceof LocalClassDeclarationStatement) {
+            visit((LocalClassDeclarationStatement) a);
+        } else if (a instanceof MethodDeclaration) {
+            visit((MethodDeclaration) a);
+        } else if (a instanceof NonWildTypeArguments) {
+            visit((NonWildTypeArguments) a);
+        } else if (a instanceof AnnotationTypeBody) {
+            visit((AnnotationTypeBody) a);
+        } else if (a instanceof Primitive) {
+            visit((Primitive) a);
+        } else if (a instanceof ClassInstanceCreationExpression) {
+            visit((ClassInstanceCreationExpression) a);
+        } else if (a instanceof ClassOrInterfaceBody) {
+            visit((ClassOrInterfaceBody) a);
         } else if (a instanceof WhileStatement) {
             visit((WhileStatement) a);
+        } else if (a instanceof BreakStatement) {
+            visit((BreakStatement) a);
+        } else if (a instanceof EqualityOperatorExpression) {
+            visit((EqualityOperatorExpression) a);
         }
         Object o = null;
     }
@@ -2205,10 +2206,10 @@ public class JavaModelVisitor {
     public void visit(PostfixExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof PostfixIncrementExpression) {
-            visit((PostfixIncrementExpression) a);
         } else if (a instanceof PrimaryExpression) {
             visit((PrimaryExpression) a);
+        } else if (a instanceof PostfixIncrementExpression) {
+            visit((PostfixIncrementExpression) a);
         } else if (a instanceof QualifiedName) {
             visit((QualifiedName) a);
         } else {
@@ -2251,22 +2252,22 @@ public class JavaModelVisitor {
     public void visit(PrimaryNoNewArrayExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof ParenthesizedExpression) {
-            visit((ParenthesizedExpression) a);
-        } else if (a instanceof MethodInvocationExpression) {
-            visit((MethodInvocationExpression) a);
-        } else if (a instanceof FieldAccessExpression) {
-            visit((FieldAccessExpression) a);
-        } else if (a instanceof ClassExpression) {
-            visit((ClassExpression) a);
-        } else if (a instanceof ThisExpression) {
-            visit((ThisExpression) a);
         } else if (a instanceof ClassInstanceCreationExpression) {
             visit((ClassInstanceCreationExpression) a);
+        } else if (a instanceof ClassExpression) {
+            visit((ClassExpression) a);
         } else if (a instanceof LiteralExpression) {
             visit((LiteralExpression) a);
+        } else if (a instanceof ThisExpression) {
+            visit((ThisExpression) a);
+        } else if (a instanceof FieldAccessExpression) {
+            visit((FieldAccessExpression) a);
+        } else if (a instanceof ParenthesizedExpression) {
+            visit((ParenthesizedExpression) a);
         } else if (a instanceof ArrayAccessExpression) {
             visit((ArrayAccessExpression) a);
+        } else if (a instanceof MethodInvocationExpression) {
+            visit((MethodInvocationExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -2315,10 +2316,10 @@ public class JavaModelVisitor {
     public void visit(RelationalExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof ShiftExpression) {
-            visit((ShiftExpression) a);
         } else if (a instanceof RelationalOperatorExpression) {
             visit((RelationalOperatorExpression) a);
+        } else if (a instanceof ShiftExpression) {
+            visit((ShiftExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -2386,10 +2387,10 @@ public class JavaModelVisitor {
     public void visit(ShiftExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof ShiftOperatorExpression) {
-            visit((ShiftOperatorExpression) a);
         } else if (a instanceof AdditiveExpression) {
             visit((AdditiveExpression) a);
+        } else if (a instanceof ShiftOperatorExpression) {
+            visit((ShiftOperatorExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -2469,56 +2470,74 @@ public class JavaModelVisitor {
     public void visit(Statement a) {
         if (a == null) {
             return;
-        } else if (a instanceof ReturnStatement) {
-            visit((ReturnStatement) a);
-        } else if (a instanceof LocalVariableDeclarationStatement) {
-            visit((LocalVariableDeclarationStatement) a);
-        } else if (a instanceof LabeledNoShortIfStatement) {
-            visit((LabeledNoShortIfStatement) a);
-        } else if (a instanceof SynchronizedStatement) {
-            visit((SynchronizedStatement) a);
-        } else if (a instanceof BlockStatement) {
-            visit((BlockStatement) a);
-        } else if (a instanceof ExpressionStatement) {
-            visit((ExpressionStatement) a);
-        } else if (a instanceof BasicForStatement) {
-            visit((BasicForStatement) a);
-        } else if (a instanceof IfStatement) {
-            visit((IfStatement) a);
-        } else if (a instanceof SwitchStatement) {
-            visit((SwitchStatement) a);
-        } else if (a instanceof LabeledStatement) {
-            visit((LabeledStatement) a);
         } else if (a instanceof BasicForNoShortIfStatement) {
             visit((BasicForNoShortIfStatement) a);
-        } else if (a instanceof ExplicitConstructorInvocationStatement) {
-            visit((ExplicitConstructorInvocationStatement) a);
-        } else if (a instanceof BreakStatement) {
-            visit((BreakStatement) a);
         } else if (a instanceof WhileNoShortIfStatement) {
             visit((WhileNoShortIfStatement) a);
-        } else if (a instanceof DoStatement) {
-            visit((DoStatement) a);
+        } else if (a instanceof BlockStatement) {
+            visit((BlockStatement) a);
+        } else if (a instanceof IfStatement) {
+            visit((IfStatement) a);
         } else if (a instanceof EmptyStatement) {
             visit((EmptyStatement) a);
-        } else if (a instanceof LocalClassDeclarationStatement) {
-            visit((LocalClassDeclarationStatement) a);
-        } else if (a instanceof ForStatement) {
-            visit((ForStatement) a);
-        } else if (a instanceof ContinueStatement) {
-            visit((ContinueStatement) a);
-        } else if (a instanceof AssertStatement) {
-            visit((AssertStatement) a);
-        } else if (a instanceof TryStatement) {
-            visit((TryStatement) a);
         } else if (a instanceof EnhancedForStatement) {
             visit((EnhancedForStatement) a);
-        } else if (a instanceof ThrowStatement) {
-            visit((ThrowStatement) a);
-        } else if (a instanceof WhileStatement) {
-            visit((WhileStatement) a);
+        } else if (a instanceof BasicForStatement) {
+            visit((BasicForStatement) a);
+        } else if (a instanceof LabeledStatement) {
+            visit((LabeledStatement) a);
+        } else if (a instanceof LabeledNoShortIfStatement) {
+            visit((LabeledNoShortIfStatement) a);
+        } else if (a instanceof SwitchStatement) {
+            visit((SwitchStatement) a);
+        } else if (a instanceof LocalClassDeclarationStatement) {
+            visit((LocalClassDeclarationStatement) a);
+        } else if (a instanceof ExplicitConstructorInvocationStatement) {
+            visit((ExplicitConstructorInvocationStatement) a);
+        } else if (a instanceof DoStatement) {
+            visit((DoStatement) a);
+        } else if (a instanceof TryStatement) {
+            visit((TryStatement) a);
         } else if (a instanceof IfNoShortIfStatement) {
             visit((IfNoShortIfStatement) a);
+        } else if (a instanceof ReturnStatement) {
+            visit((ReturnStatement) a);
+        } else if (a instanceof ForStatement) {
+            visit((ForStatement) a);
+        } else if (a instanceof AssertStatement) {
+            visit((AssertStatement) a);
+        } else if (a instanceof ContinueStatement) {
+            visit((ContinueStatement) a);
+        } else if (a instanceof SynchronizedStatement) {
+            visit((SynchronizedStatement) a);
+        } else if (a instanceof ExpressionStatement) {
+            visit((ExpressionStatement) a);
+        } else if (a instanceof WhileStatement) {
+            visit((WhileStatement) a);
+        } else if (a instanceof LocalVariableDeclarationStatement) {
+            visit((LocalVariableDeclarationStatement) a);
+        } else if (a instanceof BreakStatement) {
+            visit((BreakStatement) a);
+        } else if (a instanceof ThrowStatement) {
+            visit((ThrowStatement) a);
+        } else {
+            throw new RuntimeException("Unknown type: " + a.getClass());
+        }
+    }
+
+    public void visit(StatementExpression a) {
+        if (a == null) {
+            return;
+        } else if (a instanceof ClassInstanceCreationExpression) {
+            visit((ClassInstanceCreationExpression) a);
+        } else if (a instanceof AssignmentOperatorExpression) {
+            visit((AssignmentOperatorExpression) a);
+        } else if (a instanceof PrefixIncrementExpression) {
+            visit((PrefixIncrementExpression) a);
+        } else if (a instanceof PostfixIncrementExpression) {
+            visit((PostfixIncrementExpression) a);
+        } else if (a instanceof MethodInvocationExpression) {
+            visit((MethodInvocationExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -2527,28 +2546,28 @@ public class JavaModelVisitor {
     public void visit(StatementWithoutTrailingSubstatement a) {
         if (a == null) {
             return;
-        } else if (a instanceof ReturnStatement) {
-            visit((ReturnStatement) a);
-        } else if (a instanceof SwitchStatement) {
-            visit((SwitchStatement) a);
-        } else if (a instanceof BreakStatement) {
-            visit((BreakStatement) a);
-        } else if (a instanceof ThrowStatement) {
-            visit((ThrowStatement) a);
-        } else if (a instanceof DoStatement) {
-            visit((DoStatement) a);
-        } else if (a instanceof SynchronizedStatement) {
-            visit((SynchronizedStatement) a);
+        } else if (a instanceof ExpressionStatement) {
+            visit((ExpressionStatement) a);
         } else if (a instanceof EmptyStatement) {
             visit((EmptyStatement) a);
+        } else if (a instanceof DoStatement) {
+            visit((DoStatement) a);
+        } else if (a instanceof ReturnStatement) {
+            visit((ReturnStatement) a);
         } else if (a instanceof BlockStatement) {
             visit((BlockStatement) a);
+        } else if (a instanceof BreakStatement) {
+            visit((BreakStatement) a);
         } else if (a instanceof AssertStatement) {
             visit((AssertStatement) a);
         } else if (a instanceof ContinueStatement) {
             visit((ContinueStatement) a);
-        } else if (a instanceof ExpressionStatement) {
-            visit((ExpressionStatement) a);
+        } else if (a instanceof SwitchStatement) {
+            visit((SwitchStatement) a);
+        } else if (a instanceof SynchronizedStatement) {
+            visit((SynchronizedStatement) a);
+        } else if (a instanceof ThrowStatement) {
+            visit((ThrowStatement) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -2666,12 +2685,12 @@ public class JavaModelVisitor {
             visit((PrimitiveType) a);
         } else if (a instanceof ReferenceType) {
             visit((ReferenceType) a);
+        } else if (a instanceof ArrayType) {
+            visit((ArrayType) a);
         } else if (a instanceof VoidType) {
             visit((VoidType) a);
         } else if (a instanceof WildcardType) {
             visit((WildcardType) a);
-        } else if (a instanceof ArrayType) {
-            visit((ArrayType) a);
         } else if (a instanceof ClassOrInterfaceType) {
             visit((ClassOrInterfaceType) a);
         } else {
@@ -2753,12 +2772,12 @@ public class JavaModelVisitor {
     public void visit(UnaryExpression a) {
         if (a == null) {
             return;
-        } else if (a instanceof SignedExpression) {
-            visit((SignedExpression) a);
-        } else if (a instanceof UnaryNotPlusMinusExpression) {
-            visit((UnaryNotPlusMinusExpression) a);
         } else if (a instanceof PrefixIncrementExpression) {
             visit((PrefixIncrementExpression) a);
+        } else if (a instanceof UnaryNotPlusMinusExpression) {
+            visit((UnaryNotPlusMinusExpression) a);
+        } else if (a instanceof SignedExpression) {
+            visit((SignedExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }
@@ -2769,10 +2788,10 @@ public class JavaModelVisitor {
             return;
         } else if (a instanceof PostfixExpression) {
             visit((PostfixExpression) a);
-        } else if (a instanceof CastExpression) {
-            visit((CastExpression) a);
         } else if (a instanceof NegatedExpression) {
             visit((NegatedExpression) a);
+        } else if (a instanceof CastExpression) {
+            visit((CastExpression) a);
         } else {
             throw new RuntimeException("Unknown type: " + a.getClass());
         }

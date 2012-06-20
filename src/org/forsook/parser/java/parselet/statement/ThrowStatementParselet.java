@@ -20,6 +20,10 @@ public class ThrowStatementParselet extends StatementParselet<ThrowStatement> {
         if (!parser.peekPresentAndSkip("throw")) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression?
@@ -33,6 +37,8 @@ public class ThrowStatementParselet extends StatementParselet<ThrowStatement> {
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new ThrowStatement(expression);
     }
 }

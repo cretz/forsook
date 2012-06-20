@@ -26,6 +26,10 @@ public class AnnotationTypeDeclarationParselet
     
     @Override
     public AnnotationTypeDeclaration parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead("@interface")) {
+            return null;
+        }
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         List<Modifier> modifiers = new ArrayList<Modifier>();
@@ -38,6 +42,8 @@ public class AnnotationTypeDeclarationParselet
         if (!parser.peekPresentAndSkip("@interface")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //some spacing required
         if (parseWhiteSpaceAndComments(parser).isEmpty()) {
             return null;

@@ -150,7 +150,11 @@ public class JavaSourceWriter {
         private void visitBlockOrIndentedStatement(Statement statement) {
             if (!(statement instanceof BlockStatement)) {
                 builder.append(newline);
-                indent();
+                statementDepth++;
+            }
+            visit(statement);
+            if (!(statement instanceof BlockStatement)) {
+                statementDepth--;
             }
         }
         
@@ -259,7 +263,7 @@ public class JavaSourceWriter {
             visit(a.getCondition());
             if (a.getMessage() != null) {
                 builder.append(" : ");
-                builder.append(a.getMessage());
+                visit(a.getMessage());
             }
             builder.append(';');
         }
@@ -282,7 +286,10 @@ public class JavaSourceWriter {
                 visit(a.getCompare());
             }
             builder.append(';');
-            visitSeparated(a.getUpdate(), ", ");
+            if (a.getUpdate() != null && !a.getUpdate().isEmpty()) {
+                builder.append(' ');
+                visitSeparated(a.getUpdate(), ", ");
+            }
             builder.append(") ");
             visitBlockOrIndentedStatement(a.getBody());
         }
@@ -507,7 +514,12 @@ public class JavaSourceWriter {
             indent();
             builder.append("do ");
             visitBlockOrIndentedStatement(a.getStatement());
-            builder.append(" while (");
+            if (a.getStatement() instanceof BlockStatement) {
+                builder.append(' ');
+            } else {
+                builder.append(newline);
+            }
+            builder.append("while (");
             visit(a.getCondition());
             builder.append(");");
         }
@@ -520,7 +532,7 @@ public class JavaSourceWriter {
         @Override
         public void visit(EmptyStatement a) {
             indent();
-            builder.append(';').append(newline);
+            builder.append(';');
         }
 
         @Override
@@ -713,7 +725,7 @@ public class JavaSourceWriter {
         @Override
         public void visit(LabeledStatement a) {
             visit(a.getIdentifier());
-            builder.append(" : ");
+            builder.append(": ");
             visit(a.getStatement());
         }
 
@@ -1044,7 +1056,6 @@ public class JavaSourceWriter {
             builder.append("try ");
             visit(a.getTryBlock());
             if (a.getCatchClauses() != null && !a.getCatchClauses().isEmpty()) {
-                builder.append(' ');
                 visitSeparated(a.getCatchClauses(), " ");
             }
             if (a.getFinallyBlock() != null) {
@@ -1080,7 +1091,7 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(TypeParameter a) {
-            builder.append(a.getName());
+            visit(a.getName());
             if (a.getTypesBound() != null && !a.getTypesBound().isEmpty()) {
                 builder.append(" extends ");
                 visitSeparated(a.getTypesBound(), " & ");

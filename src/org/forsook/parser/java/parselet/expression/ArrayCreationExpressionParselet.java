@@ -33,6 +33,10 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
         if (!parser.peekPresentAndSkip("new")) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('[')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //type
@@ -51,6 +55,12 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
             if (!parser.peekPresentAndSkip('[')) {
                 break;
             }
+            //pop lookahead
+            parser.popLookAhead();
+            //lookahead
+            if (!parser.pushLookAhead(']')) {
+                return null;
+            }
             //spacing
             parseWhiteSpaceAndComments(parser);
             //expression
@@ -68,6 +78,8 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
             if (!parser.peekPresentAndSkip(']')) {
                 return null;
             }
+            //pop lookahead
+            parser.popLookAhead();
             dimensions.add(new Dimension(expression));
         } while (true);
         if (dimensions.isEmpty()) {

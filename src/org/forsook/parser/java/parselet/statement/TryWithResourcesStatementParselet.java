@@ -32,6 +32,10 @@ public class TryWithResourcesStatementParselet extends TryStatementParselet {
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //resources
         List<Resource> resources = new ArrayList<Resource>();
         do {
@@ -50,6 +54,8 @@ public class TryWithResourcesStatementParselet extends TryStatementParselet {
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //try block

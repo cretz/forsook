@@ -22,6 +22,10 @@ public class SingleElementAnnotationParselet
         if (!parser.peekPresentAndSkip('@')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('(')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //name
@@ -30,6 +34,12 @@ public class SingleElementAnnotationParselet
         parseWhiteSpaceAndComments(parser);
         //parentheses
         if (!parser.peekPresentAndSkip('(')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
             return null;
         }
         //spacing
@@ -45,8 +55,8 @@ public class SingleElementAnnotationParselet
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new SingleElementAnnotationExpression(name, value);
-    }
-
-    
+    }    
 }

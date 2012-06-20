@@ -26,6 +26,10 @@ public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclara
     
     @Override
     public EnumDeclaration parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead("enum")) {
+            return null;
+        }
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         List<Modifier> modifiers = new ArrayList<Modifier>();
@@ -39,6 +43,8 @@ public class EnumDeclarationParselet extends TypeDeclarationParselet<EnumDeclara
         if (!parser.peekPresentAndSkip("enum")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //some spacing required
         if (parseWhiteSpaceAndComments(parser).isEmpty()) {
             return null;

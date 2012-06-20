@@ -5,11 +5,12 @@ import java.util.List;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.decl.NonWildTypeArguments;
 import org.forsook.parser.java.ast.name.QualifiedName;
+import org.forsook.parser.java.ast.statement.StatementExpression;
 
 @JlsReference("15.12")
 @SuppressWarnings("serial")
 public class MethodInvocationExpression extends Expression
-        implements PrimaryNoNewArrayExpression {
+        implements PrimaryNoNewArrayExpression, StatementExpression {
 
     private Expression scope;
     private QualifiedName className;

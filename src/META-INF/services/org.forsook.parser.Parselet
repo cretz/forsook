@@ -123,6 +123,7 @@ org.forsook.parser.java.parselet.statement.NoShortIfStatementParselet
 org.forsook.parser.java.parselet.statement.ResourceParselet
 org.forsook.parser.java.parselet.statement.ReturnStatementParselet
 org.forsook.parser.java.parselet.statement.StatementParselet
+org.forsook.parser.java.parselet.statement.StatementExpressionParselet
 org.forsook.parser.java.parselet.statement.StatementWithoutTrailingSubstatementParselet
 org.forsook.parser.java.parselet.statement.SwitchBlockStatementGroupParselet
 org.forsook.parser.java.parselet.statement.SwitchStatementParselet

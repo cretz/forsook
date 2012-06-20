@@ -21,6 +21,10 @@ public class DoStatementParselet extends StatementParselet<DoStatement> {
         if (!parser.peekPresentAndSkip("do")) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead("while")) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //statement
@@ -34,10 +38,16 @@ public class DoStatementParselet extends StatementParselet<DoStatement> {
         if (!parser.peekPresentAndSkip("while")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //parentheses
         if (!parser.peekPresentAndSkip('(')) {
+            return null;
+        }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
             return null;
         }
         //spacing
@@ -53,6 +63,8 @@ public class DoStatementParselet extends StatementParselet<DoStatement> {
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //semicolon

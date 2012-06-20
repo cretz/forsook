@@ -31,6 +31,10 @@ public class EnhancedForStatementParselet extends ForStatementParselet<EnhancedF
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(':')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //var
@@ -40,6 +44,12 @@ public class EnhancedForStatementParselet extends ForStatementParselet<EnhancedF
         parseWhiteSpaceAndComments(parser);
         //colon
         if (!parser.peekPresentAndSkip(':')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
             return null;
         }
         //spacing
@@ -52,6 +62,8 @@ public class EnhancedForStatementParselet extends ForStatementParselet<EnhancedF
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //body

@@ -26,6 +26,10 @@ public class AnnotationTypeElementDeclarationParselet
 
     @Override
     public AnnotationTypeElementDeclaration parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead('(')) {
+            return null;
+        }
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         List<Modifier> modifiers = new ArrayList<Modifier>();
@@ -50,6 +54,12 @@ public class AnnotationTypeElementDeclarationParselet
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
+            return null;
+        }
         parseWhiteSpaceAndComments(parser);
         //parentheses
         if (!parser.peekPresentAndSkip(')')) {
@@ -71,6 +81,8 @@ public class AnnotationTypeElementDeclarationParselet
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new AnnotationTypeElementDeclaration(javadoc.get(), annotations, 
                 modifiers, type, name, defaultValue);
     }

@@ -24,6 +24,10 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
 
     @Override
     public FieldDeclaration parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
+            return null;
+        }
         //annotations, javadoc, and modifiers
         List<AnnotationExpression> annotations = new ArrayList<AnnotationExpression>();
         List<Modifier> modifiers = new ArrayList<Modifier>();
@@ -55,6 +59,8 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new FieldDeclaration(javadoc.get(), annotations, modifiers, type, variables);
     }
 

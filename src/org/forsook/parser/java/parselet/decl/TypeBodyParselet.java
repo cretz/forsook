@@ -14,8 +14,14 @@ public abstract class TypeBodyParselet<T extends TypeBody> extends JavaParselet<
     protected List<BodyDeclaration> parseTypeMembers(Parser parser, boolean checkBraces,
             Class<? extends BodyDeclaration>... classes) {
         //brace
-        if (checkBraces && !parser.peekPresentAndSkip('{')) {
-            return null;
+        if (checkBraces) {
+            if (!parser.peekPresentAndSkip('{')) {
+                return null;
+            }
+            //lookahead
+            if (!parser.pushLookAhead('}')) {
+                return null;
+            }
         }
         //members
         List<BodyDeclaration> members = new ArrayList<BodyDeclaration>();
@@ -34,8 +40,12 @@ public abstract class TypeBodyParselet<T extends TypeBody> extends JavaParselet<
             }
         } while (true);
         //brace
-        if (checkBraces && !parser.peekPresentAndSkip('}')) {
-            return null;
+        if (checkBraces) {
+            if (!parser.peekPresentAndSkip('}')) {
+                return null;
+            }
+            //pop lookahead
+            parser.popLookAhead();
         }
         return members;
     }

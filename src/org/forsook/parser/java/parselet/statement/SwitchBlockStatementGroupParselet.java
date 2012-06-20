@@ -37,6 +37,8 @@ public class SwitchBlockStatementGroupParselet extends JavaParselet<SwitchBlockS
             if (parser.peekPresentAndSkip("default")) {
                 defaultPresent = true;
             } else if (parser.peekPresentAndSkip("case")) {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
                 //identifier?
                 Identifier enumName = parser.next(Identifier.class);
                 if (enumName != null) {

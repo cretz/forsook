@@ -1,10 +1,11 @@
 package org.forsook.parser.java.ast.expression;
 
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.statement.StatementExpression;
 
 @JlsReference("15.26")
 @SuppressWarnings("serial")
-public class AssignmentOperatorExpression extends Expression {
+public class AssignmentOperatorExpression extends Expression implements StatementExpression {
 
     private Expression left;
     private AssignmentOperator operator;

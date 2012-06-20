@@ -20,6 +20,10 @@ public class ReturnStatementParselet extends StatementParselet<ReturnStatement> 
         if (!parser.peekPresentAndSkip("return")) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(';')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression?
@@ -32,6 +36,8 @@ public class ReturnStatementParselet extends StatementParselet<ReturnStatement> 
         if (!parser.peekPresentAndSkip(';')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new ReturnStatement(expression);
     }
 }

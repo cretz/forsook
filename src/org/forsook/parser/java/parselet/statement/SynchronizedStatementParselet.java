@@ -27,6 +27,10 @@ public class SynchronizedStatementParselet extends StatementParselet<Synchronize
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression
@@ -36,6 +40,12 @@ public class SynchronizedStatementParselet extends StatementParselet<Synchronize
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
+        //parentheses
+        if (!parser.peekPresentAndSkip(')')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
         //block
         BlockStatement block = parser.next(BlockStatement.class);
         if (block == null) {

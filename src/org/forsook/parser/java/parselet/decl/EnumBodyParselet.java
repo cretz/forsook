@@ -41,6 +41,10 @@ public class EnumBodyParselet extends TypeBodyParselet<EnumBody> {
         if (!parser.peekPresentAndSkip('{')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('}')) {
+            return null;
+        }
         List<EnumConstantDeclaration> constants = new ArrayList<EnumConstantDeclaration>();
         do {
             //don't want to grab spacing here that could gobble up javadoc
@@ -65,6 +69,14 @@ public class EnumBodyParselet extends TypeBodyParselet<EnumBody> {
                     InitializerDeclaration.class
                 ));
         }
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //brace
+        if (!parser.peekPresentAndSkip('}')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
         return new EnumBody(constants, members);
     }
 

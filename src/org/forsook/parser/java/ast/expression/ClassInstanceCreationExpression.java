@@ -5,12 +5,13 @@ import java.util.List;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceBody;
 import org.forsook.parser.java.ast.name.QualifiedName;
+import org.forsook.parser.java.ast.statement.StatementExpression;
 import org.forsook.parser.java.ast.type.TypeArguments;
 
 @JlsReference("15.9")
 @SuppressWarnings("serial")
-public class ClassInstanceCreationExpression 
-        extends Expression implements PrimaryNoNewArrayExpression {
+public class ClassInstanceCreationExpression extends Expression 
+        implements PrimaryNoNewArrayExpression, StatementExpression {
 
     private Expression scope;
     private TypeArguments preTypeArguments;

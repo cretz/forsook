@@ -30,6 +30,10 @@ public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //type
@@ -43,6 +47,8 @@ public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression

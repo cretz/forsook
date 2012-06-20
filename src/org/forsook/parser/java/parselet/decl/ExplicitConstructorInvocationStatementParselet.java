@@ -27,6 +27,10 @@ public class ExplicitConstructorInvocationStatementParselet
 
     @Override
     public ExplicitConstructorInvocationStatement parse(Parser parser) {
+        //lookahead
+        if (!parser.pushLookAhead('(')) {
+            return null;
+        }
         //scope
         Expression scope = (Expression) parser.next(PrimaryExpression.class);
         if (scope != null) {
@@ -56,6 +60,12 @@ public class ExplicitConstructorInvocationStatementParselet
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //arguments
@@ -80,6 +90,8 @@ public class ExplicitConstructorInvocationStatementParselet
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //semicolon

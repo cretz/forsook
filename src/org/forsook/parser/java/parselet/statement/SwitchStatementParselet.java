@@ -30,6 +30,10 @@ public class SwitchStatementParselet extends StatementParselet<SwitchStatement> 
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //selector
@@ -43,10 +47,16 @@ public class SwitchStatementParselet extends StatementParselet<SwitchStatement> 
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //brace
         if (!parser.peekPresentAndSkip('{')) {
+            return null;
+        }
+        //lookahead
+        if (!parser.pushLookAhead('}')) {
             return null;
         }
         //spacing
@@ -77,7 +87,9 @@ public class SwitchStatementParselet extends StatementParselet<SwitchStatement> 
             entries.add(entry);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (true);
+        } while (!parser.peekPresentAndSkip('}'));
+        //pop lookahead
+        parser.popLookAhead();
         return new SwitchStatement(selector, entries);
     }
 }

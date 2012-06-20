@@ -26,6 +26,10 @@ public class WhileStatementParselet extends StatementParselet<WhileStatement> {
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //condition
@@ -39,6 +43,8 @@ public class WhileStatementParselet extends StatementParselet<WhileStatement> {
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //body

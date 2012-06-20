@@ -84,6 +84,10 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
     protected List<TypeParameter> parseTypeParameters(Parser parser) {
         List<TypeParameter> typeParameters = new ArrayList<TypeParameter>();
         if (parser.peekPresentAndSkip('<')) {
+            //lookahead
+            if (!parser.pushLookAhead('>')) {
+                return null;
+            }
             do {
                 //spacing
                 parseWhiteSpaceAndComments(parser);
@@ -102,6 +106,8 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
             if (!parser.peekPresentAndSkip('>')) {
                 return null;
             }
+            //pop lookahead
+            parser.popLookAhead();
             //spacing
             parseWhiteSpaceAndComments(parser);
         }
@@ -118,6 +124,10 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
     protected List<Parameter> parseParameters(Parser parser) {
         //parentheses
         if (!parser.peekPresentAndSkip('(')) {
+            return null;
+        }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
             return null;
         }
         List<Parameter> parameters = new ArrayList<Parameter>();
@@ -141,6 +151,8 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         return parameters;

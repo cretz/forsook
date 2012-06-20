@@ -25,6 +25,10 @@ public class TypeArgumentsParselet extends JavaParselet<TypeArguments> {
         if (!parser.peekPresentAndSkip('<')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead('>')) {
+            return null;
+        }
         List<Type> types = new ArrayList<Type>();
         do {
             //spacing
@@ -41,6 +45,8 @@ public class TypeArgumentsParselet extends JavaParselet<TypeArguments> {
         if (!parser.peekPresentAndSkip('>')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new TypeArguments(types);
     }
 

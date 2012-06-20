@@ -41,6 +41,10 @@ public class CatchClauseParselet extends JavaParselet<CatchClause> {
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //annotations and modifiers
@@ -83,6 +87,8 @@ public class CatchClauseParselet extends JavaParselet<CatchClause> {
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //catch block
