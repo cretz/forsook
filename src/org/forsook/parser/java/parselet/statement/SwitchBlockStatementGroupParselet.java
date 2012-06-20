@@ -6,13 +6,10 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.expression.IdentifierExpression;
 import org.forsook.parser.java.ast.lexical.Identifier;
-import org.forsook.parser.java.ast.packag.TypeDeclarationStatement;
-import org.forsook.parser.java.ast.statement.ExpressionStatement;
-import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
+import org.forsook.parser.java.ast.statement.InnerBlockStatement;
 import org.forsook.parser.java.ast.statement.Statement;
 import org.forsook.parser.java.ast.statement.SwitchBlockStatementGroup;
 import org.forsook.parser.java.parselet.JavaParselet;
@@ -24,9 +21,7 @@ import org.forsook.parser.java.parselet.JavaParselet;
         needs = {
             Identifier.class,
             Expression.class,
-            ClassOrInterfaceDeclaration.class,
-            LocalVariableDeclarationExpression.class,
-            Statement.class
+            InnerBlockStatement.class
         }
 )
 public class SwitchBlockStatementGroupParselet extends JavaParselet<SwitchBlockStatementGroup> {
@@ -74,25 +69,9 @@ public class SwitchBlockStatementGroupParselet extends JavaParselet<SwitchBlockS
         //statements
         List<Statement> statements = new ArrayList<Statement>();
         do {
-            //TODO: really want to copy/paste this from block statement parselet?
-            Statement stmt;
-            //local class?
-            ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclaration.class);
-            if (decl != null && !decl.isInterface()) {
-                stmt = new TypeDeclarationStatement(decl);
-            } else {
-                //variable declaration?
-                LocalVariableDeclarationExpression expr = 
-                        parser.next(LocalVariableDeclarationExpression.class);
-                if (expr != null) {
-                    stmt = new ExpressionStatement(expr);
-                } else {
-                    //regular statement
-                    stmt = parser.next(Statement.class);
-                    if (stmt == null) {
-                        break;
-                    }
-                }
+            Statement stmt = (Statement) parser.next(InnerBlockStatement.class);
+            if (stmt == null) {
+                break;
             }
             statements.add(stmt);
             //spacing

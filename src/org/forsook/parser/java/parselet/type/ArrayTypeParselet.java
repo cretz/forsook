@@ -18,7 +18,7 @@ public class ArrayTypeParselet extends TypeParselet<ArrayType> {
     @Override
     public ArrayType parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('[')) {
+        if (!parser.pushLookAhead('[')) {
             return null;
         }
         //type
@@ -26,6 +26,8 @@ public class ArrayTypeParselet extends TypeParselet<ArrayType> {
         if (type == null) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //brackets
         parseWhiteSpaceAndComments(parser);
         if (!parser.peekPresentAndSkip('[')) {

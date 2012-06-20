@@ -35,7 +35,7 @@ public class ClassInstanceCreationExpressionParselet
     @Override
     public ClassInstanceCreationExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead("new")) {
+        if (!parser.pushLookAhead("new")) {
             return null;
         }
         //starts with primary expression?
@@ -52,6 +52,12 @@ public class ClassInstanceCreationExpressionParselet
         }
         //new
         if (!parser.peekPresentAndSkip("new")) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead('(')) {
             return null;
         }
         //spacing
@@ -101,6 +107,12 @@ public class ClassInstanceCreationExpressionParselet
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //arguments
@@ -125,6 +137,8 @@ public class ClassInstanceCreationExpressionParselet
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //body

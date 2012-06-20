@@ -33,7 +33,7 @@ public class MethodInvocationExpressionParselet
     @Override
     public MethodInvocationExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('(')) {
+        if (!parser.pushLookAhead('(')) {
             return null;
         }
         //scope
@@ -97,6 +97,12 @@ public class MethodInvocationExpressionParselet
         if (!parser.peekPresentAndSkip('(')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(')')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //arguments
@@ -121,6 +127,8 @@ public class MethodInvocationExpressionParselet
         if (!parser.peekPresentAndSkip(')')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new MethodInvocationExpression(scope, className, 
                 superPresent, typeArguments, methodName, arguments);
     }

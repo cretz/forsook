@@ -9,11 +9,12 @@ public class VoidType extends Type {
     @Override
     public int hashCode() {
         //TODO: is this ok?
-        return -63;
+        return -63 * super.hashCode();
     }
     
     @Override
     public boolean equals(Object paramObject) {
-        return paramObject != null && paramObject.getClass() == VoidType.class;
+        return paramObject != null && paramObject.getClass() == VoidType.class &&
+                super.equals(paramObject);
     }
 }

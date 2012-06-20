@@ -22,7 +22,7 @@ public class MultiplicativeOperatorExpressionParselet
     @Override
     public MultiplicativeOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('*', '/', '%')) {
+        if (!parser.pushLookAhead('*', '/', '%')) {
             return null;
         }
         //left
@@ -43,6 +43,8 @@ public class MultiplicativeOperatorExpressionParselet
         } else {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

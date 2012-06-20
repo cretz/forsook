@@ -43,6 +43,7 @@ public class CompilationUnitParselet extends JavaParselet<CompilationUnit> {
             if (mport == null) {
                 break;
             }
+            imports.add(mport);
         } while (true);
         //types
         List<TypeDeclaration<?>> types = new ArrayList<TypeDeclaration<?>>();

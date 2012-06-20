@@ -9,11 +9,12 @@ public class EmptyStatement extends Statement implements StatementWithoutTrailin
     @Override
     public int hashCode() {
         //TODO what to do here?
-        return -31;
+        return -31 * super.hashCode();
     }
     
     @Override
     public boolean equals(Object paramObject) {
-        return paramObject != null && paramObject.getClass() == EmptyStatement.class;
+        return paramObject != null && paramObject.getClass() == EmptyStatement.class &&
+                super.equals(paramObject);
     }
 }

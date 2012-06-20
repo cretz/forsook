@@ -4,7 +4,7 @@ import org.forsook.parser.java.JlsReference;
 
 @JlsReference("14.14")
 @SuppressWarnings("serial")
-public abstract class ForStatement extends Statement {
+public abstract class ForStatement extends Statement implements InnerBlockStatement {
 
     private Statement body;
     

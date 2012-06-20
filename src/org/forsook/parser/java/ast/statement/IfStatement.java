@@ -5,7 +5,7 @@ import org.forsook.parser.java.ast.expression.Expression;
 
 @JlsReference("14.9")
 @SuppressWarnings("serial")
-public class IfStatement extends Statement {
+public class IfStatement extends Statement implements InnerBlockStatement {
 
     private Expression condition;
     private Statement thenStatement;

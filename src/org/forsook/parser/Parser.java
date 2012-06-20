@@ -105,21 +105,28 @@ public interface Parser {
     
     /**
      * Checks to see whether any of the given items are 
-     * anywhere in the source starting at the given cursor
+     * anywhere in the source starting at the cursor of
+     * the last look ahead.
      * 
      * @param items
      * @return
      */
-    boolean lookAhead(char... items);
+    boolean pushLookAhead(char... items);
     
     /**
      * Checks to see whether any of the given items are 
-     * anywhere in the source starting at the given cursor
+     * anywhere in the source starting at the cursor of
+     * the last look ahead.
      * 
      * @param items
      * @return
      */
-    boolean lookAhead(String... items);
+    boolean pushLookAhead(String... items);
+    
+    /**
+     * Pop the look ahead that was pushed previously
+     */
+    void popLookAhead();
     
     /**
      * Get the current cursor position

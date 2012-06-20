@@ -25,7 +25,7 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
     @Override
     public ArrayAccessExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('[')) {
+        if (!parser.pushLookAhead('[')) {
             return null;
         }
         //name
@@ -43,6 +43,12 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
         if (!parser.peekPresentAndSkip('[')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(']')) {
+            return null;
+        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression
@@ -56,6 +62,8 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
         if (!parser.peekPresentAndSkip(']')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new ArrayAccessExpression(name, index);
     }
 

@@ -21,7 +21,7 @@ public class ExclusiveOrOperatorExpressionParselet
     @Override
     public ExclusiveOrOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('|')) {
+        if (!parser.pushLookAhead('|')) {
             return null;
         }
         //left
@@ -35,6 +35,8 @@ public class ExclusiveOrOperatorExpressionParselet
         if (!parser.peekPresentAndSkip('|')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

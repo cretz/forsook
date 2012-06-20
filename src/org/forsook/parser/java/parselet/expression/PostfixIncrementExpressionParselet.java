@@ -19,7 +19,7 @@ public class PostfixIncrementExpressionParselet extends ExpressionParselet<Postf
     @Override
     public PostfixIncrementExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead("++", "--")) {
+        if (!parser.pushLookAhead("++", "--")) {
             return null;
         }
         //expression
@@ -34,6 +34,8 @@ public class PostfixIncrementExpressionParselet extends ExpressionParselet<Postf
         if (!increment && !parser.peekPresentAndSkip("--")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         return new PostfixIncrementExpression(expression, increment);
     }
 }

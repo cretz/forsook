@@ -8,17 +8,14 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.decl.AnnotationExpression;
-import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
 import org.forsook.parser.java.ast.decl.ExplicitConstructorInvocationStatement;
 import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.Parameter;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
-import org.forsook.parser.java.ast.packag.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.statement.BlockStatement;
-import org.forsook.parser.java.ast.statement.ExpressionStatement;
-import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
+import org.forsook.parser.java.ast.statement.InnerBlockStatement;
 import org.forsook.parser.java.ast.statement.Statement;
 import org.forsook.parser.java.ast.type.ClassOrInterfaceType;
 import org.forsook.parser.java.ast.type.TypeParameter;
@@ -30,9 +27,7 @@ import org.forsook.parser.java.ast.type.TypeParameter;
         needs = {
             Identifier.class,
             ExplicitConstructorInvocationStatement.class,
-            ClassOrInterfaceDeclaration.class,
-            LocalVariableDeclarationExpression.class,
-            Statement.class
+            InnerBlockStatement.class
         }
 )
 public class ConstructorDeclarationParselet extends BodyDeclarationParselet<ConstructorDeclaration> {
@@ -77,32 +72,28 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
         List<Statement> statements = new ArrayList<Statement>();
         //local class gets no javadoc IMO
         parseWhiteSpaceAndComments(parser);
+        //explicit constructor?
+        Statement stmt = parser.next(ExplicitConstructorInvocationStatement.class);
+        if (stmt != null) {
+            statements.add(stmt);
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+        }
         do {
-            Statement stmt = parser.next(ExplicitConstructorInvocationStatement.class);
+            stmt = (Statement) parser.next(InnerBlockStatement.class);
             if (stmt == null) {
-                //local class?
-                ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclaration.class);
-                if (decl != null && !decl.isInterface()) {
-                    stmt = new TypeDeclarationStatement(decl);
-                } else {
-                    //variable declaration?
-                    LocalVariableDeclarationExpression expr = 
-                            parser.next(LocalVariableDeclarationExpression.class);
-                    if (expr != null) {
-                        stmt = new ExpressionStatement(expr);
-                    } else {
-                        //regular statement
-                        stmt = parser.next(Statement.class);
-                        if (stmt == null) {
-                            return null;
-                        }
-                    }
-                }
+                break;
             }
             statements.add(stmt);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (!parser.peekPresentAndSkip('}'));
+        } while (true);
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //brace
+        if (!parser.peekPresentAndSkip('}')) {
+            return null;
+        }
         return new ConstructorDeclaration(javadoc.get(), annotations, modifiers, 
                 typeParameters, name, parameters, throwsList, new BlockStatement(statements));
     }

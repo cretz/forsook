@@ -5,7 +5,7 @@ import org.forsook.parser.java.ast.expression.Expression;
 
 @JlsReference("14.12")
 @SuppressWarnings("serial")
-public class WhileStatement extends Statement {
+public class WhileStatement extends Statement implements InnerBlockStatement {
 
     private Expression condition;
     private Statement body;

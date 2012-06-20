@@ -6,22 +6,15 @@ import java.util.List;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
-import org.forsook.parser.java.ast.packag.TypeDeclarationStatement;
 import org.forsook.parser.java.ast.statement.BlockStatement;
-import org.forsook.parser.java.ast.statement.ExpressionStatement;
+import org.forsook.parser.java.ast.statement.InnerBlockStatement;
 import org.forsook.parser.java.ast.statement.Statement;
-import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 
 @JlsReference("14.2")
 @ParseletDefinition(
         name = "forsook.java.blockStatement",
         emits = BlockStatement.class,
-        needs = { 
-            ClassOrInterfaceDeclaration.class, 
-            LocalVariableDeclarationExpression.class,
-            Statement.class
-        }
+        needs = InnerBlockStatement.class
 )
 public class BlockStatementParselet extends StatementParselet<BlockStatement> {
 
@@ -35,28 +28,18 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
         //local class gets no javadoc IMO
         parseWhiteSpaceAndComments(parser);
         do {
-            Statement stmt;
-            //local class?
-            ClassOrInterfaceDeclaration decl = parser.next(ClassOrInterfaceDeclaration.class);
-            if (decl != null && !decl.isInterface()) {
-                stmt = new TypeDeclarationStatement(decl);
-            } else {
-                //variable declaration?
-                LocalVariableDeclarationExpression expr = parser.next(LocalVariableDeclarationExpression.class);
-                if (expr != null) {
-                    stmt = new ExpressionStatement(expr);
-                } else {
-                    //regular statement
-                    stmt = parser.next(Statement.class);
-                    if (stmt == null) {
-                        break;
-                    }
-                }
+            Statement stmt = (Statement) parser.next(InnerBlockStatement.class);
+            if (stmt == null) {
+                break;
             }
             statements.add(stmt);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (!parser.peekPresentAndSkip('}'));
+        } while (true);
+        //brace
+        if (!parser.peekPresentAndSkip('}')) {
+            return null;
+        }
         return new BlockStatement(statements);
     }
 

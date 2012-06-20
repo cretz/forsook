@@ -37,7 +37,7 @@ public class AssignmentOperatorExpressionParselet
 
     public AssignmentOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead(lookAhead)) {
+        if (!parser.pushLookAhead(lookAhead)) {
             return null;
         }
         //left
@@ -59,6 +59,8 @@ public class AssignmentOperatorExpressionParselet
         if (operator == null) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //right
         Expression right = (Expression) parser.next(AssignmentExpression.class);
         if (right == null) {

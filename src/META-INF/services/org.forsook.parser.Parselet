@@ -113,9 +113,12 @@ org.forsook.parser.java.parselet.statement.ExpressionStatementParselet
 org.forsook.parser.java.parselet.statement.ForStatementParselet
 org.forsook.parser.java.parselet.statement.IfNoShortIfStatementParselet
 org.forsook.parser.java.parselet.statement.IfStatementParselet
+org.forsook.parser.java.parselet.statement.InnerBlockStatementParselet
 org.forsook.parser.java.parselet.statement.LabeledNoShortIfStatementParselet
 org.forsook.parser.java.parselet.statement.LabeledStatementParselet
+org.forsook.parser.java.parselet.statement.LocalClassDeclarationStatementParselet
 org.forsook.parser.java.parselet.statement.LocalVariableDeclarationExpressionParselet
+org.forsook.parser.java.parselet.statement.LocalVariableDeclarationStatementParselet
 org.forsook.parser.java.parselet.statement.NoShortIfStatementParselet
 org.forsook.parser.java.parselet.statement.ResourceParselet
 org.forsook.parser.java.parselet.statement.ReturnStatementParselet

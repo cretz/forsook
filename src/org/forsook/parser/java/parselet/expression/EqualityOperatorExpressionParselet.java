@@ -22,7 +22,7 @@ public class EqualityOperatorExpressionParselet
     @Override
     public EqualityOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead("==", "!=")) {
+        if (!parser.pushLookAhead("==", "!=")) {
             return null;
         }
         //left
@@ -41,6 +41,8 @@ public class EqualityOperatorExpressionParselet
         } else {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

@@ -25,7 +25,7 @@ public class ConditionalOperatorExpressionParselet
     @Override
     public ConditionalOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('?')) {
+        if (!parser.pushLookAhead('?')) {
             return null;
         }
         //condition
@@ -37,6 +37,12 @@ public class ConditionalOperatorExpressionParselet
         parseWhiteSpaceAndComments(parser);
         //question mark
         if (!parser.peekPresentAndSkip('?')) {
+            return null;
+        }
+        //pop lookahead
+        parser.popLookAhead();
+        //lookahead
+        if (!parser.pushLookAhead(':')) {
             return null;
         }
         //spacing
@@ -52,6 +58,8 @@ public class ConditionalOperatorExpressionParselet
         if (!parser.peekPresentAndSkip(':')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //else

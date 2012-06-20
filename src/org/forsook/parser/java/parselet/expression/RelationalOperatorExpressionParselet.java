@@ -25,7 +25,7 @@ public class RelationalOperatorExpressionParselet
     @Override
     public RelationalOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead("<=", ">=", "<", ">", "instanceof")) {
+        if (!parser.pushLookAhead("<=", ">=", "<", ">", "instanceof")) {
             return null;
         }
         //left
@@ -50,6 +50,8 @@ public class RelationalOperatorExpressionParselet
         } else {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

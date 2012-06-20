@@ -20,7 +20,7 @@ public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperato
     @Override
     public AndOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('&')) {
+        if (!parser.pushLookAhead('&')) {
             return null;
         }
         //left
@@ -34,6 +34,8 @@ public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperato
         if (!parser.peekPresentAndSkip('&')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

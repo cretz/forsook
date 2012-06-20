@@ -21,7 +21,7 @@ public class ConditionalOrOperatorExpressionParselet
     @Override
     public ConditionalOrOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead("||")) {
+        if (!parser.pushLookAhead("||")) {
             return null;
         }
         //left
@@ -35,6 +35,8 @@ public class ConditionalOrOperatorExpressionParselet
         if (!parser.peekPresentAndSkip("||")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

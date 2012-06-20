@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Stack;
 
 /**
  * Simple parser supporting a string-based source file and a map of parselets
@@ -18,6 +19,8 @@ public class SimpleParser implements Parser {
     
     private final Map<Class<?>, Map<Integer, RecursiveTypeMemo>> memoTable =
             new HashMap<Class<?>, Map<Integer, RecursiveTypeMemo>>();
+    
+    private final Stack<Integer> lookAheads = new Stack<Integer>();
     
     private int cursor = -1;
     private int lastLocationCheckCursor = 0;
@@ -151,6 +154,8 @@ public class SimpleParser implements Parser {
             }
             //hold on to the cursor so we can roll back
             int oldCursor = cursor;
+            //holf on to the lookahead stack size, so we can roll back
+            int lookAheadStackSize = lookAheads.size();
             //parse
             T object = (T) parselet.getParselet().parse(this);
             //actually get something?
@@ -161,21 +166,30 @@ public class SimpleParser implements Parser {
                     memo.previousFoundEndingCursor = cursor;
                 }
                 return object;
-            } else if (memo != null && memo.previouslyFound != null) {
+            }
+            //reset the lookahead stack
+            if (lookAheads.size() > lookAheadStackSize) {
+                lookAheads.subList(lookAheadStackSize, lookAheads.size()).clear();
+            }
+            //check for memo
+            if (memo != null && memo.previouslyFound != null) {
                 //we had one earlier in this cursor and type, so update cursor and return it
                 cursor = memo.previousFoundEndingCursor;
                 return (T) memo.previouslyFound;
             }
-            //we didn't? reset the cursor
+            //reset the cursor
             cursor = oldCursor;
         }
         return null;
     }
     
     @Override
-    public boolean lookAhead(char... items) {
+    public boolean pushLookAhead(char... items) {
+        Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
         for (char item : items) {
-            if (source.indexOf(item, cursor) != -1) {
+            int index = source.lastIndexOf(item, previous - 1);
+            if (index > cursor) {
+                lookAheads.push(index);
                 return true;
             }
         }
@@ -183,13 +197,21 @@ public class SimpleParser implements Parser {
     }
     
     @Override
-    public boolean lookAhead(String... items) {
+    public boolean pushLookAhead(String... items) {
+        Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
         for (String item : items) {
-            if (source.indexOf(item, cursor) != -1) {
+            int index = source.lastIndexOf(item, previous - 1);
+            if (index > cursor) {
+                lookAheads.push(index);
                 return true;
             }
         }
         return false;
+    }
+    
+    @Override
+    public void popLookAhead() {
+        lookAheads.pop();
     }
     
     @Override

@@ -66,9 +66,6 @@ public class LocalVariableDeclarationExpressionParselet extends ExpressionParsel
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (parser.peekPresentAndSkip(','));
-        if (!parser.peekPresentAndSkip(';')) {
-            return null;
-        }
         return new LocalVariableDeclarationExpression(_final, annotations, type, vars);
     }
 

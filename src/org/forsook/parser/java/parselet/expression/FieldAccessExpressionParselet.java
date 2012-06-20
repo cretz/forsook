@@ -25,7 +25,7 @@ public class FieldAccessExpressionParselet extends ExpressionParselet<FieldAcces
     @Override
     public FieldAccessExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead('.')) {
+        if (!parser.pushLookAhead('.')) {
             return null;
         }
         //scope
@@ -59,6 +59,8 @@ public class FieldAccessExpressionParselet extends ExpressionParselet<FieldAcces
         if (!parser.peekPresentAndSkip('.')) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //field

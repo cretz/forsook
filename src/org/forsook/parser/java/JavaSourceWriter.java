@@ -82,7 +82,9 @@ import org.forsook.parser.java.ast.statement.EnhancedForStatement;
 import org.forsook.parser.java.ast.statement.ExpressionStatement;
 import org.forsook.parser.java.ast.statement.IfStatement;
 import org.forsook.parser.java.ast.statement.LabeledStatement;
+import org.forsook.parser.java.ast.statement.LocalClassDeclarationStatement;
 import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
+import org.forsook.parser.java.ast.statement.LocalVariableDeclarationStatement;
 import org.forsook.parser.java.ast.statement.Resource;
 import org.forsook.parser.java.ast.statement.ReturnStatement;
 import org.forsook.parser.java.ast.statement.Statement;
@@ -429,7 +431,7 @@ public class JavaSourceWriter {
             }
             if (a.getImports() != null & !a.getImports().isEmpty()) {
                 visitSeparated(a.getImports(), newline);
-                builder.append(newline);
+                builder.append(newline).append(newline);
             }
             visitSeparated(a.getTypes(), newline + newline);
             builder.append(newline);
@@ -719,6 +721,18 @@ public class JavaSourceWriter {
         public void visit(LiteralExpression a) {
             builder.append(a.getValue());
         }
+        
+        @Override
+        public void visit(LocalClassDeclarationStatement a) {
+            visit(a.getDeclaration());
+        }
+        
+        @Override
+        public void visit(LocalVariableDeclarationStatement a) {
+            indent();
+            visit(a.getExpression());
+            builder.append(';');
+        }
 
         @Override
         public void visit(LocalVariableDeclarationExpression a) {
@@ -732,7 +746,6 @@ public class JavaSourceWriter {
             visit(a.getType());
             builder.append(' ');
             visitSeparated(a.getVariables(), ", ");
-            builder.append(';');
         }
 
         @Override

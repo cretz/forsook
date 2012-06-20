@@ -21,7 +21,7 @@ public class ShiftOperatorExpressionParselet
 
     @Override
     public ShiftOperatorExpression parse(Parser parser) {
-        if (!parser.lookAhead("<<", ">>")) {
+        if (!parser.pushLookAhead("<<", ">>")) {
             return null;
         }
         //left
@@ -42,6 +42,8 @@ public class ShiftOperatorExpressionParselet
         } else {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

@@ -21,8 +21,8 @@ public class ConditionalAndOperatorExpressionParselet
     @Override
     public ConditionalAndOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.lookAhead("&&")) {
-            
+        if (!parser.pushLookAhead("&&")) {
+            return null;
         }
         //left
         Expression left = (Expression) parser.next(ConditionalAndExpression.class);
@@ -35,6 +35,8 @@ public class ConditionalAndOperatorExpressionParselet
         if (!parser.peekPresentAndSkip("&&")) {
             return null;
         }
+        //pop lookahead
+        parser.popLookAhead();
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right

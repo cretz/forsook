@@ -5,7 +5,7 @@ import org.forsook.parser.java.ast.lexical.Identifier;
 
 @JlsReference("14.7")
 @SuppressWarnings("serial")
-public class LabeledStatement extends Statement {
+public class LabeledStatement extends Statement implements InnerBlockStatement {
 
     private Identifier identifier;
     private Statement statement;
