@@ -21,10 +21,10 @@ public class NameParseletTest extends ParseletTestBase {
     @Test
     public void testQualifiedName() {
         assertParse("a.//something\nb", 
-                new QualifiedName(getIdentifierList("a", "b"), false));
-        assertParse("meh", new QualifiedName(getIdentifierList("meh"), false));
+                new QualifiedName(getIdentifierList("a", "b")));
+        assertParse("meh", new QualifiedName(getIdentifierList("meh")));
         assertParse("a.b.c.1", 
-                new QualifiedName(getIdentifierList("a", "b", "c"), true));
+                new QualifiedName(getIdentifierList("a", "b", "c")));
         assertNull("1.2.3", QualifiedName.class);
     }
 }

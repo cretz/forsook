@@ -61,6 +61,8 @@ public class AssignmentOperatorExpressionParselet
         }
         //pop lookahead
         parser.popLookAhead();
+        //spacing
+        parseWhiteSpaceAndComments(parser);
         //right
         Expression right = (Expression) parser.next(AssignmentExpression.class);
         if (right == null) {

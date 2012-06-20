@@ -27,7 +27,13 @@ public class TypeOnDemandImportDeclarationParselet
         }
         //simple type name
         QualifiedName name = parser.next(QualifiedName.class);
-        if (name == null || !name.isEndedWithDot()) {
+        if (name == null) {
+            return null;
+        }
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //dot
+        if (!parser.peekPresentAndSkip('.')) {
             return null;
         }
         //spacing

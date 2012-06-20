@@ -3,6 +3,7 @@ package org.forsook.parser.java.parselet.statement;
 import org.forsook.parser.java.ast.statement.AssertStatement;
 import org.forsook.parser.java.ast.statement.DoStatement;
 import org.forsook.parser.java.ast.statement.EmptyStatement;
+import org.forsook.parser.java.ast.statement.ExpressionStatement;
 import org.forsook.parser.java.ast.statement.ForStatement;
 import org.forsook.parser.java.ast.statement.IfStatement;
 import org.forsook.parser.java.ast.statement.LabeledStatement;
@@ -14,7 +15,7 @@ import org.forsook.parser.java.ast.statement.WhileStatement;
 import org.forsook.parser.java.parselet.ParseletTestBase;
 import org.junit.Test;
 
-public class SimpleStatementParseletTest extends ParseletTestBase {
+public class StatementParseletTest extends ParseletTestBase {
     
     @Test
     public void testEmptyStatement() {
@@ -77,5 +78,10 @@ public class SimpleStatementParseletTest extends ParseletTestBase {
     @Test
     public void testReturnStatement() {
         assertString("return \"meh\";", ReturnStatement.class);
+    }
+    
+    @Test
+    public void testExpressionStatement() {
+        assertString("i++;", ExpressionStatement.class);
     }
 }

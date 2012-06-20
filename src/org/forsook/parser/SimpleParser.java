@@ -256,6 +256,11 @@ public class SimpleParser implements Parser {
         return lastKnownColumn + 1;
     }
     
+    @Override
+    public void backupCursor() {
+        cursor--;
+    }
+    
     private static class RecursiveTypeMemo {
         private int minimumNeeded;
         private Object previouslyFound;

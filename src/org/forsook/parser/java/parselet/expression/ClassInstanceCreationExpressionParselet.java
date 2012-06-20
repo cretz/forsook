@@ -79,7 +79,7 @@ public class ClassInstanceCreationExpressionParselet
                 return null;
             }
             //make mutable list
-            name = new QualifiedName(new ArrayList<Identifier>(Arrays.asList(identifier)), false);
+            name = new QualifiedName(new ArrayList<Identifier>(Arrays.asList(identifier)));
         }
         //spacing
         parseWhiteSpaceAndComments(parser);

@@ -22,13 +22,15 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
     public ClassOrInterfaceType parse(Parser parser) {
         ClassOrInterfaceType type = null;
         do {
-            //name
+            //name (offset by one, because we don't want to end with a dot)
             Identifier name = parser.next(Identifier.class);
             if (name == null) {
                 //don't skip the dot, just get out (could be varargs)
                 if (type == null) {
                     return null;
                 } else {
+                    //backup that cursor (scary)
+                    parser.backupCursor();
                     break;
                 }
             }
@@ -40,7 +42,7 @@ public class ClassOrInterfaceTypeParselet extends TypeParselet<ClassOrInterfaceT
             type = new ClassOrInterfaceType(type, name, typeArguments);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (!parser.peekPresent("...") && parser.peekPresentAndSkip('.'));
+        } while (parser.peekPresentAndSkip('.'));
         return type;
     }
 

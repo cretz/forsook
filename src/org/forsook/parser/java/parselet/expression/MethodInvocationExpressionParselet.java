@@ -89,7 +89,7 @@ public class MethodInvocationExpressionParselet
             }
             //needs to be mutable list
             methodName = new QualifiedName(
-                    new ArrayList<Identifier>(Arrays.asList(methodIdentifier)), false);
+                    new ArrayList<Identifier>(Arrays.asList(methodIdentifier)));
             //spacing
             parseWhiteSpaceAndComments(parser);
         }

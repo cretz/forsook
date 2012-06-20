@@ -23,6 +23,9 @@ public class MarkerAnnotationExpressionParselet extends AnnotationExpressionPars
         parseWhiteSpaceAndComments(parser);
         //name
         QualifiedName name = parser.next(QualifiedName.class);
+        if (name == null) {
+            return null;
+        }
         return new MarkerAnnotationExpression(name);
     }
 

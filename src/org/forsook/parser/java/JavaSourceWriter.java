@@ -59,8 +59,11 @@ import org.forsook.parser.java.ast.expression.ShiftOperatorExpression;
 import org.forsook.parser.java.ast.expression.ShiftOperatorExpression.ShiftOperator;
 import org.forsook.parser.java.ast.expression.SignedExpression;
 import org.forsook.parser.java.ast.expression.ThisExpression;
+import org.forsook.parser.java.ast.lexical.BlockComment;
+import org.forsook.parser.java.ast.lexical.Comment;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
+import org.forsook.parser.java.ast.lexical.LineComment;
 import org.forsook.parser.java.ast.lexical.LiteralExpression;
 import org.forsook.parser.java.ast.lexical.WhiteSpace;
 import org.forsook.parser.java.ast.name.QualifiedName;
@@ -222,7 +225,7 @@ public class JavaSourceWriter {
         public void visit(ArrayAccessExpression a) {
             visit(a.getName());
             builder.append('[');
-            visit(a.getName());
+            visit(a.getIndex());
             builder.append(']');
         }
 
@@ -426,6 +429,17 @@ public class JavaSourceWriter {
             visit(a.getName());
             if (a.getTypeArguments() != null) {
                 visit(a.getTypeArguments());
+            }
+        }
+        
+        @Override
+        public void visit(Comment a) {
+            if (a instanceof LineComment) {
+                builder.append("//").append(a.getText());
+            } else if (a instanceof BlockComment) {
+                builder.append("/*").append(a.getText()).append("*/");
+            } else if (a instanceof JavadocComment) {
+                visit((JavadocComment) a);
             }
         }
 
@@ -1157,8 +1171,7 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(JavadocComment a) {
-            //TODO: do this better
-            builder.append(a.getText());
+            builder.append("/**").append(a.getText()).append("*/");
         }
     }
 }

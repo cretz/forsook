@@ -150,4 +150,10 @@ public interface Parser {
      * @return
      */
     int getColumn();
+    
+    /**
+     * Backup the current cursor by one value. This is very dangerous and should
+     * be used with extreme caution.
+     */
+    void backupCursor();
 }

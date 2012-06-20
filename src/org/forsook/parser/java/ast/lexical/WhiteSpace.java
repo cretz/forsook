@@ -70,7 +70,7 @@ public class WhiteSpace extends JavaModel {
         FORM_FEED("\f"),
         NEWLINE("\n"),
         RETURN("\r"),
-        NEWLINE_RETURN("\r\f");
+        NEWLINE_RETURN("\r\n");
         
         private final String string;
         

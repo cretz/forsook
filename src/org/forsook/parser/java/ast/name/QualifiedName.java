@@ -12,14 +12,12 @@ import org.forsook.parser.java.ast.lexical.Identifier;
 public class QualifiedName extends Expression implements PostfixExpression {
 
     private List<Identifier> identifiers;
-    private boolean endedWithDot;
     
     public QualifiedName() {
     }
     
-    public QualifiedName(List<Identifier> identifiers, boolean endedWithDot) {
+    public QualifiedName(List<Identifier> identifiers) {
         this.identifiers = identifiers;
-        this.endedWithDot = endedWithDot;
     }
     
     public List<Identifier> getIdentifiers() {
@@ -29,20 +27,11 @@ public class QualifiedName extends Expression implements PostfixExpression {
     public void setIdentifiers(List<Identifier> identifiers) {
         this.identifiers = identifiers;
     }
-    
-    public boolean isEndedWithDot() {
-        return endedWithDot;
-    }
-    
-    public void setEndedWithDot(boolean endedWithDot) {
-        this.endedWithDot = endedWithDot;
-    }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (endedWithDot ? 1231 : 1237);
         result = prime * result
                 + ((identifiers == null) ? 0 : identifiers.hashCode());
         return result;
@@ -60,9 +49,6 @@ public class QualifiedName extends Expression implements PostfixExpression {
             return false;
         }
         QualifiedName other = (QualifiedName) obj;
-        if (endedWithDot != other.endedWithDot) {
-            return false;
-        }
         if (identifiers == null) {
             if (other.identifiers != null) {
                 return false;
