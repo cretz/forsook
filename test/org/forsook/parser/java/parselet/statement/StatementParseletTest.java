@@ -9,6 +9,7 @@ import org.forsook.parser.java.ast.statement.IfStatement;
 import org.forsook.parser.java.ast.statement.LabeledStatement;
 import org.forsook.parser.java.ast.statement.ReturnStatement;
 import org.forsook.parser.java.ast.statement.SwitchStatement;
+import org.forsook.parser.java.ast.statement.SynchronizedStatement;
 import org.forsook.parser.java.ast.statement.ThrowStatement;
 import org.forsook.parser.java.ast.statement.TryStatement;
 import org.forsook.parser.java.ast.statement.WhileStatement;
@@ -24,7 +25,7 @@ public class StatementParseletTest extends ParseletTestBase {
     
     @Test
     public void testLabeledStatement() {
-        assertString("alabel: ;", LabeledStatement.class);
+        assertString("alabel:\n    ;", LabeledStatement.class);
     }
     
     @Test
@@ -40,6 +41,12 @@ public class StatementParseletTest extends ParseletTestBase {
     @Test
     public void testIfStatement() {
         assertString("if (true) \n    ;", IfStatement.class);
+        assertString(
+                "if (a) {\n" +
+                "    go();\n" +
+                "} else if (b) {\n" +
+                "    meh();\n" +
+                "}", IfStatement.class);
     }
     
     @Test
@@ -82,6 +89,15 @@ public class StatementParseletTest extends ParseletTestBase {
     
     @Test
     public void testExpressionStatement() {
-        assertString("i++;", ExpressionStatement.class);
+//        assertString("i++;", ExpressionStatement.class);
+        assertString("i = (SomeClass) j;", ExpressionStatement.class);
+    }
+    
+    @Test
+    public void testSynchronizedStatement() {
+        assertString(
+                "synchronized (lock) {\n" +
+                "    doSomething();\n" +
+                "}", SynchronizedStatement.class);
     }
 }

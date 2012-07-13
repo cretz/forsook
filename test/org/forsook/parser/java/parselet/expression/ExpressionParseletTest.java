@@ -11,7 +11,9 @@ import org.forsook.parser.java.ast.expression.ConditionalAndOperatorExpression;
 import org.forsook.parser.java.ast.expression.ConditionalOrOperatorExpression;
 import org.forsook.parser.java.ast.expression.EqualityOperatorExpression;
 import org.forsook.parser.java.ast.expression.ExclusiveOrOperatorExpression;
+import org.forsook.parser.java.ast.expression.FieldAccessExpression;
 import org.forsook.parser.java.ast.expression.InclusiveOrOperatorExpression;
+import org.forsook.parser.java.ast.expression.MethodInvocationExpression;
 import org.forsook.parser.java.ast.expression.NegatedExpression;
 import org.forsook.parser.java.ast.expression.ParenthesizedExpression;
 import org.forsook.parser.java.ast.expression.PrefixIncrementExpression;
@@ -52,6 +54,7 @@ public class ExpressionParseletTest extends ParseletTestBase {
         for (AssignmentOperator operator : AssignmentOperator.values()) {
             assertString("i " + operator.toString() + " 5", AssignmentOperatorExpression.class);
         }
+        assertString("i = (SomeClass) j", AssignmentOperatorExpression.class);
     }
 
     @Test
@@ -63,5 +66,22 @@ public class ExpressionParseletTest extends ParseletTestBase {
     @Test
     public void testClassExpression() {
         assertString("Integer.class", ClassExpression.class);
+    }
+    
+    @Test
+    public void testFieldAccessExpression() {
+        assertString("a.b.c", FieldAccessExpression.class);
+    }
+    
+    @Test
+    public void testMethodInvocationExpression() {
+        assertString("System.out.println()", MethodInvocationExpression.class);
+        assertString("println(new SomeClass().method())", 
+                MethodInvocationExpression.class);
+    }
+    
+    @Test
+    public void testCastExpression() {
+        assertString("(SomeClass) a", CastExpression.class);
     }
 }

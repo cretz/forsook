@@ -59,6 +59,12 @@ public class IfNoShortIfStatementParselet extends StatementParselet<IfNoShortIfS
         //spacing
         parseWhiteSpaceAndComments(parser);
         //else?
+        if (!parser.peekPresentAndSkip("else")) {
+            return null;
+        }
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //statement (must be no-short-if)
         Statement elseStatement = (Statement) parser.next(NoShortIfStatement.class);
         if (elseStatement == null) {
             return null;

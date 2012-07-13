@@ -24,8 +24,8 @@ public class UnaryNotPlusMinusExpressionParselet extends ExpressionParselet<Expr
     @Override
     public Expression parse(Parser parser) {
         return (Expression) parser.first(
+                CastExpression.class,
                 PostfixExpression.class,
-                NegatedExpression.class,
-                CastExpression.class);
+                NegatedExpression.class);
     }
 }

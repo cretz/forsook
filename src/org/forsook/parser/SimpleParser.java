@@ -158,6 +158,10 @@ public class SimpleParser implements Parser {
             int lookAheadStackSize = lookAheads.size();
             //parse
             T object = (T) parselet.getParselet().parse(this);
+            //rollback minimum needed
+            if (memo != null) {
+                memo.minimumNeeded -= parselet.getRecursiveMinimumSize();
+            }
             //actually get something?
             if (object != null) {
                 //if we had a recursive minimum, say we found an object
@@ -185,13 +189,17 @@ public class SimpleParser implements Parser {
     
     @Override
     public boolean pushLookAhead(char... items) {
-        Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
+        Integer previous = lookAheads.isEmpty() ? source.length(): lookAheads.peek();
+        int latestIndex = -1;
         for (char item : items) {
             int index = source.lastIndexOf(item, previous - 1);
-            if (index > cursor) {
-                lookAheads.push(index);
-                return true;
+            if (index > cursor && index > latestIndex) {
+                latestIndex = index;
             }
+        }
+        if (latestIndex != -1) {
+            lookAheads.push(latestIndex);
+            return true;
         }
         return false;
     }
@@ -199,12 +207,16 @@ public class SimpleParser implements Parser {
     @Override
     public boolean pushLookAhead(String... items) {
         Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
+        int latestIndex = -1;
         for (String item : items) {
             int index = source.lastIndexOf(item, previous - 1);
-            if (index > cursor) {
-                lookAheads.push(index);
-                return true;
+            if (index > cursor && index > latestIndex) {
+                latestIndex = index;
             }
+        }
+        if (latestIndex != -1) {
+            lookAheads.push(latestIndex);
+            return true;
         }
         return false;
     }

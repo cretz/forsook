@@ -7,6 +7,7 @@ import org.forsook.parser.java.ast.decl.AnnotationExpression;
 import org.forsook.parser.java.ast.decl.AnnotationTypeBody;
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
 import org.forsook.parser.java.ast.decl.AnnotationTypeElementDeclaration;
+import org.forsook.parser.java.ast.decl.BodyDeclaration;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceBody;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
@@ -20,6 +21,7 @@ import org.forsook.parser.java.ast.decl.InitializerDeclaration;
 import org.forsook.parser.java.ast.decl.MarkerAnnotationExpression;
 import org.forsook.parser.java.ast.decl.MethodDeclaration;
 import org.forsook.parser.java.ast.decl.Modifier;
+import org.forsook.parser.java.ast.decl.NonWildTypeArguments;
 import org.forsook.parser.java.ast.decl.NormalAnnotationExpression;
 import org.forsook.parser.java.ast.decl.NormalAnnotationExpression.ElementValuePair;
 import org.forsook.parser.java.ast.decl.Parameter;
@@ -572,9 +574,12 @@ public class JavaSourceWriter {
             statementDepth++;
             visitSeparated(a.getConstants(), ',' + newline);
             builder.append(';').append(newline);
-            visitSeparated(a.getMembers(), newline + newline);
+            if (a.getMembers() != null && !a.getMembers().isEmpty()) {
+                builder.append(newline);
+                visitSeparated(a.getMembers(), newline + newline);
+                builder.append(newline);
+            }
             statementDepth--;
-            builder.append(newline);
             indent();
             builder.append('}');
         }
@@ -706,14 +711,25 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(IfStatement a) {
-            indent();
+            visit(a, true);
+        }
+        
+        public void visit(IfStatement a, boolean indent) {
+            if (indent) {
+                indent();
+            }
             builder.append("if (");
             visit(a.getCondition());
             builder.append(") ");
             visitBlockOrIndentedStatement(a.getThenStatement());
             if (a.getElseStatement() != null) {
                 builder.append(" else ");
-                visitBlockOrIndentedStatement(a.getElseStatement());
+                //if statements start right here
+                if (a.getElseStatement() instanceof IfStatement) {
+                    visit((IfStatement) a.getElseStatement(), false);
+                } else {
+                    visitBlockOrIndentedStatement(a.getElseStatement());
+                }
             }
         }
 
@@ -738,9 +754,12 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(LabeledStatement a) {
+            indent();
             visit(a.getIdentifier());
-            builder.append(": ");
+            builder.append(":").append(newline);
+            statementDepth++;
             visit(a.getStatement());
+            statementDepth--;
         }
 
         @Override
@@ -856,6 +875,13 @@ public class JavaSourceWriter {
         public void visit(NegatedExpression a) {
             builder.append(a.isNot() ? '!' : '~');
             visit(a.getExpression());
+        }
+        
+        @Override
+        public void visit(NonWildTypeArguments a) {
+            builder.append('<');
+            visitSeparated(a.getTypes(), ", ");
+            builder.append('>');
         }
 
         @Override
@@ -1022,7 +1048,10 @@ public class JavaSourceWriter {
                 builder.append("default:").append(newline);
             }
             statementDepth++;
-            visitSeparated(a.getStatements(), "");
+            for (Statement statement : a.getStatements()) {
+                visit(statement);
+                builder.append(newline);
+            }
             statementDepth--;
         }
 
@@ -1032,8 +1061,7 @@ public class JavaSourceWriter {
             builder.append("switch (");
             visit(a.getSelector());
             builder.append(") {").append(newline);
-            visitSeparated(a.getEntries(), newline);
-            builder.append(newline);
+            visitSeparated(a.getEntries(), "");
             indent();
             builder.append('}');
         }
@@ -1087,9 +1115,22 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(TypeBody a) {
-            builder.append('{').append(newline).append(newline);
+            builder.append('{').append(newline);
             statementDepth++;
-            visitSeparated(a.getMembers(), newline);
+            boolean first = true;
+            for (BodyDeclaration member : a.getMembers()) {
+                builder.append(newline);
+                //we want two newlines for non-fields/enum constants
+                if (!(member instanceof FieldDeclaration) &&
+                        !(member instanceof EnumConstantDeclaration) &&
+                        !first) {
+                    builder.append(newline);
+                }
+                if (first) {
+                    first = false;
+                }
+                visit(member);
+            }
             statementDepth--;
             builder.append(newline);
             indent();

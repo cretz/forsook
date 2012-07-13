@@ -61,6 +61,23 @@ public class IfStatementParselet extends StatementParselet<IfStatement> {
                 return null;
             }
         }
-        return new IfStatement(condition, thenStatement, null);
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //else?
+        Statement elseStatement = null;
+        if (parser.peekPresentAndSkip("else")) {
+            //can't have else if the then statement isn't a no-short-if
+            if (!(thenStatement instanceof NoShortIfStatement)) {
+                return null;
+            }
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+            //statement (must be regular)
+            elseStatement = parser.next(Statement.class);
+            if (elseStatement == null) {
+                return null;
+            }
+        }
+        return new IfStatement(condition, thenStatement, elseStatement);
     }
 }

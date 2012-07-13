@@ -8,7 +8,6 @@ public class EmptyStatement extends Statement implements StatementWithoutTrailin
 
     @Override
     public int hashCode() {
-        //TODO what to do here?
         return -31 * super.hashCode();
     }
     

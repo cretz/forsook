@@ -42,30 +42,34 @@ public class EnumConstantDeclarationParselet
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
-        //arguments
-        List<Expression> arguments = new ArrayList<Expression>();
-        do {
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-            //argument
-            Expression argument = parser.next(Expression.class);
-            if (argument == null) {
-                if (arguments.isEmpty()) {
-                    break;
-                } else  {
-                    return null;
+        //parentheses?
+        List<Expression> arguments = null;
+        if (parser.peekPresentAndSkip('(')) {
+            //arguments
+            arguments = new ArrayList<Expression>();
+            do {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+                //argument
+                Expression argument = parser.next(Expression.class);
+                if (argument == null) {
+                    if (arguments.isEmpty()) {
+                        break;
+                    } else  {
+                        return null;
+                    }
                 }
+                arguments.add(argument);
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+            } while (parser.peekPresentAndSkip(','));
+            //parentheses
+            if (!parser.peekPresentAndSkip(')')) {
+                return null;
             }
-            arguments.add(argument);
             //spacing
             parseWhiteSpaceAndComments(parser);
-        } while (parser.peekPresentAndSkip(','));
-        //parentheses
-        if (!parser.peekPresentAndSkip(')')) {
-            return null;
         }
-        //spacing
-        parseWhiteSpaceAndComments(parser);
         //body
         ClassOrInterfaceBody body = parser.next(ClassOrInterfaceBody.class);
         return new EnumConstantDeclaration(javadoc.get(), annotations, name, arguments, body);

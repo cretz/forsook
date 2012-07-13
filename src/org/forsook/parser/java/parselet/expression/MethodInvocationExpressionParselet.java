@@ -9,6 +9,7 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.decl.NonWildTypeArguments;
 import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.FieldAccessExpression;
 import org.forsook.parser.java.ast.expression.MethodInvocationExpression;
 import org.forsook.parser.java.ast.expression.PrimaryExpression;
 import org.forsook.parser.java.ast.lexical.Identifier;
@@ -70,6 +71,22 @@ public class MethodInvocationExpressionParselet
                 parseWhiteSpaceAndComments(parser);
             }
         } else {
+            //wait a minute, did the scope think it was field access?
+            if (scope instanceof FieldAccessExpression) {
+                //we're gonna pretend it's the scope w/ the method name
+                //  (I hope I don't pay for this)
+                methodName = new QualifiedName(new ArrayList<Identifier>(
+                        Arrays.asList(((FieldAccessExpression) scope).getField())));
+                className = ((FieldAccessExpression) scope).getClassName();
+                scope = ((FieldAccessExpression) scope).getScope();
+            } else {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+                //dot
+                if (!parser.peekPresentAndSkip('.')) {
+                    return null;
+                }
+            }
             //spacing
             parseWhiteSpaceAndComments(parser);
         }
@@ -77,7 +94,7 @@ public class MethodInvocationExpressionParselet
         NonWildTypeArguments typeArguments = null;
         if (methodName == null) {
             typeArguments = parser.next(NonWildTypeArguments.class);
-            if (!superPresent && typeArguments == null) {
+            if (!superPresent && scope == null && typeArguments == null) {
                 return null;
             }
             //spacing

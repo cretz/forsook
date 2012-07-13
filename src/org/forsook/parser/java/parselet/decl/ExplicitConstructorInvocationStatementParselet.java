@@ -10,6 +10,7 @@ import org.forsook.parser.java.ast.decl.ExplicitConstructorInvocationStatement;
 import org.forsook.parser.java.ast.decl.NonWildTypeArguments;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.expression.PrimaryExpression;
+import org.forsook.parser.java.ast.expression.ThisExpression;
 import org.forsook.parser.java.parselet.statement.StatementParselet;
 
 @JlsReference("8.8.7.1")
@@ -33,26 +34,33 @@ public class ExplicitConstructorInvocationStatementParselet
         }
         //scope
         Expression scope = (Expression) parser.next(PrimaryExpression.class);
-        if (scope != null) {
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-            //dot
-            if (!parser.peekPresentAndSkip('.')) {
+        //it's possible that it sees the "this" before "this()"
+        boolean thisPresent = scope instanceof ThisExpression;
+        NonWildTypeArguments typeArguments = null;
+        if (thisPresent) {
+            scope = null;
+        } else {
+            if (scope != null) {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+                //dot
+                if (!parser.peekPresentAndSkip('.')) {
+                    return null;
+                }
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+            }
+            //type arguments
+            typeArguments = parser.next(NonWildTypeArguments.class);
+            if (typeArguments != null) {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+            }
+            //this
+            thisPresent = parser.peekPresentAndSkip("this");
+            if (!thisPresent && !parser.peekPresentAndSkip("super")) {
                 return null;
             }
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-        }
-        //type arguments
-        NonWildTypeArguments typeArguments = parser.next(NonWildTypeArguments.class);
-        if (typeArguments != null) {
-            //spacing
-            parseWhiteSpaceAndComments(parser);
-        }
-        //this
-        boolean thisPresent = parser.peekPresentAndSkip("this");
-        if (!thisPresent && !parser.peekPresentAndSkip("super")) {
-            return null;
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
@@ -71,8 +79,6 @@ public class ExplicitConstructorInvocationStatementParselet
         //arguments
         List<Expression> arguments = new ArrayList<Expression>();
         do {
-            //spacing
-            parseWhiteSpaceAndComments(parser);
             //argument
             Expression argument = parser.next(Expression.class);
             if (argument == null) {

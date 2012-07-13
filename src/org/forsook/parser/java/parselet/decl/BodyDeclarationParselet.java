@@ -178,7 +178,7 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
                 }
                 //spacing
                 parseWhiteSpaceAndComments(parser);
-            } while (!parser.peekPresentAndSkip(','));
+            } while (parser.peekPresentAndSkip(','));
         }
         return throwsList;
     }

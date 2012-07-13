@@ -33,40 +33,56 @@ public class FieldAccessExpressionParselet extends ExpressionParselet<FieldAcces
         //class name
         QualifiedName className = null;
         boolean superPresent = false;
+        Identifier field = null;
         if (scope == null) {
+            //grab qualified name
             className = parser.next(QualifiedName.class);
             if (className != null) {
                 //spacing
                 parseWhiteSpaceAndComments(parser);
                 //dot
                 if (!parser.peekPresentAndSkip('.')) {
-                    return null;
+                    //so, no dot? well if the class name has more
+                    //  than one identifier, it's ok
+                    if (className.getIdentifiers().size() == 1) {
+                        return null;
+                    }
+                    field = className.getIdentifiers().get(
+                            className.getIdentifiers().size() - 1);
+                    className = new QualifiedName(
+                            className.getIdentifiers().subList(0, 
+                                    className.getIdentifiers().size() - 1));
+                } else {
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
                 }
-                //spacing
-                parseWhiteSpaceAndComments(parser);
             }
-            //super
-            superPresent = parser.peekPresentAndSkip("super");
-            if (superPresent) {
-                //spacing
-                parseWhiteSpaceAndComments(parser);
+            if (field == null) {
+                //super
+                superPresent = parser.peekPresentAndSkip("super");
+                if (superPresent) {
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
+                }
             }
         } else {
             //spacing
             parseWhiteSpaceAndComments(parser);
         }
-        //dot
-        if (!parser.peekPresentAndSkip('.')) {
+        //dot (only required if field isn't already set)
+        if (field == null && !parser.peekPresentAndSkip('.')) {
             return null;
         }
         //pop lookahead
         parser.popLookAhead();
-        //spacing
-        parseWhiteSpaceAndComments(parser);
-        //field
-        Identifier field = parser.next(Identifier.class);
         if (field == null) {
-            return null;
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+            //field
+            field = parser.next(Identifier.class);
+            if (field == null) {
+                return null;
+            }
         }
         return new FieldAccessExpression(scope, className, superPresent, field);
     }

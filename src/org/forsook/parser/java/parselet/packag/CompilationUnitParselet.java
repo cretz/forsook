@@ -31,6 +31,8 @@ public class CompilationUnitParselet extends JavaParselet<CompilationUnit> {
 
     @Override
     public CompilationUnit parse(Parser parser) {
+        //spacing
+        parseWhiteSpaceAndComments(parser);
         //package
         PackageDeclaration packageDeclaration = parser.next(PackageDeclaration.class);
         //imports

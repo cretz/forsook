@@ -12,8 +12,103 @@ public class ComplexCompilationUnit {
 
     public static void main(String[] args) {
         //local variable declaration
-        int i = 0;
+        int sanity = Integer.MIN_VALUE;
         //local class declaration
-        class Hello extends SomethingElse { }
+        class LocalClasses extends AreForIdiots {
+        }
+        //array
+        String[] a = { "look", "no", "new" };
+        //try-catch
+        try {
+            killMyself();
+        } catch (Exception e) {
+            hireHitman();
+        } finally {
+            coverTracks();
+        }
+        //switch
+        switch (percentOfCoverage) {
+        case 1:
+        case 2:
+            meh();
+            break;
+        case 100:
+            yeahRight();
+        default:
+            coverageDoesntMatterAnyways();
+        }
+        //basic for
+        for (int hours = 0; i < 2; i++) {
+            workHard();
+        }
+        //do statement
+        do {
+            yourMom();
+        } while (iFeelLikeIt);
+        //enhanced for
+        for (TestCase test : testsIDontWannaWrite()) {
+            test.findAnAutomatedWayToDoThis();
+        }
+        //if
+        if (can) {
+            doIt();
+        } else if (cant) {
+            program();
+        } else {
+            solveIndecision();
+        }
+        //short if
+        if (iHateBraces)
+            whoCares();
+        //while
+        while (thisParserStillSucks) {
+            keepExtendingThisMethod();
+        }
+        //assert
+        assert notCarpalTunnel : "Pick a less verbose language";
+        //label
+        labelsAreDangerous:
+            iKnow();
+        //synchronized
+        synchronized (women) {
+            fakeMonogamy();
+        }
+        //throw
+        throw new IWishMostExceptionsWereUnchecked();
+        //return
+        return toWhereYouCameFrom;
+        //break
+        break yoSelfFoo;
+        //continue
+        continue makingMyJavaParser;
+        //cast
+        a = (ChickenOfTheInfinite) b;
+    }
+    
+    public ComplexCompilationUnit() {
+        //explicit
+        this("meh");
+    }
+    
+    public ComplexCompilationUnit() {
+        //explicit
+        super("meh");
+    }
+    
+    public ComplexCompilationUnit() {
+        //explicit
+        <A, B>super("meh");
+    }
+    
+    public enum MyEnum {
+        VAL_ONE,
+        VAL_TWO("val"),
+        VAL_THREE {
+            void hey() {
+            }
+        };
+        
+        private MyEnum() {
+        }
     }
 }

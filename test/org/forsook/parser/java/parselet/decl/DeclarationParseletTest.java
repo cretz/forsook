@@ -1,6 +1,8 @@
 package org.forsook.parser.java.parselet.decl;
 
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
+import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
+import org.forsook.parser.java.ast.decl.EnumDeclaration;
 import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.VariableDeclarator;
 import org.forsook.parser.java.ast.packag.ImportDeclaration;
@@ -49,5 +51,21 @@ public class DeclarationParseletTest extends ParseletTestBase {
         assertString("public @interface MyAnnotation {\n\n" +
                 "    String value() default \"\";\n" +
                 "}", AnnotationTypeDeclaration.class);
+    }
+    
+    @Test
+    public void testConstructorDeclaration() {
+        assertString(
+                "public MyClassName() {\n" +
+                "    this();\n" +
+                "}", ConstructorDeclaration.class);
+    }
+    
+    @Test
+    public void testEnum() {
+        assertString(
+                "public enum MyEnum {\n" +
+                "    VAL;\n" +
+                "}", EnumDeclaration.class);
     }
 }

@@ -46,6 +46,8 @@ public class SynchronizedStatementParselet extends StatementParselet<Synchronize
         }
         //pop lookahead
         parser.popLookAhead();
+        //spacing
+        parseWhiteSpaceAndComments(parser);
         //block
         BlockStatement block = parser.next(BlockStatement.class);
         if (block == null) {

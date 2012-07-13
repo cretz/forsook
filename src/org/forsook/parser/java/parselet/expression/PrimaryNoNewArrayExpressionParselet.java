@@ -34,13 +34,13 @@ public class PrimaryNoNewArrayExpressionParselet extends JavaParselet<PrimaryNoN
     @Override
     public PrimaryNoNewArrayExpression parse(Parser parser) {
         return (PrimaryNoNewArrayExpression) parser.first(
-                ClassExpression.class,
-                ThisExpression.class,
-                ParenthesizedExpression.class,
-                ClassInstanceCreationExpression.class,
-                FieldAccessExpression.class,
-                MethodInvocationExpression.class,
                 ArrayAccessExpression.class,
+                MethodInvocationExpression.class,
+                FieldAccessExpression.class,
+                ClassInstanceCreationExpression.class,
+                ParenthesizedExpression.class,
+                ThisExpression.class,
+                ClassExpression.class,
                 LiteralExpression.class
             );
     }
