@@ -3,6 +3,7 @@ package org.forsook.parser.java.parselet.decl;
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
 import org.forsook.parser.java.ast.decl.EnumDeclaration;
+import org.forsook.parser.java.ast.decl.FieldDeclaration;
 import org.forsook.parser.java.ast.decl.Modifier;
 import org.forsook.parser.java.ast.decl.VariableDeclarator;
 import org.forsook.parser.java.ast.packag.ImportDeclaration;
@@ -67,5 +68,10 @@ public class DeclarationParseletTest extends ParseletTestBase {
                 "public enum MyEnum {\n" +
                 "    VAL;\n" +
                 "}", EnumDeclaration.class);
+    }
+    
+    @Test
+    public void testFieldDeclaration() {
+        assertString("Map map = new HashMap();", FieldDeclaration.class);
     }
 }

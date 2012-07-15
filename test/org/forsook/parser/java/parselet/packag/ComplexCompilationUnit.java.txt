@@ -84,7 +84,7 @@ public class ComplexCompilationUnit {
         //cast
         a = (ChickenOfTheInfinite) b;
     }
-    
+
     public ComplexCompilationUnit() {
         //explicit
         this("meh");

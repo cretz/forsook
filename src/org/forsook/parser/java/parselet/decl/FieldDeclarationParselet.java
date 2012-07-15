@@ -52,6 +52,7 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
             if (variable == null) {
                 return null;
             }
+            variables.add(variable);
             //spacing
             parseWhiteSpaceAndComments(parser);
         } while (parser.peekPresentAndSkip(','));

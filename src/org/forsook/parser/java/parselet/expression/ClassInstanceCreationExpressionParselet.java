@@ -45,7 +45,13 @@ public class ClassInstanceCreationExpressionParselet
             parseWhiteSpaceAndComments(parser);
             //dot
             if (!parser.peekPresentAndSkip('.')) {
-                return null;
+                //was the scope myself?
+                if (scope instanceof ClassInstanceCreationExpression) {
+                    parser.popLookAhead();
+                    return (ClassInstanceCreationExpression) scope;
+                } else {
+                    return null;
+                }
             }
             //spacing
             parseWhiteSpaceAndComments(parser);

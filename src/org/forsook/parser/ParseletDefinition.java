@@ -60,4 +60,5 @@ public @interface ParseletDefinition {
      * is NOT inherited.
      */
     int recursiveMinimumSize() default -1;
+    
 }

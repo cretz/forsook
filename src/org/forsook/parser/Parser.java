@@ -123,6 +123,8 @@ public interface Parser {
      */
     boolean pushLookAhead(String... items);
     
+    
+    
     /**
      * Pop the look ahead that was pushed previously
      */
@@ -156,4 +158,8 @@ public interface Parser {
      * be used with extreme caution.
      */
     void backupCursor();
+    
+    interface LookAhead {
+        
+    }
 }

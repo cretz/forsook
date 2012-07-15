@@ -4,8 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Stack;
+import java.util.TreeMap;
+
+import org.forsook.parser.java.ast.lexical.Comment;
+import org.forsook.parser.java.ast.lexical.LiteralExpression;
+import org.forsook.parser.java.parselet.lexical.CharacterAndStringLiteralExpressionParselet;
+import org.forsook.parser.java.parselet.lexical.CommentParselet;
 
 /**
  * Simple parser supporting a string-based source file and a map of parselets
@@ -22,6 +30,8 @@ public class SimpleParser implements Parser {
     
     private final Stack<Integer> lookAheads = new Stack<Integer>();
     
+    private final NavigableMap<Integer, Integer> lexedNonCode = new TreeMap<Integer, Integer>();
+    
     private int cursor = -1;
     private int lastLocationCheckCursor = 0;
     private int lastKnownLine = 0;
@@ -30,6 +40,54 @@ public class SimpleParser implements Parser {
     public SimpleParser(String source, Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap) {
         this.source = source;
         this.parseletMap = parseletMap;
+        int index = 0;
+        CharacterAndStringLiteralExpressionParselet literal = 
+                new CharacterAndStringLiteralExpressionParselet();
+        CommentParselet comment = new CommentParselet();
+        while (index < source.length()) {
+            switch (source.charAt(index)) {
+            case '"':
+            case '\'':
+                cursor = index - 1;
+                LiteralExpression expr = literal.parse(this);
+                if (expr == null) {
+                    throw new RuntimeException();
+                }
+                lexedNonCode.put(index, cursor);
+                index = cursor + 1;
+                break;
+            case '/':
+                if (index < source.length() - 1) {
+                    switch (source.charAt(index + 1)) {
+                    case '/':
+                    case '*':
+                        cursor = index - 1;
+                        Comment cmt = comment.parse(this);
+                        if (cmt == null) {
+                            throw new RuntimeException();
+                        }
+                        lexedNonCode.put(index, cursor);
+                        index = cursor + 1;
+                        break;
+                    default:
+                        index++;
+                    }
+                } else {
+                    index++;
+                }
+                break;
+            default:
+                index++;
+            }
+        }
+        memoTable.clear();
+        lookAheads.clear();
+//        System.out.println("stack - " + lexedNonCode);
+//        for (Entry<Integer, Integer> entry : lexedNonCode.entrySet()) {
+//            System.out.println(source.substring(entry.getKey(), 
+//                    entry.getValue() + 1));
+//        }
+        cursor = -1;
     }
     
     @Override
@@ -132,8 +190,9 @@ public class SimpleParser implements Parser {
                 if (map == null) {
                     map = new HashMap<Integer, RecursiveTypeMemo>();
                     memoTable.put(type, map);
+                } else {
+                    memo = map.get(cursor);
                 }
-                memo = map.get(cursor);
                 if (memo == null) {
                     memo = new RecursiveTypeMemo(0);
                     map.put(cursor, memo);
@@ -192,10 +251,22 @@ public class SimpleParser implements Parser {
         Integer previous = lookAheads.isEmpty() ? source.length(): lookAheads.peek();
         int latestIndex = -1;
         for (char item : items) {
-            int index = source.lastIndexOf(item, previous - 1);
-            if (index > cursor && index > latestIndex) {
-                latestIndex = index;
-            }
+            Entry<Integer, Integer> entry;
+            int check = previous - 1;
+            do {
+                int index = source.lastIndexOf(item, check);
+                if (index > cursor && index > latestIndex && index < previous) {
+                    entry = lexedNonCode.floorEntry(index);
+                    if (entry == null || entry.getValue() < index) {
+                        latestIndex = index;
+                        break;
+                    } else {
+                        check = entry.getKey() - 1;
+                    }
+                } else {
+                    break;
+                }
+            } while (true);
         }
         if (latestIndex != -1) {
             lookAheads.push(latestIndex);
@@ -209,10 +280,22 @@ public class SimpleParser implements Parser {
         Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
         int latestIndex = -1;
         for (String item : items) {
-            int index = source.lastIndexOf(item, previous - 1);
-            if (index > cursor && index > latestIndex) {
-                latestIndex = index;
-            }
+            Entry<Integer, Integer> entry;
+            int check = previous - 1;
+            do {
+                int index = source.lastIndexOf(item, check);
+                if (index > cursor && index > latestIndex && index < previous) {
+                    entry = lexedNonCode.floorEntry(index);
+                    if (entry == null || entry.getValue() < index) {
+                        latestIndex = index;
+                        break;
+                    } else {
+                        check = entry.getKey() - 1;
+                    }
+                } else {
+                    break;
+                }
+            } while (true);
         }
         if (latestIndex != -1) {
             lookAheads.push(latestIndex);

@@ -23,7 +23,7 @@ public class LexicalParseletTest extends ParseletTestBase {
         assertString("//something here", Comment.class);
         assertString("/*more *complex**/", Comment.class);
         assertString("/**javadoc time!*/", Comment.class);
-        assertNull("this isn't a comment", Comment.class);
+        assertNull("notAComment()", Comment.class);
         assertString("//", Comment.class);
         assertString("/**/", Comment.class);
         assertString("/***/", Comment.class);
