@@ -103,6 +103,8 @@ public interface Parser {
      */
     <T> T next(Class<T> type);
     
+    <T> T next(Class<T> type, Class<?> cantRecurseType);
+    
     /**
      * Checks to see whether any of the given items are 
      * anywhere in the source starting at the cursor of
@@ -112,6 +114,10 @@ public interface Parser {
      * @return
      */
     boolean pushLookAhead(char... items);
+    
+    boolean pushFirstDepthLookAhead(int astDepth, char... items);
+    
+    boolean pushLastDepthLookAhead(int astDepth, char... items);
     
     /**
      * Checks to see whether any of the given items are 
@@ -123,12 +129,14 @@ public interface Parser {
      */
     boolean pushLookAhead(String... items);
     
-    
+    boolean pushFirstDepthLookAhead(int astDepth, String... items);
     
     /**
      * Pop the look ahead that was pushed previously
      */
     void popLookAhead();
+    
+    int peekAstDepth();
     
     /**
      * Get the current cursor position

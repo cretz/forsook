@@ -16,6 +16,10 @@ public class InitializerDeclarationParselet extends BodyDeclarationParselet<Init
 
     @Override
     public InitializerDeclaration parse(Parser parser) {
+        //TODO: get javadoc out and store it?
+        //spacing
+        parseWhiteSpaceAndComments(parser);
+        //static?
         boolean _static = parser.peekPresentAndSkip("static");
         if (_static) {
             //spacing

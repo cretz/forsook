@@ -127,7 +127,7 @@ public abstract class BodyDeclarationParselet<T extends BodyDeclaration> extends
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         List<Parameter> parameters = new ArrayList<Parameter>();

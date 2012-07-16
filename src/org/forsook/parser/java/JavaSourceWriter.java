@@ -12,6 +12,7 @@ import org.forsook.parser.java.ast.decl.ClassOrInterfaceBody;
 import org.forsook.parser.java.ast.decl.ClassOrInterfaceDeclaration;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
 import org.forsook.parser.java.ast.decl.ElementValue;
+import org.forsook.parser.java.ast.decl.ElementValueArrayInitializerExpression;
 import org.forsook.parser.java.ast.decl.EnumBody;
 import org.forsook.parser.java.ast.decl.EnumConstantDeclaration;
 import org.forsook.parser.java.ast.decl.EnumDeclaration;
@@ -62,7 +63,6 @@ import org.forsook.parser.java.ast.expression.ShiftOperatorExpression.ShiftOpera
 import org.forsook.parser.java.ast.expression.SignedExpression;
 import org.forsook.parser.java.ast.expression.ThisExpression;
 import org.forsook.parser.java.ast.lexical.BlockComment;
-import org.forsook.parser.java.ast.lexical.Comment;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.lexical.JavadocComment;
 import org.forsook.parser.java.ast.lexical.LineComment;
@@ -132,7 +132,6 @@ public class JavaSourceWriter {
     }
     
     private class ToStringVisitor extends JavaModelVisitor {
-
         private void visitSeparated(List<?> list, String separator) {
             visitSeparated(list, separator, false);
         }
@@ -225,7 +224,7 @@ public class JavaSourceWriter {
 
         @Override
         public void visit(ArrayAccessExpression a) {
-            visit(a.getName());
+            visit(a.getScope());
             builder.append('[');
             visit(a.getIndex());
             builder.append(']');
@@ -299,6 +298,11 @@ public class JavaSourceWriter {
             visitBlockOrIndentedStatement(a.getBody());
         }
 
+        @Override
+        public void visit(BlockComment a) {
+            builder.append("/*").append(a.getText()).append("*/");
+        }
+        
         @Override
         public void visit(BlockStatement a) {
             builder.append('{');
@@ -431,17 +435,6 @@ public class JavaSourceWriter {
             visit(a.getName());
             if (a.getTypeArguments() != null) {
                 visit(a.getTypeArguments());
-            }
-        }
-        
-        @Override
-        public void visit(Comment a) {
-            if (a instanceof LineComment) {
-                builder.append("//").append(a.getText());
-            } else if (a instanceof BlockComment) {
-                builder.append("/*").append(a.getText()).append("*/");
-            } else if (a instanceof JavadocComment) {
-                visit((JavadocComment) a);
             }
         }
 
@@ -761,6 +754,11 @@ public class JavaSourceWriter {
             visit(a.getStatement());
             statementDepth--;
         }
+        
+        @Override
+        public void visit(LineComment a) {
+            builder.append("//").append(a.getText());
+        }
 
         @Override
         public void visit(LiteralExpression a) {
@@ -841,7 +839,8 @@ public class JavaSourceWriter {
             if (a.getScope() != null) {
                 visit(a.getScope());
                 builder.append('.');
-            } else if (a.getClassName() != null) {
+            }
+            if (a.getClassName() != null) {
                 visit(a.getClassName());
                 builder.append('.');
             }
@@ -1201,6 +1200,13 @@ public class JavaSourceWriter {
                 builder.append(" super ");
                 visit(a.getSuperType());
             }
+        }
+        
+        @Override
+        public void visit(ElementValueArrayInitializerExpression a) {
+            builder.append('{');
+            visitSeparated(a.getValues(), ", ");
+            builder.append('}');
         }
 
         @Override

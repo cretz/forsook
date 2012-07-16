@@ -75,7 +75,7 @@ public class ConstructorDeclarationParselet extends BodyDeclarationParselet<Cons
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushLookAhead('}')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), '}')) {
             return null;
         }
         //statements

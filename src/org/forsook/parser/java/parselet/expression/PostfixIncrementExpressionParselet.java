@@ -23,7 +23,8 @@ public class PostfixIncrementExpressionParselet extends ExpressionParselet<Postf
             return null;
         }
         //expression
-        Expression expression = (Expression) parser.next(PostfixExpression.class);
+        Expression expression = (Expression) parser.next(PostfixExpression.class, 
+                PostfixIncrementExpression.class);
         if (expression == null) {
             return null;
         }

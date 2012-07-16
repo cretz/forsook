@@ -3,6 +3,7 @@ package org.forsook.parser.java.parselet.expression;
 import org.forsook.parser.java.ast.expression.AdditiveOperatorExpression;
 import org.forsook.parser.java.ast.expression.AndOperatorExpression;
 import org.forsook.parser.java.ast.expression.ArrayAccessExpression;
+import org.forsook.parser.java.ast.expression.ArrayCreationExpression;
 import org.forsook.parser.java.ast.expression.AssignmentOperatorExpression;
 import org.forsook.parser.java.ast.expression.AssignmentOperatorExpression.AssignmentOperator;
 import org.forsook.parser.java.ast.expression.CastExpression;
@@ -30,6 +31,7 @@ public class ExpressionParseletTest extends ParseletTestBase {
         assertString("1 == 1", EqualityOperatorExpression.class);
         assertString("1 != 1", EqualityOperatorExpression.class);
         assertString("1 + 1", AdditiveOperatorExpression.class);
+        assertString("1 + 1 + 1", AdditiveOperatorExpression.class);
         assertString("1 - 1", AdditiveOperatorExpression.class);
         assertString("1 & 1", AndOperatorExpression.class);
         assertString("true && false", ConditionalAndOperatorExpression.class);
@@ -55,6 +57,9 @@ public class ExpressionParseletTest extends ParseletTestBase {
             assertString("i " + operator.toString() + " 5", AssignmentOperatorExpression.class);
         }
         assertString("i = (SomeClass) j", AssignmentOperatorExpression.class);
+        assertString("a = b()[c].d()", AssignmentOperatorExpression.class);
+        assertString("a[b] = c", AssignmentOperatorExpression.class);
+        assertString("a = c().d", AssignmentOperatorExpression.class);
     }
 
     @Test
@@ -76,12 +81,37 @@ public class ExpressionParseletTest extends ParseletTestBase {
     @Test
     public void testMethodInvocationExpression() {
         assertString("System.out.println()", MethodInvocationExpression.class);
-//        assertString("println(new SomeClass().method())", 
-//                MethodInvocationExpression.class);
+        assertString("println(new SomeClass().method())", 
+                MethodInvocationExpression.class);
+        assertString("method().method(method(), method().method())",
+                MethodInvocationExpression.class);
+        //test a bunch of right recursion-removal
+        String method = "";
+        for (int i = 0; i < 20; i++) {
+            if (!method.isEmpty()) {
+                method += '.';
+            }
+            method += "a()";
+            assertString(method, MethodInvocationExpression.class);
+        }
+        //test field access and array access right recursion-removal
+        assertString("a()[0].b()", MethodInvocationExpression.class);
+        assertString("a().b.c()", MethodInvocationExpression.class);
+        assertString("this.meh.call()", MethodInvocationExpression.class);
     }
     
     @Test
     public void testCastExpression() {
         assertString("(SomeClass) a", CastExpression.class);
+    }
+    
+    @Test
+    public void testArrayCreationExpression() {
+        assertString("new int[5][]", ArrayCreationExpression.class);
+    }
+    
+    @Test
+    public void testParenthesizedExpression() {
+        assertString("((a))", ParenthesizedExpression.class);
     }
 }

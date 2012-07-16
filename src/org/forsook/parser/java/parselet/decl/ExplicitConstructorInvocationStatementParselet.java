@@ -33,7 +33,8 @@ public class ExplicitConstructorInvocationStatementParselet
             return null;
         }
         //scope
-        Expression scope = (Expression) parser.next(PrimaryExpression.class);
+        Expression scope = (Expression) parser.next(PrimaryExpression.class, 
+                ExplicitConstructorInvocationStatement.class);
         //it's possible that it sees the "this" before "this()"
         boolean thisPresent = scope instanceof ThisExpression;
         NonWildTypeArguments typeArguments = null;
@@ -71,7 +72,7 @@ public class ExplicitConstructorInvocationStatementParselet
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing

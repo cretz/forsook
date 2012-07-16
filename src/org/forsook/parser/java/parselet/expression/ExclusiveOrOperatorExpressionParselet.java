@@ -40,7 +40,8 @@ public class ExclusiveOrOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(AndExpression.class);
+        Expression right = (Expression) parser.next(AndExpression.class, 
+                ExclusiveOrOperatorExpression.class);
         if (right == null) {
             return null;
         }

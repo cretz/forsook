@@ -31,7 +31,7 @@ public class SwitchStatementParselet extends StatementParselet<SwitchStatement> 
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing
@@ -56,7 +56,7 @@ public class SwitchStatementParselet extends StatementParselet<SwitchStatement> 
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead('}')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), '}')) {
             return null;
         }
         //spacing

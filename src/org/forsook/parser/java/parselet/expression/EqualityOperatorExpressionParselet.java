@@ -26,7 +26,8 @@ public class EqualityOperatorExpressionParselet
             return null;
         }
         //left
-        Expression left = (Expression) parser.next(RelationalExpression.class);
+        Expression left = (Expression) parser.next(RelationalExpression.class, 
+                EqualityOperatorExpression.class);
         if (left == null) {
             return null;
         }
@@ -46,7 +47,8 @@ public class EqualityOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(EqualityExpression.class);
+        Expression right = (Expression) parser.next(EqualityExpression.class, 
+                EqualityOperatorExpression.class);
         if (right == null) {
             return null;
         }

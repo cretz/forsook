@@ -17,7 +17,7 @@ public class LocalVariableDeclarationStatementParselet extends StatementParselet
     @Override
     public LocalVariableDeclarationStatement parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead(';')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ';')) {
             return null;
         }
         //declaration

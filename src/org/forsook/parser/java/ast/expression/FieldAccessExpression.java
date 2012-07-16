@@ -6,7 +6,8 @@ import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.11")
 @SuppressWarnings("serial")
-public class FieldAccessExpression extends Expression implements PrimaryNoNewArrayExpression {
+public class FieldAccessExpression extends Expression 
+        implements PrimaryNoNewArrayExpression, ScopedExpression {
 
     private Expression scope;
     private QualifiedName className;
@@ -24,10 +25,12 @@ public class FieldAccessExpression extends Expression implements PrimaryNoNewArr
         this.field = field;
     }
 
+    @Override
     public Expression getScope() {
         return scope;
     }
 
+    @Override
     public void setScope(Expression scope) {
         this.scope = scope;
     }

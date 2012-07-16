@@ -26,6 +26,7 @@ public class AnnotationTypeElementDeclarationParselet
 
     @Override
     public AnnotationTypeElementDeclaration parse(Parser parser) {
+        int currDepth = parser.peekAstDepth();
         //lookahead
         if (!parser.pushLookAhead('(')) {
             return null;
@@ -57,7 +58,7 @@ public class AnnotationTypeElementDeclarationParselet
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushLookAhead(';')) {
+        if (!parser.pushFirstDepthLookAhead(currDepth, ';')) {
             return null;
         }
         parseWhiteSpaceAndComments(parser);

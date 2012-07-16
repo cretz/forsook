@@ -47,7 +47,8 @@ public class ShiftOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(AdditiveExpression.class);
+        Expression right = (Expression) parser.next(AdditiveExpression.class, 
+                ShiftOperatorExpression.class);
         if (right == null) {
             return null;
         }

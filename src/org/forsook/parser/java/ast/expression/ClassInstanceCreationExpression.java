@@ -11,7 +11,7 @@ import org.forsook.parser.java.ast.type.TypeArguments;
 @JlsReference("15.9")
 @SuppressWarnings("serial")
 public class ClassInstanceCreationExpression extends Expression 
-        implements PrimaryNoNewArrayExpression, StatementExpression {
+        implements PrimaryNoNewArrayExpression, StatementExpression, ScopedExpression {
 
     private Expression scope;
     private TypeArguments preTypeArguments;
@@ -37,10 +37,12 @@ public class ClassInstanceCreationExpression extends Expression
         this.anonymousBody = anonymousBody;
     }
 
+    @Override
     public Expression getScope() {
         return scope;
     }
 
+    @Override
     public void setScope(Expression scope) {
         this.scope = scope;
     }

@@ -25,7 +25,8 @@ public class FieldDeclarationParselet extends BodyDeclarationParselet<FieldDecla
     @Override
     public FieldDeclaration parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead(';')) {
+        if (!parser.pushFirstDepthLookAhead(
+                parser.peekAstDepth(), ';')) {
             return null;
         }
         //annotations, javadoc, and modifiers

@@ -40,7 +40,8 @@ public class ConditionalOrOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(ConditionalAndExpression.class);
+        Expression right = (Expression) parser.next(ConditionalAndExpression.class, 
+                ConditionalOrOperatorExpression.class);
         if (right == null) {
             return null;
         }

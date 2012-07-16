@@ -29,7 +29,8 @@ public class RelationalOperatorExpressionParselet
             return null;
         }
         //left
-        Expression left = (Expression) parser.next(RelationalExpression.class);
+        Expression left = (Expression) parser.next(RelationalExpression.class, 
+                RelationalOperatorExpression.class);
         if (left == null) {
             return null;
         }
@@ -62,7 +63,8 @@ public class RelationalOperatorExpressionParselet
                 right = new TypeExpression(type);
             }
         } else {
-            right = (Expression) parser.next(ShiftExpression.class);
+            right = (Expression) parser.next(ShiftExpression.class, 
+                    RelationalOperatorExpression.class);
         }
         if (right == null) {
             return null;

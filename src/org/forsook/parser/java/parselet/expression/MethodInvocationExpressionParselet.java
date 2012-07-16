@@ -8,10 +8,12 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.decl.NonWildTypeArguments;
+import org.forsook.parser.java.ast.expression.ArrayAccessExpression;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.expression.FieldAccessExpression;
 import org.forsook.parser.java.ast.expression.MethodInvocationExpression;
 import org.forsook.parser.java.ast.expression.PrimaryExpression;
+import org.forsook.parser.java.ast.expression.ScopedExpression;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
@@ -34,11 +36,13 @@ public class MethodInvocationExpressionParselet
     @Override
     public MethodInvocationExpression parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead('(')) {
+        if (!parser.pushLastDepthLookAhead(parser.peekAstDepth() + 1, '(')) {
             return null;
         }
         //scope
-        Expression scope = (Expression) parser.next(PrimaryExpression.class);
+        //this is too heavy to allow left recursion here, turned to right recusion later...
+        Expression scope = (Expression) parser.next(PrimaryExpression.class, 
+                MethodInvocationExpression.class);
         QualifiedName className = null;
         boolean superPresent = false;
         QualifiedName methodName = null;
@@ -117,7 +121,7 @@ public class MethodInvocationExpressionParselet
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing
@@ -146,7 +150,73 @@ public class MethodInvocationExpressionParselet
         }
         //pop lookahead
         parser.popLookAhead();
-        return new MethodInvocationExpression(scope, className, 
+        //regular
+        MethodInvocationExpression expr = new MethodInvocationExpression(scope, className, 
                 superPresent, typeArguments, methodName, arguments);
+        ArrayAccessExpression pendingArray = null;
+        //now, right recursively get other method calls :-(
+        int lastKnownGoodCursor = parser.getCursor();
+        do {
+            boolean found = false;
+            //dot or array access?
+            if (parser.peekPresentAndSkip('.')) {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+                //method?
+                MethodInvocationExpression parent = parser.next(MethodInvocationExpression.class);
+                if (parent != null) {
+                    //set parent scope
+                    ScopedExpression scoped = parent;
+                    while (scoped.getScope() != null) {
+                        //better be a scoped expression or somethin's messed up
+                        scoped = (ScopedExpression) scoped.getScope();
+                    }
+                    scoped.setScope(pendingArray != null ? pendingArray : expr);
+                    pendingArray = null;
+                    expr = parent;
+                    found = true;
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
+                    lastKnownGoodCursor = parser.getCursor();
+                }
+            } else if (parser.peekPresentAndSkip('[')) {
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+                //lookahead
+                if (parser.pushLookAhead(']')) {
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
+                    //expression
+                    Expression index = parser.next(Expression.class);
+                    if (index == null) {
+                        return null;
+                    }
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
+                    //bracket
+                    if (!parser.peekPresentAndSkip(']')) {
+                        return null;
+                    }
+                    //pop lookahead
+                    parser.popLookAhead();
+                    //populate
+                    pendingArray = new ArrayAccessExpression(expr, index);
+                    expr = null;
+                    found = true;
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
+                }
+            }
+            if (!found) {
+                break;
+            }
+        } while (true);
+        //rollback cursor
+        int finalCursor = parser.getCursor();
+        for (int i = 0; i < finalCursor - lastKnownGoodCursor; i++) {
+            //TODO: expose forced setter?
+            parser.backupCursor();
+        }
+        return expr;
     }
 }

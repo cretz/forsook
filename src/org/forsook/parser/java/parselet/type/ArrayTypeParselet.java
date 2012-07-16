@@ -18,7 +18,7 @@ public class ArrayTypeParselet extends TypeParselet<ArrayType> {
     @Override
     public ArrayType parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead('[')) {
+        if (!parser.pushLastDepthLookAhead(parser.peekAstDepth(), '[')) {
             return null;
         }
         //type

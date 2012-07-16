@@ -48,7 +48,8 @@ public class MultiplicativeOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(UnaryExpression.class);
+        Expression right = (Expression) parser.next(UnaryExpression.class, 
+                MultiplicativeOperatorExpression.class);
         if (right == null) {
             return null;
         }

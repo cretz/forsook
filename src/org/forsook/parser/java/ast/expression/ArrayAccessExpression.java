@@ -4,25 +4,26 @@ import org.forsook.parser.java.JlsReference;
 
 @JlsReference("15.13")
 @SuppressWarnings("serial")
-public class ArrayAccessExpression extends Expression implements PrimaryNoNewArrayExpression {
+public class ArrayAccessExpression extends Expression
+        implements PrimaryNoNewArrayExpression, ScopedExpression {
 
-    private Expression name;
+    private Expression scope;
     private Expression index;
     
     public ArrayAccessExpression() {
     }
     
-    public ArrayAccessExpression(Expression name, Expression index) {
-        this.name = name;
+    public ArrayAccessExpression(Expression scope, Expression index) {
+        this.scope = scope;
         this.index = index;
     }
     
-    public Expression getName() {
-        return name;
+    public Expression getScope() {
+        return scope;
     }
     
-    public void setName(Expression name) {
-        this.name = name;
+    public void setScope(Expression scope) {
+        this.scope = scope;
     }
     
     public Expression getIndex() {
@@ -38,7 +39,7 @@ public class ArrayAccessExpression extends Expression implements PrimaryNoNewArr
         final int prime = 31;
         int result = 1;
         result = prime * result + ((index == null) ? 0 : index.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((scope == null) ? 0 : scope.hashCode());
         return result;
     }
 
@@ -61,11 +62,11 @@ public class ArrayAccessExpression extends Expression implements PrimaryNoNewArr
         } else if (!index.equals(other.index)) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
+        if (scope == null) {
+            if (other.scope != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (!scope.equals(other.scope)) {
             return false;
         }
         return true;

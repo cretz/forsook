@@ -25,7 +25,8 @@ public class PrefixIncrementExpressionParselet extends ExpressionParselet<Prefix
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression
-        Expression expression = (Expression) parser.next(UnaryExpression.class);
+        Expression expression = (Expression) parser.next(UnaryExpression.class, 
+                PrefixIncrementExpression.class);
         if (expression == null) {
             return null;
         }

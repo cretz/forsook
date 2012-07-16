@@ -41,8 +41,8 @@ public class AssignmentOperatorExpressionParselet
             return null;
         }
         //left
-        Expression left = (Expression) parser.first(QualifiedName.class, 
-                FieldAccessExpression.class, ArrayAccessExpression.class);
+        Expression left = (Expression) parser.first(ArrayAccessExpression.class, 
+                FieldAccessExpression.class, QualifiedName.class);
         if (left == null) {
             return null;
         }
@@ -64,7 +64,8 @@ public class AssignmentOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(AssignmentExpression.class);
+        Expression right = (Expression) parser.next(AssignmentExpression.class, 
+                AssignmentOperatorExpression.class);
         if (right == null) {
             return null;
         }

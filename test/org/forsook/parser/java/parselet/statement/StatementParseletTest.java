@@ -79,7 +79,8 @@ public class StatementParseletTest extends ParseletTestBase {
     
     @Test
     public void testThrowStatement() {
-        assertString("throw new Exception(\"hey\");", ThrowStatement.class);
+//        assertString("throw new Exception(\"hey\");", ThrowStatement.class);
+        assertString("throw new a(\"\" + a.b() + \"\");", ThrowStatement.class);
     }
     
     @Test

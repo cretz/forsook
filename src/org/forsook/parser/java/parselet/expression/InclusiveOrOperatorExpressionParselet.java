@@ -40,7 +40,8 @@ public class InclusiveOrOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(ExclusiveOrExpression.class);
+        Expression right = (Expression) parser.next(ExclusiveOrExpression.class, 
+                InclusiveOrOperatorExpression.class);
         if (right == null) {
             return null;
         }

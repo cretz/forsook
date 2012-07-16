@@ -46,7 +46,8 @@ public class AdditiveOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(MultiplicativeExpression.class);
+        Expression right = (Expression) parser.next(MultiplicativeExpression.class,
+                AdditiveOperatorExpression.class);
         if (right == null) {
             return null;
         }

@@ -64,6 +64,8 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
         }
         //pop lookahead
         parser.popLookAhead();
+        //need a check here to make sure it's not a method or field
+        parseWhiteSpaceAndComments(parser);
         return new ArrayAccessExpression(name, index);
     }
 

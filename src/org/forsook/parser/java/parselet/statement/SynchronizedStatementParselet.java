@@ -28,7 +28,7 @@ public class SynchronizedStatementParselet extends StatementParselet<Synchronize
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing

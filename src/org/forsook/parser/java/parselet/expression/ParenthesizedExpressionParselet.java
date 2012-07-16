@@ -21,7 +21,7 @@ public class ParenthesizedExpressionParselet extends ExpressionParselet<Parenthe
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing

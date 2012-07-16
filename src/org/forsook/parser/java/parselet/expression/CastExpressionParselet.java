@@ -31,7 +31,7 @@ public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing

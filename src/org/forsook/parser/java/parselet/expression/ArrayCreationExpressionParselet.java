@@ -33,8 +33,9 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
         if (!parser.peekPresentAndSkip("new")) {
             return null;
         }
+        int currDepth = parser.peekAstDepth();
         //lookahead
-        if (!parser.pushLookAhead('[')) {
+        if (!parser.pushFirstDepthLookAhead(currDepth, '[')) {
             return null;
         }
         //spacing
@@ -64,7 +65,9 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
             //spacing
             parseWhiteSpaceAndComments(parser);
             //expression
-            Expression expression = parser.next(Expression.class);
+            //TODO: is it possible to have new T[new T...?
+            Expression expression = parser.next(Expression.class, 
+                    ArrayCreationExpression.class);
             if (expression == null) {
                 nonExpressionDimFound = true;
             } else if (nonExpressionDimFound) {
@@ -81,6 +84,9 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
             //pop lookahead
             parser.popLookAhead();
             dimensions.add(new Dimension(expression));
+            if (!parser.pushFirstDepthLookAhead(currDepth, '[')) {
+                break;
+            }
         } while (true);
         if (dimensions.isEmpty()) {
             return null;

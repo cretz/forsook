@@ -20,7 +20,7 @@ public class AssertStatementParselet extends StatementParselet<AssertStatement> 
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(';')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ';')) {
             return null;
         }
         //spacing

@@ -8,7 +8,7 @@ import org.forsook.parser.java.ast.type.Type;
 
 @JlsReference("15.10")
 @SuppressWarnings("serial")
-public class ArrayCreationExpression extends Expression {
+public class ArrayCreationExpression extends Expression implements PrimaryExpression {
 
     private Type type;
     private List<Dimension> dimensions;

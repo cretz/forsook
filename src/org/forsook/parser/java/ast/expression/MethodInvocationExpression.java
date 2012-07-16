@@ -10,7 +10,7 @@ import org.forsook.parser.java.ast.statement.StatementExpression;
 @JlsReference("15.12")
 @SuppressWarnings("serial")
 public class MethodInvocationExpression extends Expression
-        implements PrimaryNoNewArrayExpression, StatementExpression {
+        implements PrimaryNoNewArrayExpression, StatementExpression, ScopedExpression {
 
     private Expression scope;
     private QualifiedName className;
@@ -34,10 +34,12 @@ public class MethodInvocationExpression extends Expression
         this.arguments = arguments;
     }
 
+    @Override
     public Expression getScope() {
         return scope;
     }
 
+    @Override
     public void setScope(Expression scope) {
         this.scope = scope;
     }

@@ -1,14 +1,12 @@
 package org.forsook.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Stack;
-import java.util.TreeMap;
 
 import org.forsook.parser.java.ast.lexical.Comment;
 import org.forsook.parser.java.ast.lexical.LiteralExpression;
@@ -30,7 +28,12 @@ public class SimpleParser implements Parser {
     
     private final Stack<Integer> lookAheads = new Stack<Integer>();
     
-    private final NavigableMap<Integer, Integer> lexedNonCode = new TreeMap<Integer, Integer>();
+//    private final NavigableMap<Integer, Integer> lexedNonCode = new TreeMap<Integer, Integer>();
+    private final boolean[] nonCode;
+    //just commas and braces for now
+    private final int[] astDepth;
+    
+    private final List<String> cantRecurse = new ArrayList<String>();
     
     private int cursor = -1;
     private int lastLocationCheckCursor = 0;
@@ -41,9 +44,11 @@ public class SimpleParser implements Parser {
         this.source = source;
         this.parseletMap = parseletMap;
         int index = 0;
+        //TODO: this w/ separate parser please so it'll be up extensions
         CharacterAndStringLiteralExpressionParselet literal = 
                 new CharacterAndStringLiteralExpressionParselet();
         CommentParselet comment = new CommentParselet();
+        nonCode = new boolean[source.length()];
         while (index < source.length()) {
             switch (source.charAt(index)) {
             case '"':
@@ -51,11 +56,14 @@ public class SimpleParser implements Parser {
                 cursor = index - 1;
                 LiteralExpression expr = literal.parse(this);
                 if (expr == null) {
-                    throw new RuntimeException();
+                    throw new RuntimeException(
+                            "Incomplete string/char literal starting at " +
+                            getLine() + ":" + getColumn());
                 }
-                lexedNonCode.put(index, cursor);
+                Arrays.fill(nonCode, index, cursor + 1, true);
+//                lexedNonCode.put(index, cursor);
                 index = cursor + 1;
-                break;
+                continue;
             case '/':
                 if (index < source.length() - 1) {
                     switch (source.charAt(index + 1)) {
@@ -66,19 +74,33 @@ public class SimpleParser implements Parser {
                         if (cmt == null) {
                             throw new RuntimeException();
                         }
-                        lexedNonCode.put(index, cursor);
+//                        lexedNonCode.put(index, cursor);
+                        Arrays.fill(nonCode, index, cursor + 1, true);
                         index = cursor + 1;
-                        break;
-                    default:
-                        index++;
+                        continue;
                     }
-                } else {
-                    index++;
                 }
-                break;
-            default:
-                index++;
             }
+            index++;
+        }
+        //now ast depth
+        astDepth = new int[source.length()];
+        int currDepth = 0;
+        for (int i = 0; i < source.length(); i++) {
+            if (!nonCode[i]) {
+                switch (source.charAt(i)) {
+                case '(':
+                case '{':
+                    astDepth[i] = ++currDepth;
+                    continue;
+                case ')':
+                case '}':
+                    astDepth[i] = currDepth;
+                    currDepth--;
+                    continue;
+                }
+            }
+            astDepth[i] = currDepth;
         }
         memoTable.clear();
         lookAheads.clear();
@@ -88,6 +110,9 @@ public class SimpleParser implements Parser {
 //                    entry.getValue() + 1));
 //        }
         cursor = -1;
+        lastLocationCheckCursor = 0;
+        lastKnownLine = 0;
+        lastKnownColumn = 0;
     }
     
     @Override
@@ -175,75 +200,96 @@ public class SimpleParser implements Parser {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T next(Class<T> type) {
-        NavigableSet<ParseletInstance> parseletSet = parseletMap.get(type);
-        if (parseletSet == null) {
-            throw new RuntimeException("No parselets that emit type " + type);
+        return next(type, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> T next(Class<T> type, Class<?> cantRecurseType) {
+        if (cantRecurse.contains(type.getName() + "-" + cursor)) {
+            return null;
         }
-        for (ParseletInstance parselet : parseletSet) {
-            //need to check whether this is impossible recursive
-            RecursiveTypeMemo memo = null;
-            if (parselet.getRecursiveMinimumSize() != null) {
-                //in the map?
-                Map<Integer, RecursiveTypeMemo> map = memoTable.get(type);
-                if (map == null) {
-                    map = new HashMap<Integer, RecursiveTypeMemo>();
-                    memoTable.put(type, map);
-                } else {
-                    memo = map.get(cursor);
-                }
-                if (memo == null) {
-                    memo = new RecursiveTypeMemo(0);
-                    map.put(cursor, memo);
-                }
-                //is this over the length allowed?
-                if (memo.minimumNeeded > source.length() - cursor - 1) {
-                    //did we have one here before?
-                    if (memo.previouslyFound != null) {
-                        //we did, so reset the cursor and return the object
-                        cursor = memo.previousFoundEndingCursor;
-                        return (T) memo.previouslyFound;
+        String cantRecurseKey = null;
+        if (cantRecurseType != null) {
+            cantRecurseKey = cantRecurseType.getName() + "-" + cursor;
+            cantRecurse.add(cantRecurseKey);
+        }
+        try {
+            NavigableSet<ParseletInstance> parseletSet = parseletMap.get(type);
+            if (parseletSet == null) {
+                throw new RuntimeException("No parselets that emit type " + type);
+            }
+            for (ParseletInstance parselet : parseletSet) {
+                //need to check whether this is impossible recursive
+                RecursiveTypeMemo memo = null;
+                if (parselet.getRecursiveMinimumSize() != null) {
+                    //in the map?
+                    Map<Integer, RecursiveTypeMemo> map = memoTable.get(type);
+                    if (map == null) {
+                        map = new HashMap<Integer, RecursiveTypeMemo>();
+                        memoTable.put(type, map);
+                    } else {
+                        memo = map.get(cursor);
                     }
-                    //nope, recursion gone too far
-                    return null;
-                } else {
-                    memo.minimumNeeded += parselet.getRecursiveMinimumSize();
+                    if (memo == null) {
+                        memo = new RecursiveTypeMemo(0);
+                        memo.maxCursor = lookAheads.isEmpty() ?
+                                source.length() : lookAheads.peek();
+                        memo.maxCursor -= cursor - 1;
+                        map.put(cursor, memo);
+                    }
+                    //is this over the length allowed?
+                    if (memo.minimumNeeded > memo.maxCursor) {
+                        //did we have one here before?
+                        if (memo.previouslyFound != null) {
+                            //we did, so reset the cursor and return the object
+                            cursor = memo.previousFoundEndingCursor;
+                            return (T) memo.previouslyFound;
+                        }
+                        //nope, recursion gone too far
+                        return null;
+                    } else {
+                        memo.minimumNeeded += parselet.getRecursiveMinimumSize();
+                    }
                 }
-            }
-            //hold on to the cursor so we can roll back
-            int oldCursor = cursor;
-            //holf on to the lookahead stack size, so we can roll back
-            int lookAheadStackSize = lookAheads.size();
-            //parse
-            T object = (T) parselet.getParselet().parse(this);
-            //rollback minimum needed
-            if (memo != null) {
-                memo.minimumNeeded -= parselet.getRecursiveMinimumSize();
-            }
-            //actually get something?
-            if (object != null) {
-                //if we had a recursive minimum, say we found an object
+                //hold on to the cursor so we can roll back
+                int oldCursor = cursor;
+                //holf on to the lookahead stack size, so we can roll back
+                int lookAheadStackSize = lookAheads.size();
+                //parse
+                T object = (T) parselet.getParselet().parse(this);
+                //rollback minimum needed
                 if (memo != null) {
-                    memo.previouslyFound = object;
-                    memo.previousFoundEndingCursor = cursor;
+                    memo.minimumNeeded -= parselet.getRecursiveMinimumSize();
                 }
-                return object;
+                //actually get something?
+                if (object != null) {
+                    //if we had a recursive minimum, say we found an object
+                    if (memo != null) {
+                        memo.previouslyFound = object;
+                        memo.previousFoundEndingCursor = cursor;
+                    }
+                    return object;
+                }
+                //reset the lookahead stack
+                if (lookAheads.size() > lookAheadStackSize) {
+                    lookAheads.subList(lookAheadStackSize, lookAheads.size()).clear();
+                }
+                //check for memo
+                if (memo != null && memo.previouslyFound != null) {
+                    //we had one earlier in this cursor and type, so update cursor and return it
+                    cursor = memo.previousFoundEndingCursor;
+                    return (T) memo.previouslyFound;
+                }
+                //reset the cursor
+                cursor = oldCursor;
             }
-            //reset the lookahead stack
-            if (lookAheads.size() > lookAheadStackSize) {
-                lookAheads.subList(lookAheadStackSize, lookAheads.size()).clear();
+            return null;
+        } finally {
+            if (cantRecurseKey != null) {
+                cantRecurse.remove(cantRecurseKey);
             }
-            //check for memo
-            if (memo != null && memo.previouslyFound != null) {
-                //we had one earlier in this cursor and type, so update cursor and return it
-                cursor = memo.previousFoundEndingCursor;
-                return (T) memo.previouslyFound;
-            }
-            //reset the cursor
-            cursor = oldCursor;
         }
-        return null;
     }
     
     @Override
@@ -251,17 +297,32 @@ public class SimpleParser implements Parser {
         Integer previous = lookAheads.isEmpty() ? source.length(): lookAheads.peek();
         int latestIndex = -1;
         for (char item : items) {
-            Entry<Integer, Integer> entry;
+//            Entry<Integer, Integer> entry;
             int check = previous - 1;
             do {
                 int index = source.lastIndexOf(item, check);
                 if (index > cursor && index > latestIndex && index < previous) {
-                    entry = lexedNonCode.floorEntry(index);
-                    if (entry == null || entry.getValue() < index) {
+//                    entry = lexedNonCode.floorEntry(index);
+//                    if (entry == null || entry.getValue() < index) {
+//                        latestIndex = index;
+//                        break;
+//                    } else {
+//                        check = entry.getKey() - 1;
+//                    }
+                    if (nonCode[index]) {
+                        int i;
+                        for (i = index; i >= 0; i--) {
+                            if (!nonCode[i]) {
+                                check = i;
+                                break;
+                            }
+                        }
+                        if (i == -1) {
+                            throw new RuntimeException();
+                        }
+                    } else {
                         latestIndex = index;
                         break;
-                    } else {
-                        check = entry.getKey() - 1;
                     }
                 } else {
                     break;
@@ -280,17 +341,32 @@ public class SimpleParser implements Parser {
         Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
         int latestIndex = -1;
         for (String item : items) {
-            Entry<Integer, Integer> entry;
+//            Entry<Integer, Integer> entry;
             int check = previous - 1;
             do {
                 int index = source.lastIndexOf(item, check);
                 if (index > cursor && index > latestIndex && index < previous) {
-                    entry = lexedNonCode.floorEntry(index);
-                    if (entry == null || entry.getValue() < index) {
+//                    entry = lexedNonCode.floorEntry(index);
+//                    if (entry == null || entry.getValue() < index) {
+//                        latestIndex = index;
+//                        break;
+//                    } else {
+//                        check = entry.getKey() - 1;
+//                    }
+                    if (nonCode[index]) {
+                        int i;
+                        for (i = index; i >= 0; i--) {
+                            if (!nonCode[i]) {
+                                check = i;
+                                break;
+                            }
+                        }
+                        if (i == -1) {
+                            throw new RuntimeException();
+                        }
+                    } else {
                         latestIndex = index;
                         break;
-                    } else {
-                        check = entry.getKey() - 1;
                     }
                 } else {
                     break;
@@ -305,8 +381,78 @@ public class SimpleParser implements Parser {
     }
     
     @Override
+    public boolean pushFirstDepthLookAhead(int astDepth, char... items) {
+        return pushDepthLookAhead(astDepth, true, items);
+    }
+    
+    @Override
+    public boolean pushLastDepthLookAhead(int astDepth, char... items) {
+        return pushDepthLookAhead(astDepth, false, items);
+    }
+    
+    private boolean pushDepthLookAhead(int depth, boolean first, char... items) {
+        int origFirstOrLast = first ? source.length() : -1;
+        int firstOrLastIndex = origFirstOrLast;
+        int lastIndex = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
+        for (char item : items) {
+            int index;
+            int from = cursor + 1;
+            do {
+                index = source.indexOf(item, from);
+                if (index >= lastIndex || index == -1 || astDepth[index] < depth) {
+                    break;
+                } else if (index != -1 && ((first && index < firstOrLastIndex) ||
+                        (!first && index > firstOrLastIndex)) &&
+                        !nonCode[index] && astDepth[index] == depth) {
+                    firstOrLastIndex = index;
+                }
+                from = index + 1;
+            } while (true);
+        }
+        if (firstOrLastIndex != origFirstOrLast) {
+            lookAheads.push(firstOrLastIndex);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean pushFirstDepthLookAhead(int depth, String... items) {
+        int firstIndex = source.length();
+        int lastIndex = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
+        for (String item : items) {
+            int index;
+            int from = cursor + 1;
+            do {
+                index = source.indexOf(item, from);
+                if (index >= lastIndex) {
+                    break;
+                } else if (index != -1 && index < firstIndex &&
+                        !nonCode[index] && astDepth[index] == depth) {
+                    firstIndex = index;
+                    break;
+                } else if (index == -1) {
+                    break;
+                } else {
+                    from = index + 1;
+                }
+            } while (true);
+        }
+        if (firstIndex != source.length()) {
+            lookAheads.push(firstIndex);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
     public void popLookAhead() {
         lookAheads.pop();
+    }
+    
+    @Override
+    public int peekAstDepth() {
+        return cursor == -1 ? 0 : astDepth[cursor];
     }
     
     @Override
@@ -360,6 +506,7 @@ public class SimpleParser implements Parser {
         private int minimumNeeded;
         private Object previouslyFound;
         private int previousFoundEndingCursor;
+        private int maxCursor;
         
         private RecursiveTypeMemo(int minimumNeeded) {
             this.minimumNeeded = minimumNeeded;

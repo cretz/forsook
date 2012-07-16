@@ -39,7 +39,8 @@ public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperato
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(EqualityExpression.class);
+        Expression right = (Expression) parser.next(EqualityExpression.class, 
+                AndOperatorExpression.class);
         if (right == null) {
             return null;
         }

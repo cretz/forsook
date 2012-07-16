@@ -32,7 +32,7 @@ public class EnhancedForStatementParselet extends ForStatementParselet<EnhancedF
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead(':')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ':')) {
             return null;
         }
         //spacing
@@ -49,7 +49,7 @@ public class EnhancedForStatementParselet extends ForStatementParselet<EnhancedF
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing

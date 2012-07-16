@@ -39,7 +39,8 @@ public class ClassInstanceCreationExpressionParselet
             return null;
         }
         //starts with primary expression?
-        Expression scope = (Expression) parser.next(PrimaryExpression.class);
+        Expression scope = (Expression) parser.next(PrimaryExpression.class, 
+                ClassInstanceCreationExpression.class);
         if (scope != null) {
             //spacing
             parseWhiteSpaceAndComments(parser);

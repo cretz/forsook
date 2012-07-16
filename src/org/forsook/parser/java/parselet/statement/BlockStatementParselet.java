@@ -24,7 +24,7 @@ public class BlockStatementParselet extends StatementParselet<BlockStatement> {
             return null;
         }
         //lookahead
-        if (!parser.pushLookAhead('}')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), '}')) {
             return null;
         }
         //statements

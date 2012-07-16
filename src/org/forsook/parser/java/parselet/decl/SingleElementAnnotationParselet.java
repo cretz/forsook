@@ -39,7 +39,7 @@ public class SingleElementAnnotationParselet
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushLookAhead(')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
             return null;
         }
         //spacing
