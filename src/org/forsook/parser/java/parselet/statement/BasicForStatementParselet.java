@@ -37,7 +37,7 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
             return null;
         }
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ';')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ';')) {
             return null;
         }
         //spacing
@@ -72,7 +72,7 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ';')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ';')) {
             return null;
         }
         //spacing
@@ -88,7 +88,7 @@ public class BasicForStatementParselet extends ForStatementParselet<BasicForStat
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ')')) {
             return null;
         }
         //update

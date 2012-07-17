@@ -30,54 +30,72 @@ public class FieldAccessExpressionParselet extends ExpressionParselet<FieldAcces
         }
         //scope
         Expression scope = (Expression) parser.next(PrimaryExpression.class);
+        //pop here
+        parser.popLookAhead();
         //class name
         QualifiedName className = null;
         boolean superPresent = false;
         Identifier field = null;
         if (scope == null) {
-            //grab qualified name
-            className = parser.next(QualifiedName.class);
-            if (className != null) {
+            //just super?
+            if (parser.peekPresentAndSkip("super")) {
                 //spacing
                 parseWhiteSpaceAndComments(parser);
                 //dot
                 if (!parser.peekPresentAndSkip('.')) {
-                    //so, no dot? well if the class name has more
-                    //  than one identifier, it's ok
-                    if (className.getIdentifiers().size() == 1) {
-                        return null;
+                    return null;
+                }
+            } else {
+                //nope, better be a class name
+                if (!parser.pushLookAhead('.')) {
+                    return null;
+                }
+                className = parser.next(QualifiedName.class);
+                if (className == null) {
+                    return null;
+                }
+                parser.popLookAhead();
+                //spacing
+                parseWhiteSpaceAndComments(parser);
+                //dot?
+                if (parser.peekPresentAndSkip('.')) {
+                    //spacing
+                    parseWhiteSpaceAndComments(parser);
+                    //super?
+                    if (parser.peekPresentAndSkip("super")) {
+                        //spacing
+                        parseWhiteSpaceAndComments(parser);
+                        //dot
+                        if (!parser.peekPresentAndSkip('.')) {
+                            return null;
+                        }
+                        //spacing
+                        parseWhiteSpaceAndComments(parser);
                     }
+                } else {
+                    //hrmm...break up the class name
                     field = className.getIdentifiers().get(
                             className.getIdentifiers().size() - 1);
-                    className = new QualifiedName(
-                            className.getIdentifiers().subList(0, 
-                                    className.getIdentifiers().size() - 1));
-                } else {
-                    //spacing
-                    parseWhiteSpaceAndComments(parser);
-                }
-            }
-            if (field == null) {
-                //super
-                superPresent = parser.peekPresentAndSkip("super");
-                if (superPresent) {
-                    //spacing
-                    parseWhiteSpaceAndComments(parser);
+                    if (className.getIdentifiers().size() > 1) {
+                        className = new QualifiedName(className.getIdentifiers().
+                                subList(0, className.getIdentifiers().size() - 1));
+                    } else {
+                        className = null;
+                    }
                 }
             }
         } else {
             //spacing
             parseWhiteSpaceAndComments(parser);
-        }
-        //dot (only required if field isn't already set)
-        if (field == null && !parser.peekPresentAndSkip('.')) {
-            return null;
-        }
-        //pop lookahead
-        parser.popLookAhead();
-        if (field == null) {
+            //dot
+            if (!parser.peekPresentAndSkip('.')) {
+                return null;
+            }
             //spacing
             parseWhiteSpaceAndComments(parser);
+        }
+        //dot (only required if field isn't already set)
+        if (field == null) {
             //field
             field = parser.next(Identifier.class);
             if (field == null) {

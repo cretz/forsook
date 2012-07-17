@@ -19,7 +19,7 @@ public abstract class TypeBodyParselet<T extends TypeBody> extends JavaParselet<
                 return null;
             }
             //lookahead
-            if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), '}')) {
+            if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), '}')) {
                 return null;
             }
         }

@@ -25,7 +25,7 @@ public class ArrayInitializerExpressionParselet
             return null;
         }
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), '}')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), '}')) {
             return null;
         }
         //values

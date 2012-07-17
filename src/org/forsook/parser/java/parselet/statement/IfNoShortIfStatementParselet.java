@@ -31,7 +31,7 @@ public class IfNoShortIfStatementParselet extends StatementParselet<IfNoShortIfS
             return null;
         }
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ')')) {
             return null;
         }
         //spacing

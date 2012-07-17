@@ -1,0 +1,6 @@
+public class a {
+
+    void a() {
+    }
+    d e = { };
+}

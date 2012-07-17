@@ -18,7 +18,7 @@ public class ExpressionStatementParselet extends StatementParselet<ExpressionSta
     @Override
     public ExpressionStatement parse(Parser parser) {
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ';')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ';')) {
             return null;
         }
         //expression

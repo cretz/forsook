@@ -138,6 +138,8 @@ public interface Parser {
     
     int peekAstDepth();
     
+    int getAstDepth();
+    
     /**
      * Get the current cursor position
      * 
@@ -167,7 +169,5 @@ public interface Parser {
      */
     void backupCursor();
     
-    interface LookAhead {
-        
-    }
+    int getParseletDepth();
 }

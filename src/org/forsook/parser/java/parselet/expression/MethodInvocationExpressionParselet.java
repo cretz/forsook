@@ -36,11 +36,11 @@ public class MethodInvocationExpressionParselet
     @Override
     public MethodInvocationExpression parse(Parser parser) {
         //lookahead
-        if (!parser.pushLastDepthLookAhead(parser.peekAstDepth() + 1, '(')) {
+        if (!parser.pushLastDepthLookAhead(parser.getAstDepth() + 1, '(')) {
             return null;
         }
         //scope
-        //this is too heavy to allow left recursion here, turned to right recusion later...
+        //this is too heavy to allow left recursion here, turned to right recursion later...
         Expression scope = (Expression) parser.next(PrimaryExpression.class, 
                 MethodInvocationExpression.class);
         QualifiedName className = null;
@@ -121,7 +121,7 @@ public class MethodInvocationExpressionParselet
         //pop lookahead
         parser.popLookAhead();
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ')')) {
             return null;
         }
         //spacing

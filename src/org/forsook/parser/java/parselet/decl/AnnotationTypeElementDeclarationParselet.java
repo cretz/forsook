@@ -26,7 +26,7 @@ public class AnnotationTypeElementDeclarationParselet
 
     @Override
     public AnnotationTypeElementDeclaration parse(Parser parser) {
-        int currDepth = parser.peekAstDepth();
+        int currDepth = parser.getAstDepth();
         //lookahead
         if (!parser.pushLookAhead('(')) {
             return null;

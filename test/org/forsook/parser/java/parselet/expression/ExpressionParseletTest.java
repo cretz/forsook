@@ -28,6 +28,7 @@ public class ExpressionParseletTest extends ParseletTestBase {
 
     @Test
     public void testCommonExpressions() {
+        assertString("1 + f(1 - 1)", AdditiveOperatorExpression.class);
         assertString("1 == 1", EqualityOperatorExpression.class);
         assertString("1 != 1", EqualityOperatorExpression.class);
         assertString("1 + 1", AdditiveOperatorExpression.class);
@@ -35,6 +36,8 @@ public class ExpressionParseletTest extends ParseletTestBase {
         assertString("1 - 1", AdditiveOperatorExpression.class);
         assertString("1 & 1", AndOperatorExpression.class);
         assertString("true && false", ConditionalAndOperatorExpression.class);
+        assertString("true && false && true",
+                ConditionalAndOperatorExpression.class);
         assertString("true || false", ConditionalOrOperatorExpression.class);
         assertString("1 ^ 1", ExclusiveOrOperatorExpression.class);
         assertString("1 | 1", InclusiveOrOperatorExpression.class);
@@ -98,11 +101,14 @@ public class ExpressionParseletTest extends ParseletTestBase {
         assertString("a()[0].b()", MethodInvocationExpression.class);
         assertString("a().b.c()", MethodInvocationExpression.class);
         assertString("this.meh.call()", MethodInvocationExpression.class);
+        assertString("a(b[1], c[2])", MethodInvocationExpression.class);
     }
     
     @Test
     public void testCastExpression() {
         assertString("(SomeClass) a", CastExpression.class);
+        //TODO: breaking
+        assertString("(a)b(c)", "(a) b(c)", CastExpression.class);
     }
     
     @Test

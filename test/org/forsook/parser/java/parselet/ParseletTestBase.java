@@ -46,9 +46,13 @@ public abstract class ParseletTestBase {
     }
     
     protected void assertString(String source, Class<?> classToEmit) {
+        assertString(source, source, classToEmit);
+    }
+    
+    protected void assertString(String source, String expected, Class<?> classToEmit) {
         Object actual = buildParser(source).next(classToEmit);
         Assert.assertNotNull("Result null for class: " + classToEmit, actual);
-        Assert.assertEquals(source, new JavaSourceWriter().build(actual).toString());
+        Assert.assertEquals(expected, new JavaSourceWriter().build(actual).toString());
     }
     
     protected QualifiedName getQualifiedName(String value) {

@@ -22,7 +22,7 @@ public class DoStatementParselet extends StatementParselet<DoStatement> {
             return null;
         }
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), "while")) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), "while")) {
             return null;
         }
         //spacing

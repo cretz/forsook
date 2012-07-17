@@ -33,7 +33,7 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
         if (!parser.peekPresentAndSkip("new")) {
             return null;
         }
-        int currDepth = parser.peekAstDepth();
+        int currDepth = parser.getAstDepth();
         //lookahead
         if (!parser.pushFirstDepthLookAhead(currDepth, '[')) {
             return null;

@@ -39,6 +39,7 @@ public class SimpleParser implements Parser {
     private int lastLocationCheckCursor = 0;
     private int lastKnownLine = 0;
     private int lastKnownColumn = 0;
+    private int depth = 0;
     
     public SimpleParser(String source, Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap) {
         this.source = source;
@@ -113,6 +114,7 @@ public class SimpleParser implements Parser {
         lastLocationCheckCursor = 0;
         lastKnownLine = 0;
         lastKnownColumn = 0;
+        depth = 0;
     }
     
     @Override
@@ -256,8 +258,10 @@ public class SimpleParser implements Parser {
                 int oldCursor = cursor;
                 //holf on to the lookahead stack size, so we can roll back
                 int lookAheadStackSize = lookAheads.size();
+                depth++;
                 //parse
                 T object = (T) parselet.getParselet().parse(this);
+                depth--;
                 //rollback minimum needed
                 if (memo != null) {
                     memo.minimumNeeded -= parselet.getRecursiveMinimumSize();
@@ -276,11 +280,11 @@ public class SimpleParser implements Parser {
                     lookAheads.subList(lookAheadStackSize, lookAheads.size()).clear();
                 }
                 //check for memo
-                if (memo != null && memo.previouslyFound != null) {
-                    //we had one earlier in this cursor and type, so update cursor and return it
-                    cursor = memo.previousFoundEndingCursor;
-                    return (T) memo.previouslyFound;
-                }
+//                if (memo != null && memo.previouslyFound != null) {
+//                    //we had one earlier in this cursor and type, so update cursor and return it
+//                    cursor = memo.previousFoundEndingCursor;
+//                    return (T) memo.previouslyFound;
+//                }
                 //reset the cursor
                 cursor = oldCursor;
             }
@@ -452,6 +456,12 @@ public class SimpleParser implements Parser {
     
     @Override
     public int peekAstDepth() {
+        return cursor + 1 >= astDepth.length ? Integer.MAX_VALUE : 
+            astDepth[cursor + 1];
+    }
+    
+    @Override
+    public int getAstDepth() {
         return cursor == -1 ? 0 : astDepth[cursor];
     }
     
@@ -500,6 +510,11 @@ public class SimpleParser implements Parser {
     @Override
     public void backupCursor() {
         cursor--;
+    }
+    
+    @Override
+    public int getParseletDepth() {
+        return depth;
     }
     
     private static class RecursiveTypeMemo {

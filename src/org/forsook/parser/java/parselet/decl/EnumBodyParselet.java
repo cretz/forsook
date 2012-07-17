@@ -42,7 +42,7 @@ public class EnumBodyParselet extends TypeBodyParselet<EnumBody> {
             return null;
         }
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), '}')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), '}')) {
             return null;
         }
         List<EnumConstantDeclaration> constants = new ArrayList<EnumConstantDeclaration>();

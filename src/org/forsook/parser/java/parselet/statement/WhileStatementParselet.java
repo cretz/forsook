@@ -27,7 +27,7 @@ public class WhileStatementParselet extends StatementParselet<WhileStatement> {
             return null;
         }
         //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.peekAstDepth(), ')')) {
+        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ')')) {
             return null;
         }
         //spacing

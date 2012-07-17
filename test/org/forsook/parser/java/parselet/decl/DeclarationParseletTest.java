@@ -1,6 +1,7 @@
 package org.forsook.parser.java.parselet.decl;
 
 import org.forsook.parser.java.ast.decl.AnnotationTypeDeclaration;
+import org.forsook.parser.java.ast.decl.ClassOrInterfaceBody;
 import org.forsook.parser.java.ast.decl.ConstructorDeclaration;
 import org.forsook.parser.java.ast.decl.EnumDeclaration;
 import org.forsook.parser.java.ast.decl.FieldDeclaration;
@@ -73,5 +74,14 @@ public class DeclarationParseletTest extends ParseletTestBase {
     @Test
     public void testFieldDeclaration() {
         assertString("Map map = new HashMap();", FieldDeclaration.class);
+    }
+    
+    public void testClassOrInterfaceBody() {
+        assertString(
+                "{\n" +
+                "    void a() {\n" +
+                "    }\n\n" +
+                "    d e = { };\n" +
+                "}", ClassOrInterfaceBody.class);
     }
 }

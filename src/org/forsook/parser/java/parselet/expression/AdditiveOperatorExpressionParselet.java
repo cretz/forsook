@@ -22,7 +22,7 @@ public class AdditiveOperatorExpressionParselet
     @Override
     public AdditiveOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead('+', '-')) {
+        if (!parser.pushLastDepthLookAhead(parser.getAstDepth(), '+', '-')) {
             return null;
         }
         //left

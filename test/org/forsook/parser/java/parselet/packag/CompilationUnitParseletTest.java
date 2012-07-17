@@ -1,5 +1,7 @@
 package org.forsook.parser.java.parselet.packag;
 
+import java.io.InputStream;
+
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.ast.packag.CompilationUnit;
 import org.forsook.parser.java.parselet.ParseletTestBase;
@@ -22,5 +24,18 @@ public class CompilationUnitParseletTest extends ParseletTestBase {
                     parser.getLine() + ":" + parser.getColumn());
         }
         Assert.assertTrue(true);
+    }
+    
+    @Test
+    public void testCompilationUnit() {
+        for (int i = 1; ; i++) {
+            InputStream stream = getClass().getResourceAsStream(
+                    "CompilationUnit." + i + ".java.txt");
+            if (stream == null) {
+                break;
+            }
+            String source = IoUtils.streamToString(stream);
+            assertString(source.replace("\r\n", "\n"), CompilationUnit.class);
+        }
     }
 }

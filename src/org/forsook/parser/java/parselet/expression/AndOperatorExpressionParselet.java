@@ -20,7 +20,7 @@ public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperato
     @Override
     public AndOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead('&')) {
+        if (!parser.pushLastDepthLookAhead(parser.getAstDepth(), '&')) {
             return null;
         }
         //left

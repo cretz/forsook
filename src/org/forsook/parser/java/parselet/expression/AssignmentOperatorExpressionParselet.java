@@ -37,6 +37,7 @@ public class AssignmentOperatorExpressionParselet
 
     public AssignmentOperatorExpression parse(Parser parser) {
         //lookahead
+        //TODO: last depth look ahead?
         if (!parser.pushLookAhead(lookAhead)) {
             return null;
         }

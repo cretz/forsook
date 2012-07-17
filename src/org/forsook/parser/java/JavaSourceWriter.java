@@ -250,8 +250,12 @@ public class JavaSourceWriter {
         @Override
         public void visit(ArrayInitializerExpression a) {
             builder.append("{ ");
-            visitSeparated(a.getValues(), ", ");
-            builder.append(" }");
+            if (a.getValues() == null || a.getValues().isEmpty()) {
+                builder.append("}");
+            } else {
+                visitSeparated(a.getValues(), ", ");
+                builder.append(" }");
+            }
         }
 
         @Override

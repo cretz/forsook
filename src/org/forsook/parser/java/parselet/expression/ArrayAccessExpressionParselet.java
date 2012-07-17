@@ -39,12 +39,16 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
         }
         //spacing
         parseWhiteSpaceAndComments(parser);
-        //bracket
-        if (!parser.peekPresentAndSkip('[')) {
-            return null;
-        }
         //pop lookahead
         parser.popLookAhead();
+        //bracket
+        if (!parser.peekPresentAndSkip('[')) {
+            //could have gotten an array access
+            if (name instanceof ArrayAccessExpression) {
+                return (ArrayAccessExpression) name;
+            }
+            return null;
+        }
         //lookahead
         if (!parser.pushLookAhead(']')) {
             return null;
