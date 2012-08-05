@@ -3,10 +3,10 @@ package org.forsook.parser.java.parselet.expression;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
-import org.forsook.parser.java.ast.expression.InclusiveOrExpression;
-import org.forsook.parser.java.ast.expression.InclusiveOrOperatorExpression;
 import org.forsook.parser.java.ast.expression.ExclusiveOrExpression;
 import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.InclusiveOrExpression;
+import org.forsook.parser.java.ast.expression.InclusiveOrOperatorExpression;
 
 @JlsReference("15.22")
 @ParseletDefinition(
@@ -33,6 +33,10 @@ public class InclusiveOrOperatorExpressionParselet
         parseWhiteSpaceAndComments(parser);
         //operator
         if (!parser.peekPresentAndSkip('|')) {
+            if (left instanceof InclusiveOrOperatorExpression) {
+                parser.popLookAhead();
+                return (InclusiveOrOperatorExpression) left;
+            }
             return null;
         }
         //pop lookahead

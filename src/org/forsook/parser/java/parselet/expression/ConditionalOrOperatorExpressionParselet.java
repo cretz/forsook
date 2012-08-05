@@ -3,9 +3,9 @@ package org.forsook.parser.java.parselet.expression;
 import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
+import org.forsook.parser.java.ast.expression.ConditionalAndExpression;
 import org.forsook.parser.java.ast.expression.ConditionalOrExpression;
 import org.forsook.parser.java.ast.expression.ConditionalOrOperatorExpression;
-import org.forsook.parser.java.ast.expression.ConditionalAndExpression;
 import org.forsook.parser.java.ast.expression.Expression;
 
 @JlsReference("15.24")
@@ -21,7 +21,7 @@ public class ConditionalOrOperatorExpressionParselet
     @Override
     public ConditionalOrOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead("||")) {
+        if (!parser.pushLastDepthLookAhead(parser.getAstDepth(), "||")) {
             return null;
         }
         //left
@@ -33,6 +33,10 @@ public class ConditionalOrOperatorExpressionParselet
         parseWhiteSpaceAndComments(parser);
         //operator
         if (!parser.peekPresentAndSkip("||")) {
+            if (left instanceof ConditionalOrOperatorExpression) {
+                parser.popLookAhead();
+                return (ConditionalOrOperatorExpression) left;
+            }
             return null;
         }
         //pop lookahead

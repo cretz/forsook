@@ -37,7 +37,7 @@ public class CastExpressionParselet extends ExpressionParselet<CastExpression> {
         //spacing
         parseWhiteSpaceAndComments(parser);
         //type
-        Type type = (Type) parser.first(PrimitiveType.class, ReferenceType.class);
+        Type type = (Type) parser.first(ReferenceType.class, PrimitiveType.class);
         if (type == null) {
             return null;
         }

@@ -1,6 +1,7 @@
 package org.forsook.parser;
 
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Parser interface
@@ -119,6 +120,10 @@ public interface Parser {
     
     boolean pushLastDepthLookAhead(int astDepth, char... items);
     
+    boolean pushFirstLookAheadNoDeeperThan(int astDepth, char item);
+    
+    boolean pushLastLookAheadNoDeeperThan(int astDepth, char item);
+    
     /**
      * Checks to see whether any of the given items are 
      * anywhere in the source starting at the cursor of
@@ -130,6 +135,7 @@ public interface Parser {
     boolean pushLookAhead(String... items);
     
     boolean pushFirstDepthLookAhead(int astDepth, String... items);
+    boolean pushLastDepthLookAhead(int astDepth, String... items);
     
     /**
      * Pop the look ahead that was pushed previously
@@ -170,4 +176,5 @@ public interface Parser {
     void backupCursor();
     
     int getParseletDepth();
+    Stack<ParseletInstance> getParseletStack();
 }

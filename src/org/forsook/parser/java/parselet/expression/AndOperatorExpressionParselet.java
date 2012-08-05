@@ -32,6 +32,10 @@ public class AndOperatorExpressionParselet extends ExpressionParselet<AndOperato
         parseWhiteSpaceAndComments(parser);
         //operator
         if (!parser.peekPresentAndSkip('&')) {
+            if (left instanceof AndOperatorExpression) {
+                parser.popLookAhead();
+                return (AndOperatorExpression) left;
+            }
             return null;
         }
         //pop lookahead

@@ -7,6 +7,7 @@ import org.forsook.parser.java.ast.statement.ExpressionStatement;
 import org.forsook.parser.java.ast.statement.ForStatement;
 import org.forsook.parser.java.ast.statement.IfStatement;
 import org.forsook.parser.java.ast.statement.LabeledStatement;
+import org.forsook.parser.java.ast.statement.LocalVariableDeclarationExpression;
 import org.forsook.parser.java.ast.statement.ReturnStatement;
 import org.forsook.parser.java.ast.statement.SwitchStatement;
 import org.forsook.parser.java.ast.statement.SynchronizedStatement;
@@ -47,6 +48,7 @@ public class StatementParseletTest extends ParseletTestBase {
                 "} else if (b) {\n" +
                 "    meh();\n" +
                 "}", IfStatement.class);
+        assertString("if ((a).b) {\n}", IfStatement.class);
     }
     
     @Test
@@ -75,11 +77,15 @@ public class StatementParseletTest extends ParseletTestBase {
                 "default:\n" +
                 "    break;\n" +
                 "}", SwitchStatement.class);
+        assertString("switch (val) {\n" +
+                "case A.B:\n" +
+                "    break;\n" +
+                "}", SwitchStatement.class);
     }
     
     @Test
     public void testThrowStatement() {
-//        assertString("throw new Exception(\"hey\");", ThrowStatement.class);
+        assertString("throw new Exception(\"hey\");", ThrowStatement.class);
         assertString("throw new a(\"\" + a.b() + \"\");", ThrowStatement.class);
     }
     
@@ -90,7 +96,7 @@ public class StatementParseletTest extends ParseletTestBase {
     
     @Test
     public void testExpressionStatement() {
-//        assertString("i++;", ExpressionStatement.class);
+        assertString("i++;", ExpressionStatement.class);
         assertString("i = (SomeClass) j;", ExpressionStatement.class);
     }
     
@@ -100,5 +106,10 @@ public class StatementParseletTest extends ParseletTestBase {
                 "synchronized (lock) {\n" +
                 "    doSomething();\n" +
                 "}", SynchronizedStatement.class);
+    }
+    
+    @Test
+    public void testLocalVariableDeclarationExpression() {
+        assertString("int a, b", LocalVariableDeclarationExpression.class);
     }
 }

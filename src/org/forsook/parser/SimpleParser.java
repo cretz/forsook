@@ -13,6 +13,8 @@ import org.forsook.parser.java.ast.lexical.LiteralExpression;
 import org.forsook.parser.java.parselet.lexical.CharacterAndStringLiteralExpressionParselet;
 import org.forsook.parser.java.parselet.lexical.CommentParselet;
 
+import com.eaio.stringsearch.BoyerMooreHorspoolRaita;
+
 /**
  * Simple parser supporting a string-based source file and a map of parselets
  *
@@ -28,7 +30,6 @@ public class SimpleParser implements Parser {
     
     private final Stack<Integer> lookAheads = new Stack<Integer>();
     
-//    private final NavigableMap<Integer, Integer> lexedNonCode = new TreeMap<Integer, Integer>();
     private final boolean[] nonCode;
     //just commas and braces for now
     private final int[] astDepth;
@@ -39,7 +40,12 @@ public class SimpleParser implements Parser {
     private int lastLocationCheckCursor = 0;
     private int lastKnownLine = 0;
     private int lastKnownColumn = 0;
-    private int depth = 0;
+
+    private final Stack<ParseletInstance> parseletStack = new Stack<ParseletInstance>();
+    
+    private final char[] reversedSource;
+    private final BoyerMooreHorspoolRaita searcher =
+            new BoyerMooreHorspoolRaita();
     
     public SimpleParser(String source, Map<Class<?>, NavigableSet<ParseletInstance>> parseletMap) {
         this.source = source;
@@ -62,7 +68,6 @@ public class SimpleParser implements Parser {
                             getLine() + ":" + getColumn());
                 }
                 Arrays.fill(nonCode, index, cursor + 1, true);
-//                lexedNonCode.put(index, cursor);
                 index = cursor + 1;
                 continue;
             case '/':
@@ -75,7 +80,6 @@ public class SimpleParser implements Parser {
                         if (cmt == null) {
                             throw new RuntimeException();
                         }
-//                        lexedNonCode.put(index, cursor);
                         Arrays.fill(nonCode, index, cursor + 1, true);
                         index = cursor + 1;
                         continue;
@@ -87,7 +91,10 @@ public class SimpleParser implements Parser {
         //now ast depth
         astDepth = new int[source.length()];
         int currDepth = 0;
+        reversedSource = new char[source.length()];
         for (int i = 0; i < source.length(); i++) {
+            char chr = source.charAt(i);
+            reversedSource[source.length() - i - 1] = chr;
             if (!nonCode[i]) {
                 switch (source.charAt(i)) {
                 case '(':
@@ -103,18 +110,13 @@ public class SimpleParser implements Parser {
             }
             astDepth[i] = currDepth;
         }
+        //process
         memoTable.clear();
         lookAheads.clear();
-//        System.out.println("stack - " + lexedNonCode);
-//        for (Entry<Integer, Integer> entry : lexedNonCode.entrySet()) {
-//            System.out.println(source.substring(entry.getKey(), 
-//                    entry.getValue() + 1));
-//        }
         cursor = -1;
         lastLocationCheckCursor = 0;
         lastKnownLine = 0;
         lastKnownColumn = 0;
-        depth = 0;
     }
     
     @Override
@@ -208,7 +210,8 @@ public class SimpleParser implements Parser {
     
     @SuppressWarnings("unchecked")
     public <T> T next(Class<T> type, Class<?> cantRecurseType) {
-        if (cantRecurse.contains(type.getName() + "-" + cursor)) {
+        String typeKey = type.getName() + "-" + cursor;
+        if (cantRecurse.contains(typeKey)) {
             return null;
         }
         String cantRecurseKey = null;
@@ -258,10 +261,14 @@ public class SimpleParser implements Parser {
                 int oldCursor = cursor;
                 //holf on to the lookahead stack size, so we can roll back
                 int lookAheadStackSize = lookAheads.size();
-                depth++;
+                parseletStack.push(parselet);
+                //times
+                long ms = System.currentTimeMillis();
                 //parse
                 T object = (T) parselet.getParselet().parse(this);
-                depth--;
+                //times
+                parselet.incrementTotalCount(System.currentTimeMillis() - ms);
+                parseletStack.pop();
                 //rollback minimum needed
                 if (memo != null) {
                     memo.minimumNeeded -= parselet.getRecursiveMinimumSize();
@@ -279,12 +286,6 @@ public class SimpleParser implements Parser {
                 if (lookAheads.size() > lookAheadStackSize) {
                     lookAheads.subList(lookAheadStackSize, lookAheads.size()).clear();
                 }
-                //check for memo
-//                if (memo != null && memo.previouslyFound != null) {
-//                    //we had one earlier in this cursor and type, so update cursor and return it
-//                    cursor = memo.previousFoundEndingCursor;
-//                    return (T) memo.previouslyFound;
-//                }
                 //reset the cursor
                 cursor = oldCursor;
             }
@@ -301,18 +302,11 @@ public class SimpleParser implements Parser {
         Integer previous = lookAheads.isEmpty() ? source.length(): lookAheads.peek();
         int latestIndex = -1;
         for (char item : items) {
-//            Entry<Integer, Integer> entry;
             int check = previous - 1;
             do {
-                int index = source.lastIndexOf(item, check);
+                //int index = source.lastIndexOf(item, check);
+                int index = lastIndexOf(item, cursor + 1, check);
                 if (index > cursor && index > latestIndex && index < previous) {
-//                    entry = lexedNonCode.floorEntry(index);
-//                    if (entry == null || entry.getValue() < index) {
-//                        latestIndex = index;
-//                        break;
-//                    } else {
-//                        check = entry.getKey() - 1;
-//                    }
                     if (nonCode[index]) {
                         int i;
                         for (i = index; i >= 0; i--) {
@@ -340,23 +334,42 @@ public class SimpleParser implements Parser {
         return false;
     }
     
+    private int lastIndexOf(String item, int start, int end) {
+        char[] reversed = new char[item.length()];
+        for (int i = 0; i < reversed.length; i++) {
+            reversed[reversed.length - i - 1] = item.charAt(i);
+        }
+        return lastIndexOf(reversed, start, end);
+    }
+    
+    private int lastIndexOf(char item, int start, int end) {
+        return lastIndexOf(new char[] { item }, start, end);
+    }
+    
+    private int lastIndexOf(char[] reversed, int start, int end) {
+        if (start > end || start < 0) {
+            return -1;
+        }
+        int index = searcher.searchChars(reversedSource, 
+                source.length() - end - 1,
+                source.length() - start,
+                reversed);
+        if (index != -1) {
+            index = source.length() - index - reversed.length;
+        }
+        return index;
+    }
+    
     @Override
     public boolean pushLookAhead(String... items) {
         Integer previous = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
         int latestIndex = -1;
         for (String item : items) {
-//            Entry<Integer, Integer> entry;
             int check = previous - 1;
             do {
-                int index = source.lastIndexOf(item, check);
+                //int index = source.lastIndexOf(item, check);
+                int index = lastIndexOf(item, cursor + 1, check);
                 if (index > cursor && index > latestIndex && index < previous) {
-//                    entry = lexedNonCode.floorEntry(index);
-//                    if (entry == null || entry.getValue() < index) {
-//                        latestIndex = index;
-//                        break;
-//                    } else {
-//                        check = entry.getKey() - 1;
-//                    }
                     if (nonCode[index]) {
                         int i;
                         for (i = index; i >= 0; i--) {
@@ -408,6 +421,7 @@ public class SimpleParser implements Parser {
                 } else if (index != -1 && ((first && index < firstOrLastIndex) ||
                         (!first && index > firstOrLastIndex)) &&
                         !nonCode[index] && astDepth[index] == depth) {
+                    //if we're the last, let's 
                     firstOrLastIndex = index;
                 }
                 from = index + 1;
@@ -421,29 +435,71 @@ public class SimpleParser implements Parser {
     }
     
     @Override
+    public boolean pushFirstLookAheadNoDeeperThan(int depth, char item) {
+        int lastIndex = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
+        int index;
+        int from = cursor + 1;
+        do {
+            index = source.indexOf(item, from);
+            if (index >= lastIndex || index == -1) {
+                return false;
+            } else if (!nonCode[index] && astDepth[index] <= depth) {
+                lookAheads.push(index);
+                return true;
+            }
+            from = index + 1;
+        } while (true);
+    }
+    
+    @Override
+    public boolean pushLastLookAheadNoDeeperThan(int depth, char item) {
+        int start = cursor + 1;
+        int end = lookAheads.isEmpty() ? source.length() - 1 : lookAheads.peek() - 1;
+        int index;
+        do {
+            index = lastIndexOf(item, start, end);
+            if (index == -1) {
+                return false;
+            } else if (!nonCode[index] && astDepth[index] <= depth) {
+                lookAheads.push(index);
+                return true;
+            }
+            end = index - 1;
+        } while (true);
+    }
+    
+    @Override
     public boolean pushFirstDepthLookAhead(int depth, String... items) {
-        int firstIndex = source.length();
+        return pushDepthLookAhead(depth, true, items);
+    }
+    
+    @Override
+    public boolean pushLastDepthLookAhead(int depth, String... items) {
+        return pushDepthLookAhead(depth, false, items);
+    }
+    
+    private boolean pushDepthLookAhead(int depth, boolean first, String... items) {
+        int origFirstOrLast = first ? source.length() : -1;
+        int firstOrLastIndex = origFirstOrLast;
         int lastIndex = lookAheads.isEmpty() ? source.length() : lookAheads.peek();
         for (String item : items) {
             int index;
             int from = cursor + 1;
             do {
                 index = source.indexOf(item, from);
-                if (index >= lastIndex) {
+                if (index >= lastIndex || index == -1 || astDepth[index] < depth) {
                     break;
-                } else if (index != -1 && index < firstIndex &&
+                } else if (index != -1 && ((first && index < firstOrLastIndex) ||
+                        (!first && index > firstOrLastIndex)) &&
                         !nonCode[index] && astDepth[index] == depth) {
-                    firstIndex = index;
-                    break;
-                } else if (index == -1) {
-                    break;
-                } else {
-                    from = index + 1;
+                    //if we're the last, let's 
+                    firstOrLastIndex = index;
                 }
+                from = index + 1;
             } while (true);
         }
-        if (firstIndex != source.length()) {
-            lookAheads.push(firstIndex);
+        if (firstOrLastIndex != origFirstOrLast) {
+            lookAheads.push(firstOrLastIndex);
             return true;
         }
         return false;
@@ -493,7 +549,9 @@ public class SimpleParser implements Parser {
     
     @Override
     public int getLine() {
-        if (cursor != lastLocationCheckCursor) {
+        if (cursor < 0) {
+            return 0;
+        } else if (cursor != lastLocationCheckCursor) {
             updateLineAndColumn();
         }
         return lastKnownLine + 1;
@@ -501,7 +559,9 @@ public class SimpleParser implements Parser {
     
     @Override
     public int getColumn() {
-        if (cursor != lastLocationCheckCursor) {
+        if (cursor < 0) {
+            return 0;
+        } else if (cursor != lastLocationCheckCursor) {
             updateLineAndColumn();
         }
         return lastKnownColumn + 1;
@@ -514,7 +574,12 @@ public class SimpleParser implements Parser {
     
     @Override
     public int getParseletDepth() {
-        return depth;
+        return parseletStack.size();
+    }
+    
+    @Override
+    public Stack<ParseletInstance> getParseletStack() {
+        return parseletStack;
     }
     
     private static class RecursiveTypeMemo {

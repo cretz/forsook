@@ -9,5 +9,6 @@ public class ArrayInitializerExpressionParseletTest extends ParseletTestBase {
     @Test
     public void testArrayInitializerExpression() {
         assertString("{ 1, { 2, 3 } }", ArrayInitializerExpression.class);
+        assertString("{ 1, 2, 3, }", ArrayInitializerExpression.class);
     }
 }

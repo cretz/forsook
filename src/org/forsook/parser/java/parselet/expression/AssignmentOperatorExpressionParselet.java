@@ -9,6 +9,7 @@ import org.forsook.parser.java.ast.expression.AssignmentOperatorExpression;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.expression.FieldAccessExpression;
 import org.forsook.parser.java.ast.expression.AssignmentOperatorExpression.AssignmentOperator;
+import org.forsook.parser.java.ast.expression.PrimaryNoNewArrayExpression;
 import org.forsook.parser.java.ast.name.QualifiedName;
 
 @JlsReference("15.26")
@@ -42,9 +43,9 @@ public class AssignmentOperatorExpressionParselet
             return null;
         }
         //left
-        Expression left = (Expression) parser.first(ArrayAccessExpression.class, 
-                FieldAccessExpression.class, QualifiedName.class);
-        if (left == null) {
+        Expression left = (Expression) parser.first(PrimaryNoNewArrayExpression.class, QualifiedName.class);
+        if (left == null || (!(left instanceof ArrayAccessExpression) && 
+                !(left instanceof FieldAccessExpression) && !(left instanceof QualifiedName))) {
             return null;
         }
         //spacing
@@ -65,8 +66,7 @@ public class AssignmentOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(AssignmentExpression.class, 
-                AssignmentOperatorExpression.class);
+        Expression right = (Expression) parser.next(AssignmentExpression.class);
         if (right == null) {
             return null;
         }

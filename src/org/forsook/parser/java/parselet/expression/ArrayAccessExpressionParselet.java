@@ -24,7 +24,22 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
 
     @Override
     public ArrayAccessExpression parse(Parser parser) {
+        //can't call myself directly
+        for (int i = parser.getParseletStack().size() - 2; i >= 0; i--) {
+            if (parser.getParseletStack().get(i).getParselet().getClass() ==
+                    ArrayAccessExpressionParselet.class) {
+                return null;
+            } else if (parser.getParseletStack().get(i).getParselet().getClass() != 
+                    PrimaryExpressionParselet.class &&
+                    parser.getParseletStack().get(i).getParselet().getClass() !=
+                    PrimaryNoNewArrayExpressionParselet.class) {
+                break;
+            }
+        }
         //lookahead
+        if (!parser.pushLastLookAheadNoDeeperThan(parser.peekAstDepth(), ']')) {
+            return null;
+        }
         if (!parser.pushLookAhead('[')) {
             return null;
         }
@@ -49,10 +64,6 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
             }
             return null;
         }
-        //lookahead
-        if (!parser.pushLookAhead(']')) {
-            return null;
-        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //expression
@@ -68,9 +79,27 @@ public class ArrayAccessExpressionParselet extends ExpressionParselet<ArrayAcces
         }
         //pop lookahead
         parser.popLookAhead();
-        //need a check here to make sure it's not a method or field
-        parseWhiteSpaceAndComments(parser);
-        return new ArrayAccessExpression(name, index);
+        ArrayAccessExpression expr = new ArrayAccessExpression(name, index);
+        do {
+            parseWhiteSpaceAndComments(parser);
+            if (!parser.peekPresentAndSkip('[')) {
+                break;
+            }
+            if (!parser.pushLastDepthLookAhead(parser.getAstDepth(), ']')) {
+                return null;
+            }
+            parseWhiteSpaceAndComments(parser);
+            index = parser.next(Expression.class);
+            if (index != null) {
+                parseWhiteSpaceAndComments(parser);
+            }
+            if (!parser.peekPresentAndSkip(']')) {
+                return null;
+            }
+            parser.popLookAhead();
+            expr = new ArrayAccessExpression(expr, index);
+        } while (true);
+        return expr;
     }
 
 }

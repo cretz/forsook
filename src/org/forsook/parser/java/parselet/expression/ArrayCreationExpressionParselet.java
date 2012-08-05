@@ -93,7 +93,7 @@ public class ArrayCreationExpressionParselet extends ExpressionParselet<ArrayCre
         }
         //initializer
         ArrayInitializerExpression initializer = null;
-        if (expressionDimFound) {
+        if (!expressionDimFound) {
             //spacing
             parseWhiteSpaceAndComments(parser);
             initializer = parser.next(ArrayInitializerExpression.class); 

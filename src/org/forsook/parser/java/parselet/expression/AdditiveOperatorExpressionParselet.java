@@ -38,6 +38,9 @@ public class AdditiveOperatorExpressionParselet
             operator = AdditiveOperator.PLUS;
         } else if (parser.peekPresentAndSkip('-')) {
             operator = AdditiveOperator.MINUS;
+        } else if (left instanceof AdditiveOperatorExpression) {
+            parser.popLookAhead();
+            return (AdditiveOperatorExpression) left;
         } else {
             return null;
         }

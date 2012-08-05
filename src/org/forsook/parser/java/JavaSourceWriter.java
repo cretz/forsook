@@ -254,6 +254,9 @@ public class JavaSourceWriter {
                 builder.append("}");
             } else {
                 visitSeparated(a.getValues(), ", ");
+                if (a.isTrailingCommaPresent()) {
+                    builder.append(',');
+                }
                 builder.append(" }");
             }
         }

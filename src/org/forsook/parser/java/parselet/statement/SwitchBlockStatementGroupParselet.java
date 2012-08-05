@@ -7,7 +7,6 @@ import org.forsook.parser.ParseletDefinition;
 import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.Expression;
-import org.forsook.parser.java.ast.expression.IdentifierExpression;
 import org.forsook.parser.java.ast.lexical.Identifier;
 import org.forsook.parser.java.ast.statement.InnerBlockStatement;
 import org.forsook.parser.java.ast.statement.Statement;
@@ -40,16 +39,9 @@ public class SwitchBlockStatementGroupParselet extends JavaParselet<SwitchBlockS
                 //spacing
                 parseWhiteSpaceAndComments(parser);
                 //identifier?
-                Identifier enumName = parser.next(Identifier.class);
-                if (enumName != null) {
-                    label = new IdentifierExpression(enumName);
-                } else {
-                    //just a normal expression
-                    //TODO: better check for constant?
-                    label = parser.next(Expression.class);
-                    if (label == null) {
-                        return null;
-                    }
+                label = parser.next(Expression.class);
+                if (label == null) {
+                    return null;
                 }
             } else {
                 break;

@@ -34,9 +34,12 @@ public class MethodInvocationExpressionParselet
         extends ExpressionParselet<MethodInvocationExpression> {
 
     @Override
-    public MethodInvocationExpression parse(Parser parser) {
+    public MethodInvocationExpression parse(Parser parser) {        
         //lookahead
-        if (!parser.pushLastDepthLookAhead(parser.getAstDepth() + 1, '(')) {
+        if (!parser.pushLastLookAheadNoDeeperThan(parser.peekAstDepth() + 1, ')')) {
+            return null;
+        }
+        if (!parser.pushLookAhead('(')) {
             return null;
         }
         //scope
@@ -120,10 +123,6 @@ public class MethodInvocationExpressionParselet
         }
         //pop lookahead
         parser.popLookAhead();
-        //lookahead
-        if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ')')) {
-            return null;
-        }
         //spacing
         parseWhiteSpaceAndComments(parser);
         //arguments
@@ -150,6 +149,8 @@ public class MethodInvocationExpressionParselet
         }
         //pop lookahead
         parser.popLookAhead();
+        //spacing
+        parseWhiteSpaceAndComments(parser);
         //regular
         MethodInvocationExpression expr = new MethodInvocationExpression(scope, className, 
                 superPresent, typeArguments, methodName, arguments);

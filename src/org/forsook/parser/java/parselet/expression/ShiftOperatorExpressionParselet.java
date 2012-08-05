@@ -27,6 +27,10 @@ public class ShiftOperatorExpressionParselet
         //left
         Expression left = (Expression) parser.next(ShiftExpression.class);
         if (left == null) {
+            if (left instanceof ShiftOperatorExpression) {
+                parser.popLookAhead();
+                return (ShiftOperatorExpression) left;
+            }
             return null;
         }
         //spacing
@@ -35,10 +39,10 @@ public class ShiftOperatorExpressionParselet
         ShiftOperator operator;
         if (parser.peekPresentAndSkip("<<")) {
             operator = ShiftOperator.LEFT;
-        } else if (parser.peekPresentAndSkip(">>")) {
-            operator = ShiftOperator.SIGNED_RIGHT;
         } else if (parser.peekPresentAndSkip(">>>")) {
             operator = ShiftOperator.UNSIGNED_RIGHT;
+        } else if (parser.peekPresentAndSkip(">>")) {
+            operator = ShiftOperator.SIGNED_RIGHT;
         } else {
             return null;
         }

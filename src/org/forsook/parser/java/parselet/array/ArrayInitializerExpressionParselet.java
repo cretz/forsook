@@ -30,7 +30,7 @@ public class ArrayInitializerExpressionParselet
         }
         //values
         List<Expression> values = new ArrayList<Expression>();
-        int commaCount = 0;
+        boolean trailingComma = false;
         do {
             //spacing
             parseWhiteSpaceAndComments(parser);
@@ -40,16 +40,14 @@ public class ArrayInitializerExpressionParselet
                 expression = parser.next(ArrayInitializerExpression.class);
             }
             if (expression != null) {
+                trailingComma = false;
                 values.add(expression);
-            } else if (commaCount > 0) {
-                //can't have "{ , , }" but can have "{ , }" 
-                return null;
             }
             //spacing
             parseWhiteSpaceAndComments(parser);
             //comma?
             if (parser.peekPresentAndSkip(',')) {
-                commaCount++;
+                trailingComma = true;
             } else if (parser.peekPresentAndSkip('}')) {
                 //pop lookahead
                 parser.popLookAhead();
@@ -58,7 +56,7 @@ public class ArrayInitializerExpressionParselet
                 return null;
             }
         } while (true);
-        return new ArrayInitializerExpression(values);
+        return new ArrayInitializerExpression(values, trailingComma);
     }
 
 }

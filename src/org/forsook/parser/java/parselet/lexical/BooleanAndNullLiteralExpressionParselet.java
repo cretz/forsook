@@ -16,14 +16,20 @@ public class BooleanAndNullLiteralExpressionParselet extends ExpressionParselet<
     
     @Override
     public LiteralExpression parse(Parser parser) {
+        LiteralExpression expr;
         if (parser.peekPresentAndSkip("true")) {
-            return new LiteralExpression("true", LiteralExpressionType.BOOLEAN);
+            expr = new LiteralExpression("true", LiteralExpressionType.BOOLEAN);
         } else if (parser.peekPresentAndSkip("false")) {
-            return new LiteralExpression("false", LiteralExpressionType.BOOLEAN);
+            expr = new LiteralExpression("false", LiteralExpressionType.BOOLEAN);
         } else if (parser.peekPresentAndSkip("null")) {
-            return new LiteralExpression("null", LiteralExpressionType.NULL);
+            expr = new LiteralExpression("null", LiteralExpressionType.NULL);
         } else {
             return null;
         }
+        //next char can't be a valid java identifier char
+        if (parser.peek() != null && Character.isJavaIdentifierPart(parser.peek())) {
+            return null;
+        }
+        return expr;
     }
 }

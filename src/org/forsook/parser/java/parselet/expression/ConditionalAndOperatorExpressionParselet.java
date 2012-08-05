@@ -5,15 +5,15 @@ import org.forsook.parser.Parser;
 import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.ConditionalAndExpression;
 import org.forsook.parser.java.ast.expression.ConditionalAndOperatorExpression;
-import org.forsook.parser.java.ast.expression.InclusiveOrExpression;
 import org.forsook.parser.java.ast.expression.Expression;
+import org.forsook.parser.java.ast.expression.InclusiveOrExpression;
 
 @JlsReference("15.23")
 @ParseletDefinition(
         name = "forsook.java.conditionalAndOperatorExpression",
         emits = ConditionalAndOperatorExpression.class,
         needs = { ConditionalAndExpression.class, InclusiveOrExpression.class },
-        recursiveMinimumSize = 3
+        recursiveMinimumSize = 2
 )
 public class ConditionalAndOperatorExpressionParselet 
         extends ExpressionParselet<ConditionalAndOperatorExpression> {
@@ -21,7 +21,7 @@ public class ConditionalAndOperatorExpressionParselet
     @Override
     public ConditionalAndOperatorExpression parse(Parser parser) {
         //lookahead
-        if (!parser.pushLookAhead("&&")) {
+        if (!parser.pushLastDepthLookAhead(parser.getAstDepth(), "&&")) {
             return null;
         }
         //left
@@ -33,6 +33,10 @@ public class ConditionalAndOperatorExpressionParselet
         parseWhiteSpaceAndComments(parser);
         //operator
         if (!parser.peekPresentAndSkip("&&")) {
+            if (left instanceof ConditionalAndOperatorExpression) {
+                parser.popLookAhead();
+                return (ConditionalAndOperatorExpression) left;
+            }
             return null;
         }
         //pop lookahead
@@ -40,7 +44,7 @@ public class ConditionalAndOperatorExpressionParselet
         //spacing
         parseWhiteSpaceAndComments(parser);
         //right
-        Expression right = (Expression) parser.next(InclusiveOrExpression.class, 
+        Expression right = (Expression) parser.next(InclusiveOrExpression.class,
                 ConditionalAndOperatorExpression.class);
         if (right == null) {
             return null;

@@ -52,11 +52,12 @@ public class LocalVariableDeclarationExpressionParselet extends ExpressionParsel
         if (type == null) {
             return null;
         }
-        //spacing
-        parseWhiteSpaceAndComments(parser);
         //declarators
         List<VariableDeclarator> vars = new ArrayList<VariableDeclarator>();
         do {
+            //spacing
+            parseWhiteSpaceAndComments(parser);
+            //var
             VariableDeclarator var = parser.next(VariableDeclarator.class);
             if (var != null) {
                 vars.add(var);

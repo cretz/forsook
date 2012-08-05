@@ -26,7 +26,7 @@ public class InnerBlockStatementParselet extends JavaParselet<InnerBlockStatemen
         return (InnerBlockStatement) parser.first(
                 LocalClassDeclarationStatement.class,
                 LocalVariableDeclarationStatement.class,
-                Statement.class); 
+                Statement.class);
     }
 
 }

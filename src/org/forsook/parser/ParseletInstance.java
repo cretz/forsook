@@ -12,6 +12,8 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
     private final BigDecimal precedence;
     private final Parselet<?> parselet;
     private final Integer recursiveMinimumSize;
+    private long totalMs;
+    private int totalCount;
     
     ParseletInstance(String name, Set<Class<?>> emits, Set<Class<?>> needs,
             Set<Class<? extends Parselet<?>>> replaces, BigDecimal precedence,
@@ -25,7 +27,7 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
         this.recursiveMinimumSize = recursiveMinimumSize > 0 ? recursiveMinimumSize : null;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -45,7 +47,7 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
         return precedence;
     }
 
-    Parselet<?> getParselet() {
+    public Parselet<?> getParselet() {
         return parselet;
     }
     
@@ -57,5 +59,18 @@ public class ParseletInstance implements Comparable<ParseletInstance> {
     public int compareTo(ParseletInstance o) {
         int compare = precedence.compareTo(o.precedence);
         return compare != 0 ? compare : name.compareTo(o.name);
+    }
+    
+    void incrementTotalCount(long ms) {
+        totalCount++;
+        totalMs += ms;
+    }
+    
+    public int getTotalCount() {
+        return totalCount;
+    }
+    
+    public long getTotalMs() {
+        return totalMs;
     }
 }

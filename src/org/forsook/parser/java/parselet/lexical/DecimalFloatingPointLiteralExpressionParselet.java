@@ -45,7 +45,9 @@ public class DecimalFloatingPointLiteralExpressionParselet
         } while (true);
         if (ret.length() == 0) {
             return null;
-        } else if (ret.charAt(ret.length() - 1) == 'E' || ret.charAt(ret.length() - 1) == 'e') {
+        } else if (ret.charAt(ret.length() - 1) == 'E' || 
+                ret.charAt(ret.length() - 1) == 'e' ||
+                (ret.length() == 1 && ret.charAt(0) == '.')) {
             return null;
         } else {
             boolean hasEnd = checkEndOfFloatingPoint(parser, ret);

@@ -6,8 +6,8 @@ import org.forsook.parser.java.JlsReference;
 import org.forsook.parser.java.ast.expression.Expression;
 import org.forsook.parser.java.ast.expression.MultiplicativeExpression;
 import org.forsook.parser.java.ast.expression.MultiplicativeOperatorExpression;
-import org.forsook.parser.java.ast.expression.UnaryExpression;
 import org.forsook.parser.java.ast.expression.MultiplicativeOperatorExpression.MultiplicativeOperator;
+import org.forsook.parser.java.ast.expression.UnaryExpression;
 
 @JlsReference("15.17")
 @ParseletDefinition(
@@ -40,6 +40,9 @@ public class MultiplicativeOperatorExpressionParselet
             operator = MultiplicativeOperator.DIVIDE;
         } else if (parser.peekPresentAndSkip('%')) {
             operator = MultiplicativeOperator.REMAINDER;
+        } else if (left instanceof MultiplicativeOperatorExpression) {
+            parser.popLookAhead();
+            return (MultiplicativeOperatorExpression) left;
         } else {
             return null;
         }

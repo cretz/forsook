@@ -75,11 +75,11 @@ public class ExplicitConstructorInvocationStatementParselet
         if (!parser.pushFirstDepthLookAhead(parser.getAstDepth(), ')')) {
             return null;
         }
-        //spacing
-        parseWhiteSpaceAndComments(parser);
         //arguments
         List<Expression> arguments = new ArrayList<Expression>();
         do {
+            //spacing
+            parseWhiteSpaceAndComments(parser);
             //argument
             Expression argument = parser.next(Expression.class);
             if (argument == null) {
